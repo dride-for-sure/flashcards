@@ -3,8 +3,8 @@ import { H1 as StyledH1, Header as StyledHeader, Span as StyledSpan } from './st
 export default function Header() {
   return (
     <StyledHeader>
-      <StyledH1>Awesome sauce <br />transfunctioner</StyledH1>
-      <StyledSpan>hot or not...</StyledSpan>
+      <StyledH1>Drop it like its hot</StyledH1>
+      <StyledSpan>Awesome sauce transfunctioner</StyledSpan>
     </StyledHeader>
   );
 }

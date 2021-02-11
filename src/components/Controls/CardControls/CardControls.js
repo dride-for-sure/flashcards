@@ -16,8 +16,16 @@ export default function Form({ onAdd, setSauces, sauces, gameMode }) {
         setTitle("");
         setHotness("");
       }}>
-        <StyledInput required disabled={gameMode !== "empty" && gameMode !== "ready"} placeholder="Sauce Name?" value={title} onChange={event => setTitle(event.target.value)} />
-        <StyledSelect required disabled={gameMode !== "empty" && gameMode !== "ready"} onChange={event => setHotness(event.target.value)}>
+        <StyledInput
+          required
+          disabled={gameMode !== "empty" && gameMode !== "ready"}
+          placeholder="Sauce Name?"
+          value={title}
+          onChange={event => setTitle(event.target.value)} />
+        <StyledSelect
+          required
+          disabled={gameMode !== "empty" && gameMode !== "ready"}
+          onChange={event => setHotness(event.target.value)}>
           <option value="" selected="selected" hidden="hidden">🔥 or not?</option>
           <option value="3">🔥🔥🔥</option>
           <option value="2">🔥🔥</option>
@@ -26,9 +34,12 @@ export default function Form({ onAdd, setSauces, sauces, gameMode }) {
         <StyledButton disabled={gameMode !== "empty" && gameMode !== "ready"} bg="warning">Punch it!</StyledButton>
       </StyledForm >
       <StyledAdder>
-        <StyledButton disabled={gameMode !== "empty" && gameMode !== "ready"} type="Add" onClick={() => setSauces(addRandomSauce(sauces, possibleSauces))}>
+        <StyledButton
+          disabled={gameMode !== "empty" && gameMode !== "ready"}
+          type="Add"
+          onClick={() => setSauces(addRandomSauce(sauces, possibleSauces))}>
           Add random hot shit
-      </StyledButton>
+        </StyledButton>
       </StyledAdder>
     </StyledContainer>
   )

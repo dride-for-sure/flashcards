@@ -101,7 +101,7 @@ export const Button = styled.button`
   font-size: 2.5rem;
   background-color: transparent;
 
-  &:hover {
+  &:not(:disabled):hover {
     opacity: 0.5;
     cursor: pointer;
   }
