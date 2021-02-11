@@ -1,20 +1,20 @@
-import { deleteAllSauces } from '../../common/helper';
-import { Button as StyledButton, Container as StyledContainer, Message as StyledMessage } from './styles';
+import { deleteAllQuestions } from '../../common/helper';
+import { Button, Container, Message } from './styles';
 
-export const Congratulations = ({ result, messages, setSauces, counter }) => {
+export const Congratulations = ({ result, messages, setQuestions, counter }) => {
 
   const count = <span>🤟 {counter.checked} / ☠️ {counter.missed}</span>;
-  const btn = <StyledButton onClick={() => setSauces(deleteAllSauces())}>Again, again and again!</StyledButton>;
-  const win = <StyledMessage><span>🏅</span>{count}<span>Well done! Praise the {messages.win}!</span>{btn}</StyledMessage>;
-  const draw = <StyledMessage><span>🤒</span>{count}<span>Well, trying is not enough...</span>{btn}</StyledMessage>;
-  const loose = <StyledMessage><span>☠️ </span>{count}<span>This was probably nothing</span>{btn}</StyledMessage >;
+  const btn = <Button onClick={() => setQuestions(deleteAllQuestions())}>Again, again and again!</Button>;
+  const win = <Message><span>🏅</span>{count}<span>Well done! Praise the {messages.win}!</span>{btn}</Message>;
+  const draw = <Message><span>🤒</span>{count}<span>Well, trying is not enough...</span>{btn}</Message>;
+  const loose = <Message><span>☠️ </span>{count}<span>This was probably nothing</span>{btn}</Message >;
 
   return (
-    <StyledContainer result={result}>
+    <Container result={result}>
       {result === "win" ? win : null}
       {result === "draw" ? draw : null}
       {result === "loose" ? loose : null}
-    </StyledContainer >
+    </Container >
 
   );
 }
