@@ -1,77 +1,89 @@
 import axios from "axios";
 
-
-export const addSauce = (sauces, sauce) => {
-  let updatedSauces = [...sauces];
-  updatedSauces.push({
+export const addQuestion = (questions, question) => {
+  let updatedQuestions = [...questions];
+  updatedQuestions.push({
     id: uuid(),
-    ...sauce
+    ...question
   });
-  return updatedSauces;
+  return updatedQuestions;
 }
 
-export const addRandomSauce = (sauces, possibleSauces) => {
-  let updatedSauces = [...sauces];
-  updatedSauces.push({
-    id: uuid(),
-    ...possibleSauces[Math.floor(Math.random() * possibleSauces.length)]
-  });
-  return updatedSauces;
+export const addRandomQuestion = (difficulty, possibleQuestions) => {
+  let maxQuestions;
+  let filteredQuestions;
+  if (difficulty === "easy") {
+    maxQuestions = 25;
+    filteredQuestions = possibleQuestions.filter(question => question.nerdfactor === "1");
+  } else if (difficulty === "moderat") {
+    maxQuestions = 20;
+    filteredQuestions = possibleQuestions.filter(question => question.nerdfactor !== "3");
+  } else {
+    maxQuestions = 15;
+    filteredQuestions = possibleQuestions;
+  }
+  let updatedQuestions = [];
+  for (let i = 0; i < maxQuestions; i++) {
+    updatedQuestions.push({
+      id: uuid(),
+      ...filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)]
+    });
+  }
+  return updatedQuestions;
 };
 
-export const deleteAllSauces = () => {
+export const deleteAllQuestions = () => {
   return [];
 }
 
-export const checkThisSauce = (id, sauces) => {
-  let updatedSauces = [...sauces];
-  return updatedSauces.map(sauce => sauce.id === id ? { status: "checked", title: sauce.title, hotness: sauce.hotness } : sauce);
+export const checkThisQuestion = (id, questions) => {
+  let updatedQuestions = [...questions];
+  return updatedQuestions.map(question => question.id === id ? { status: "checked", id: question.id, topic: question.topic, nerdfactor: question.nerdfactor } : question);
 }
 
-export const missedThisSauce = (id, sauces) => {
-  let updatedSauces = [...sauces];
-  return updatedSauces.map(sauce => sauce.id === id ? { status: "missed", title: sauce.title, hotness: sauce.hotness } : sauce);
+export const missedThisQuestion = (id, questions) => {
+  let updatedQuestions = [...questions];
+  return updatedQuestions.map(question => question.id === id ? { status: "missed", id: question.id, topic: question.topic, nerdfactor: question.nerdfactor } : question);
 }
 
-export const updateCounter = (sauces) => {
-  let thisSauces = [...sauces];
+export const updateCounter = (questions) => {
+  let thisQuestions = [...questions];
   let updatedCounter = { checked: 0, missed: 0 };
-  thisSauces.forEach(sauce => {
-    if (sauce.status === "checked") {
+  thisQuestions.forEach(question => {
+    if (question.status === "checked") {
       updatedCounter.checked = parseFloat(updatedCounter.checked) + 1;
-    } else if (sauce.status === "missed") {
+    } else if (question.status === "missed") {
       updatedCounter.missed = parseFloat(updatedCounter.missed) + 1;
     }
   });
   return updatedCounter;
 }
 
-export const selectRandomSauce = (sauces) => {
-  console.log(sauces);
-  const filteredSauces = [...sauces].filter(sauce => sauce.status === "deactivated");
-  if (filteredSauces.length === 0) {
-    return sauces;
+export const selectRandomQuestion = (questions) => {
+  const filteredQuestions = [...questions].filter(question => question.status === "deactivated");
+  if (filteredQuestions.length === 0) {
+    return questions;
   } else {
-    let updatedSauce = { ...filteredSauces[Math.floor(Math.random() * filteredSauces.length)] };
-    updatedSauce.status = "selected";
-    return [...sauces].map(sauce => sauce.id === updatedSauce.id ? updatedSauce : sauce);
+    let updatedQuestion = { ...filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)] };
+    updatedQuestion.status = "selected";
+    return [...questions].map(question => question.id === updatedQuestion.id ? updatedQuestion : question);
   }
 };
 
-export const changeGameMode = (sauces) => {
-  if (sauces.length === 0) {
+export const changeGameMode = (questions) => {
+  if (questions.length === 0) {
     return "empty";
   }
 
-  if (sauces.every(sauce => sauce.status === "deactivated")) {
+  if (questions.every(question => question.status === "deactivated")) {
     return "ready";
   }
 
-  if (sauces.some(sauce => sauce.status === "selected")) {
+  if (questions.some(question => question.status === "selected")) {
     return "play";
   }
 
-  if ((sauces.every(sauce => (sauce.status === "checked") || sauce.status === "missed"))) {
+  if ((questions.every(question => (question.status === "checked") || question.status === "missed"))) {
     return "finish";
   }
 }

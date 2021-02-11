@@ -1,32 +1,142 @@
-export const possibleSauces = [
+export const possibleQuestions = [
   {
-    title: "Sudden Death",
-    hotness: "3",
-    status: "deactivated"
+    topic: "Arrays",
+    description: "Get every second element",
+    nerdfactor: "3",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
   },
   {
-    title: "Imperator 1337",
-    hotness: "2",
-    status: "deactivated"
+    topic: "Arrays",
+    description: "Get every second element",
+    nerdfactor: "2",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
   },
   {
-    title: "Sweet Not",
-    hotness: "2",
-    status: "deactivated"
+    topic: "Arrays",
+    description: "Get every second element",
+    nerdfactor: "2",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
   },
   {
-    title: "Black Mice X",
-    hotness: "1",
-    status: "deactivated"
+    topic: "Arrays",
+    description: "Get every second element",
+    nerdfactor: "1",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
   },
   {
-    title: "Hot Sauce",
-    hotness: "3",
-    status: "deactivated"
+    topic: "Arrays",
+    description: "Get every second element",
+    nerdfactor: "3",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
   },
   {
-    title: "Ketchup",
-    hotness: "1",
-    status: "deactivated"
+    topic: "Arrays",
+    description: "Get every second element",
+    nerdfactor: "1",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
+  },
+  {
+    topic: "Objects",
+    description: "Print all values",
+    nerdfactor: "2",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
+  },
+  {
+    topic: "Objects",
+    description: "Print all values",
+    nerdfactor: "1",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
+  },
+  {
+    topic: "Objects",
+    description: "Print all values",
+    nerdfactor: "3",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
+  },
+  {
+    topic: "Objects",
+    description: "Print all values",
+    nerdfactor: "1",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
+  },
+  {
+    topic: "Objects",
+    description: "Print all values",
+    nerdfactor: "2",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
+  },
+  {
+    topic: "Objects",
+    description: "Print all values",
+    nerdfactor: "1",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
+  },
+  {
+    topic: "Objects",
+    description: "Print all values",
+    nerdfactor: "3",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
+  },
+  {
+    topic: "Objects",
+    description: "Print all values",
+    nerdfactor: "1",
+    status: "deactivated",
+    answer: {
+      a: "Ouputs 2",
+      b: "null"
+    }
   },
 ];

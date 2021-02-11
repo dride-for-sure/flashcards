@@ -1,22 +1,19 @@
 import styled from 'styled-components';
 
-export const Header = styled.header`
-  padding: 40px 0;
+export const Head = styled.header`
   display: flex;
   flex-direction: column;
   background-color: darkseagreen;
   color: white;
-  
-  > * {
-    align-self:center;
-  }
+  padding: 20px;
+  box-sizing: border-box;
+  height: 200px;
 `;
 
 export const H1 = styled.h1`
   text-transform: uppercase;
   padding: 0;
   margin: 0;
-  text-align:center;
 `;
 
 export const Span = styled.span`
