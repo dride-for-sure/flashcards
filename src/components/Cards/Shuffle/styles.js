@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const ShuffleCard = styled.div`
   background-color: #666;
@@ -14,6 +14,10 @@ export const ShuffleCard = styled.div`
   flex-direction: column;
   font-family: 'Times New Roman', Times, serif;
   text-align:left;
+
+  ${props => props.disabled && css`
+    opacity: .5;
+  `}
 
   > span {
     &:first-of-type{
@@ -40,7 +44,7 @@ export const Difficulty = styled.button`
   font-size: 2rem;
   outline: none;
 
-  &:hover {
+  &:not(:disabled):hover {
     cursor: pointer;
     opacity: 0.8;
   }
