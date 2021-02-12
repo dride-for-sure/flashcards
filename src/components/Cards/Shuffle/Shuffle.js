@@ -3,15 +3,30 @@ import { possibleQuestions } from "../../../store/store";
 import { Difficulty, ShuffleCard } from "./styles";
 
 
-export default function Shuffle({ gameMode, setQuestions }) {
+export default function Shuffle({ gameMode, shuffleQuestions }) {
 
   return (
     <ShuffleCard disabled={gameMode !== "empty" && gameMode !== "ready"}>
       <span>Shuffle that deck</span>
       <span>
-        <Difficulty onClick={() => setQuestions(addRandomQuestion("easy", possibleQuestions))} for="difficultyEasy" title="Easy peasy">🥱</Difficulty>
-        <Difficulty onClick={() => setQuestions(addRandomQuestion("moderat", possibleQuestions))} for="difficultyModerat" title="For everyday">💪</Difficulty>
-        <Difficulty onClick={() => setQuestions(addRandomQuestion("hard", possibleQuestions))} for="difficultyHard" title="100% pain">🤯</Difficulty>
+        <Difficulty
+          disabled={gameMode !== "empty" && gameMode !== "ready"}
+          onClick={() => shuffleQuestions(addRandomQuestion("easy", possibleQuestions))}
+          title="Easy peasy">
+          🥱
+        </Difficulty>
+        <Difficulty
+          disabled={gameMode !== "empty" && gameMode !== "ready"}
+          onClick={() => shuffleQuestions(addRandomQuestion("moderat", possibleQuestions))}
+          title="For everyday">
+          💪
+        </Difficulty>
+        <Difficulty
+          disabled={gameMode !== "empty" && gameMode !== "ready"}
+          onClick={() => shuffleQuestions(addRandomQuestion("hard", possibleQuestions))}
+          title="100% pain">
+          🤯
+        </Difficulty>
       </span>
     </ShuffleCard>
   )

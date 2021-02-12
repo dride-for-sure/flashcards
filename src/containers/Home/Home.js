@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { calcResult, changeGameMode, checkThisQuestion, getMessages, missedThisQuestion, selectRandomQuestion, updateCounter } from "../../common/helper";
+import { calcResult, changeGameMode, checkThisQuestion, getMessages, missedThisQuestion, selectRandomQuestion, timeOutLimesZero, updateCounter } from "../../common/helper";
 import Congratulations from "../../components/Congratulations/Congratulations";
 import Grid from "./Grid/Grid";
 
@@ -35,6 +35,7 @@ export default function Home() {
         onChecked={id => {
           setQuestions(selectRandomQuestion(checkThisQuestion(id, questions)));
         }}
+        shuffleQuestions={questions => timeOutLimesZero(questions, setQuestions, 1000, 0)}
         setQuestions={questions => setQuestions(questions)}
         gameMode={gameMode}
       />
