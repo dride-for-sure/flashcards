@@ -5,7 +5,7 @@ export default function Questions({ questions }) {
   return (
     <>
       {
-        questions.map((question) => (
+        questions.map((question) =>
           <Card status={question.status} nerdfactor={question.nerdfactor} key={question.id} >
             <span>{question.nerdfactor === "3" ? "🤯" : question.nerdfactor === "2" ? "💪" : "🥱"}</span>
             <span>{question.topic} </span>
@@ -16,7 +16,7 @@ export default function Questions({ questions }) {
             </span>
             <span> Timer</span>
           </Card>
-        ))
+        )
       }
     </>
   );

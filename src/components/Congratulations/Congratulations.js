@@ -1,9 +1,12 @@
 import { deleteAllQuestions } from '../../common/helper';
 import { Button, Container, Message } from './styles';
 
-export const Congratulations = ({ result, setQuestions, counter }) => {
+export const Congratulations = ({ setQuestions, gameMode }) => {
 
-  const count = <span>🤟 {counter.checked} / ☠️ {counter.missed}</span>;
+  if (gameMode !== "finish") return null;
+
+  const result = "win";
+  const count = <span>🤟 X / ☠️ Y</span>;
   const btn = <Button onClick={() => setQuestions(deleteAllQuestions())}>Again, again and again!</Button>;
   const win = <Message><span>🏅</span>{count}<span>Well done! Praise the nerd!</span>{btn}</Message>;
   const draw = <Message><span>🤒</span>{count}<span>Well, trying is not enough...</span>{btn}</Message>;

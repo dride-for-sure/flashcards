@@ -66,12 +66,15 @@ export const selectRandomQuestion = (questions) => {
   }
 };
 
-export const timeOutLimesZero = (questions, setQuestions, maxDelay, iteration) => {
+export const timeOutLimesZero = (questions, setQuestions, setGameMode, maxDelay, iteration) => {
   const delay = Math.pow(1.3, iteration);
   console.log(delay);
-  if (delay >= maxDelay) return;
+  if (delay >= maxDelay) {
+    setGameMode("prepared");
+    return;
+  }
   setQuestions(shuffleQuestions(questions));
-  setTimeout(() => timeOutLimesZero(questions, setQuestions, maxDelay, iteration += 1), delay);
+  setTimeout(() => timeOutLimesZero(questions, setQuestions, setGameMode, maxDelay, iteration += 1), delay);
 }
 
 export const shuffleQuestions = (questions) => {
