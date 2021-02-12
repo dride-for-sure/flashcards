@@ -1,4 +1,4 @@
-import { deleteAllQuestions } from '../../common/helper';
+import { deleteAllQuestions } from '../../../common/helper';
 import { Button, Container, Message } from './styles';
 
 export const Congratulations = ({ setQuestions, gameMode }) => {

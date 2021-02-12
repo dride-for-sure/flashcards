@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { checkThisQuestion, missedThisQuestion, selectRandomQuestion, timeOutLimesZero } from "../../common/helper";
-import Congratulations from "../../components/Congratulations/Congratulations";
+import Congratulations from "./Congratulations/Congratulations";
 import Grid from "./Grid/Grid";
+
 
 export default function Home() {
   const [questions, setQuestions] = useState([]);
