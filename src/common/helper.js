@@ -10,16 +10,13 @@ export const addQuestion = (questions, question) => {
 }
 
 export const addRandomQuestion = (difficulty, possibleQuestions) => {
-  let maxQuestions;
+  let maxQuestions = 20;
   let filteredQuestions;
   if (difficulty === "easy") {
-    maxQuestions = 25;
     filteredQuestions = possibleQuestions.filter(question => question.nerdfactor === "1");
   } else if (difficulty === "moderat") {
-    maxQuestions = 20;
     filteredQuestions = possibleQuestions.filter(question => question.nerdfactor !== "3");
   } else {
-    maxQuestions = 15;
     filteredQuestions = possibleQuestions;
   }
   let updatedQuestions = [];
@@ -69,6 +66,24 @@ export const selectRandomQuestion = (questions) => {
     return [...questions].map(question => question.id === updatedQuestion.id ? updatedQuestion : question);
   }
 };
+
+export const timeOutLimesZero = (questions, setQuestions, maxDelay, iteration) => {
+  const delay = Math.pow(1.3, iteration);
+  console.log(delay);
+  if (delay >= maxDelay) return;
+  setQuestions(shuffleQuestions(questions));
+  setTimeout(() => timeOutLimesZero(questions, setQuestions, maxDelay, iteration += 1), delay);
+}
+
+export const shuffleQuestions = (questions) => {
+  let shuffled = [];
+  let rest = [...questions];
+  while (rest.length > 0) {
+    const index = Math.floor(Math.random() * rest.length)
+    shuffled.push((rest.splice(index, 1)).pop());
+  }
+  return shuffled;
+}
 
 export const changeGameMode = (questions) => {
   if (questions.length === 0) {
