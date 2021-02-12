@@ -14,6 +14,15 @@ export const ShuffleCard = styled.div`
   flex-direction: column;
   font-family: 'Times New Roman', Times, serif;
   text-align:left;
+  border: 5px dotted transparent;
+
+  ${props => props.disabled && css`
+    opacity: .5;
+  `}
+
+  ${props => props.gameMode === "empty" && css`
+    border-color: grey;
+  `}
 
   ${props => props.disabled && css`
     opacity: .5;

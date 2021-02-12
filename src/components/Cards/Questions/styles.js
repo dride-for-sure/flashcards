@@ -61,15 +61,20 @@ export const Card = styled.div`
       } 
     `}
 
+    ${props => props.gameMode === "play" && css`
+      opacity: .5;
+    `}
+
     ${props => props.status === "selected" && css`
-      
       transform: scale(1.2) rotate(-2deg) translate(1%,2%);
       transition-duration: .8s;
       z-index: 2;
+      border: 5px solid rgba(255,255,255,.5);
+      padding: 15px;
+      opacity: 1;
     `}
 
     ${props => props.status === "checked" && css`
-      
       display: flex;
       justify-content: center;
       opacity: 0.5;
@@ -86,7 +91,6 @@ export const Card = styled.div`
     `}
 
     ${props => props.status === "missed" && css`
-      
       display: flex;
       justify-content: center;
       opacity: 0.5;

@@ -1,43 +1,29 @@
-import { useEffect, useState } from "react";
-import { calcResult, changeGameMode, checkThisQuestion, getMessages, missedThisQuestion, selectRandomQuestion, timeOutLimesZero, updateCounter } from "../../common/helper";
-import Congratulations from "../../components/Congratulations/Congratulations";
+import { useState } from "react";
+import { checkThisQuestion, missedThisQuestion, selectRandomQuestion, timeOutLimesZero } from "../../common/helper";
+import Congratulations from "./Congratulations/Congratulations";
 import Grid from "./Grid/Grid";
+
 
 export default function Home() {
   const [questions, setQuestions] = useState([]);
-  const [counter, setCounter] = useState({ checked: 0, missed: 0 });
-  const [gameMode, setGameMode] = useState("");
-  const [messages, setMessages] = useState();
-
-  useEffect(() => {
-    setCounter(updateCounter(questions))
-    setGameMode(changeGameMode(questions))
-  }, [questions])
-
-  useEffect(() => {
-    setMessages(getMessages());
-  }, [])
+  const [gameMode, setGameMode] = useState("empty"); // empty, shuffle, prepared, play, finish
 
   return (
     <>
-      {gameMode === "finish"
-        ? <Congratulations
-          result={calcResult(counter)}
-          messages={messages}
-          setQuestions={questions => setQuestions(questions)}
-          counter={counter} />
-        : null}
+      <Congratulations
+        setQuestions={questions => setQuestions(questions)}
+        setGameMode={setGameMode} />
       <Grid
         questions={questions}
-        onMissed={id => {
-          setQuestions(selectRandomQuestion(missedThisQuestion(id, questions)));
-        }}
-        onChecked={id => {
-          setQuestions(selectRandomQuestion(checkThisQuestion(id, questions)));
+        onMissed={id => { setQuestions(selectRandomQuestion(missedThisQuestion(id, questions))); }}
+        onChecked={id => { setQuestions(selectRandomQuestion(checkThisQuestion(id, questions))); }}
+        shuffleQuestions={questions => {
+          timeOutLimesZero(questions, setQuestions, setGameMode, 1000, 0);
         }}
         shuffleQuestions={questions => timeOutLimesZero(questions, setQuestions, 1000, 0)}
         setQuestions={questions => setQuestions(questions)}
         gameMode={gameMode}
+        setGameMode={gameMode => setGameMode(gameMode)}
       />
     </>
   );
