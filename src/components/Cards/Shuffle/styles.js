@@ -24,6 +24,10 @@ export const ShuffleCard = styled.div`
     border-color: grey;
   `}
 
+  ${props => props.disabled && css`
+    opacity: .5;
+  `}
+
   > span {
     &:first-of-type{
       font-size: 2rem;

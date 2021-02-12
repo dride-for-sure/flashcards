@@ -20,6 +20,7 @@ export default function Home() {
         shuffleQuestions={questions => {
           timeOutLimesZero(questions, setQuestions, setGameMode, 1000, 0);
         }}
+        shuffleQuestions={questions => timeOutLimesZero(questions, setQuestions, 1000, 0)}
         setQuestions={questions => setQuestions(questions)}
         gameMode={gameMode}
         setGameMode={gameMode => setGameMode(gameMode)}
