@@ -35,7 +35,8 @@ export default function Home() {
         onChecked={id => {
           setQuestions(selectRandomQuestion(checkThisQuestion(id, questions)));
         }}
-        setQuestions={questions => timeOutLimesZero(questions, setQuestions, 1000, 0)}
+        shuffleQuestions={questions => timeOutLimesZero(questions, setQuestions, 1000, 0)}
+        setQuestions={questions => setQuestions(questions)}
         gameMode={gameMode}
       />
     </>
