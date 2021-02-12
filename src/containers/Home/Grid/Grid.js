@@ -11,8 +11,8 @@ export default function Grid({ questions, setQuestions, shuffleQuestions, onMiss
     <Container>
       <GameTitle />
       <Shuffle questions={questions} shuffleQuestions={shuffleQuestions} gameMode={gameMode} setGameMode={setGameMode} />
-      <Play setQuestions={setQuestions} questions={questions} gameMode={gameMode} />
-      <Questions questions={questions} onMissed={onMissed} onChecked={onChecked} />
+      <Play setQuestions={setQuestions} questions={questions} gameMode={gameMode} setGameMode={setGameMode} />
+      <Questions questions={questions} onMissed={onMissed} onChecked={onChecked} gameMode={gameMode} />
     </Container >
   );
 }

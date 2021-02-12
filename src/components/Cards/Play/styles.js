@@ -5,7 +5,6 @@ export const Button = styled.button`
   padding: 20px;
   box-sizing: border-box;
   height: 200px;
-  border: 5px dotted grey;
   font-family: 'Times New Roman', Times, serif;
   color: white;
   outline: none;
@@ -16,10 +15,19 @@ export const Button = styled.button`
   display:flex;
   text-transform: uppercase;
   text-align:left;
+  border: 5px dotted transparent;
 
   ${props => props.gameMode === "play" && css`
-    background-color: tomato;
+    background-color: khaki;
   `}
+
+  ${props => props.gameMode === "prepared" && css`
+    border: 5px dotted grey;
+  `}
+
+  &:disabled {
+    opacity: .5;
+  }
 
   &:not(:disabled) {
     cursor: pointer;

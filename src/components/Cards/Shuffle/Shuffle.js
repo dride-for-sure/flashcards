@@ -8,7 +8,7 @@ export default function Shuffle({ shuffleQuestions, gameMode, setGameMode }) {
   const disabled = gameMode !== "empty" && gameMode !== "ready" && gameMode !== "prepared";
 
   return (
-    <ShuffleCard disabled={disabled}>
+    <ShuffleCard disabled={disabled} gameMode={gameMode}>
       <span>Shuffle that deck</span>
       <span>
         <Difficulty
