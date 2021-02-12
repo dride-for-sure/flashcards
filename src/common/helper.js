@@ -68,7 +68,6 @@ export const selectRandomQuestion = (questions) => {
 
 export const timeOutLimesZero = (questions, setQuestions, setGameMode, maxDelay, iteration) => {
   const delay = Math.pow(1.3, iteration);
-  console.log(delay);
   if (delay >= maxDelay) {
     setGameMode("prepared");
     return;
