@@ -1,4 +1,3 @@
-import axios from "axios";
 
 export const addQuestion = (questions, question) => {
   let updatedQuestions = [...questions];
@@ -113,19 +112,6 @@ export const calcResult = (counter) => {
   } else {
     return "";
   }
-}
-
-export const getMessages = () => {
-  let updatedMessages = { win: "", draw: "", loose: "" };
-  for (const status in updatedMessages) {
-    getMessage().then(a => updatedMessages[status] = a);
-  }
-  return updatedMessages;
-}
-
-const getMessage = () => {
-  return axios.get('https://httpbin.org/get?answer=42')
-    .then(response => response.data.args.answer);
 }
 
 const uuid = () => {
