@@ -125,43 +125,6 @@ export const timeOutLimesZero = (
   delay);
 };
 
-export const changeGameMode = (questions) => {
-  if (questions.length === 0) {
-    return 'empty';
-  }
-
-  if (questions.every((question) => question.status === 'deactivated')) {
-    return 'ready';
-  }
-
-  if (questions.some((question) => question.status === 'selected')) {
-    return 'play';
-  }
-
-  if (questions.every(
-    (question) => question.status === 'checked' || question.status === 'missed',
-  )) {
-    return 'finish';
-  }
-
-  return 'empty';
-};
-
-// export const calcResult = (counter) => {
-//   if (counter.checked > counter.missed) {
-//     return 'win';
-//   }
-//   if (counter.checked === counter.missed) {
-//     return 'draw';
-//   }
-//   if (counter.checked <= counter.missed) {
-//     return 'loose';
-//   }
-//   return '';
-// };
-
-// TODO: {missed: checked: total:}
-
 export const calcResult = (questions) => {
   const missed = questions.reduce((acc, value) => (value.status === 'missed' ? acc + 1 : acc), 0);
   const checked = questions.reduce((acc, value) => (value.status === 'checked' ? acc + 1 : acc), 0);
