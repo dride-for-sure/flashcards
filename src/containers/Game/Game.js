@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
-import { checkThisQuestion, missedThisQuestion, selectNextQuestion, timeOutLimesZero } from '../../common/helper';
-import Congratulations from './Congratulations/Congratulations';
+import React, { useEffect, useState } from 'react';
+import { calcResult, checkThisQuestion, deleteAllQuestions, missedThisQuestion, selectNextQuestion, timeOutLimesZero } from '../../common/helper';
+import Congrats from './Congrats/Congrats';
 import Grid from './Grid/Grid';
 
-export default function Home() {
+export default function Game() {
   const [questions, setQuestions] = useState([]);
   const [gameMode, setGameMode] = useState('empty');
+  const [results, setResults] = useState({});
+
+  useEffect(() => {
+    setResults(calcResult(questions));
+  }, [questions]);
+
+  useEffect(() => {
+    if (questions.length > 0 && questions.length === results.total) {
+      setGameMode('finish');
+    }
+  }, [results]);
 
   const onMissed = (question) => setQuestions(
     selectNextQuestion(missedThisQuestion(question, questions)),
@@ -13,12 +24,17 @@ export default function Home() {
   const onChecked = (question) => setQuestions(
     selectNextQuestion(checkThisQuestion(question, questions)),
   );
+  const handleCongratsClick = () => {
+    setQuestions(deleteAllQuestions());
+    setGameMode('empty');
+  };
 
   return (
     <>
-      <Congratulations
-        setQuestions={(returnedQuestions) => setQuestions(returnedQuestions)}
-        setGameMode={setGameMode}
+      <Congrats
+        gameMode={gameMode}
+        handleCongratsClick={handleCongratsClick}
+        results={results}
       />
       <Grid
         questions={questions}

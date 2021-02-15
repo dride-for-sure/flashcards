@@ -15,8 +15,7 @@ export const addQuestion = (questions, question) => {
   return updatedQuestions;
 };
 
-export const addRandomQuestion = (difficulty, possibleQuestions) => {
-  const maxQuestions = 20;
+export const addRandomQuestion = (difficulty, possibleQuestions, total) => {
   let filteredQuestions;
   if (difficulty === 'easy') {
     filteredQuestions = possibleQuestions.filter(
@@ -30,7 +29,7 @@ export const addRandomQuestion = (difficulty, possibleQuestions) => {
     filteredQuestions = possibleQuestions;
   }
   const updatedQuestions = [];
-  for (let i = 0; i < maxQuestions; i += 1) {
+  for (let i = 0; i < total; i += 1) {
     updatedQuestions.push({
       id: uuid(),
       ...filteredQuestions[
@@ -148,15 +147,28 @@ export const changeGameMode = (questions) => {
   return 'empty';
 };
 
-export const calcResult = (counter) => {
-  if (counter.checked > counter.missed) {
-    return 'win';
-  }
-  if (counter.checked === counter.missed) {
-    return 'draw';
-  }
-  if (counter.checked <= counter.missed) {
-    return 'loose';
-  }
-  return '';
+// export const calcResult = (counter) => {
+//   if (counter.checked > counter.missed) {
+//     return 'win';
+//   }
+//   if (counter.checked === counter.missed) {
+//     return 'draw';
+//   }
+//   if (counter.checked <= counter.missed) {
+//     return 'loose';
+//   }
+//   return '';
+// };
+
+// TODO: {missed: checked: total:}
+
+export const calcResult = (questions) => {
+  const missed = questions.reduce((acc, value) => (value.status === 'missed' ? acc + 1 : acc), 0);
+  const checked = questions.reduce((acc, value) => (value.status === 'checked' ? acc + 1 : acc), 0);
+
+  return {
+    missed,
+    checked,
+    total: missed + checked,
+  };
 };

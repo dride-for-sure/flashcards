@@ -1,11 +1,11 @@
-import Home from './containers/Home/Home';
+import Game from './containers/Game/Game';
 import GlobalStyle from './GlobalStyles';
 
 function App() {
   return (
     <>
       <GlobalStyle />
-      <Home />
+      <Game />
     </>
   );
 }

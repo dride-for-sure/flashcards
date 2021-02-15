@@ -14,7 +14,7 @@ export default function Shuffle({ shuffleQuestions, gameMode, setGameMode }) {
           disabled={disabled}
           onClick={() => {
             setGameMode('shuffle');
-            shuffleQuestions(addRandomQuestion('easy', possibleQuestions));
+            shuffleQuestions(addRandomQuestion('easy', possibleQuestions, 5));
           }}
           title="Easy peasy">
           🥱
@@ -23,7 +23,7 @@ export default function Shuffle({ shuffleQuestions, gameMode, setGameMode }) {
           disabled={disabled}
           onClick={() => {
             setGameMode('shuffle');
-            shuffleQuestions(addRandomQuestion('moderat', possibleQuestions));
+            shuffleQuestions(addRandomQuestion('moderat', possibleQuestions, 5));
           }}
           title="For everyday">
           💪
@@ -32,7 +32,7 @@ export default function Shuffle({ shuffleQuestions, gameMode, setGameMode }) {
           disabled={disabled}
           onClick={() => {
             setGameMode('shuffle');
-            shuffleQuestions(addRandomQuestion('hard', possibleQuestions));
+            shuffleQuestions(addRandomQuestion('hard', possibleQuestions, 5));
           }}
           title="100% pain">
           🤯
