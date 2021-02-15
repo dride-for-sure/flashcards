@@ -38,7 +38,11 @@ export default function Game() {
             handleShuffleClick(difficulty, setGameMode, possibleQuestions, setQuestions);
           }
         }
-        onQuestionClick={(question) => handleQuestionClick(question, questions, setQuestions)}
+        onQuestionClick={
+          (question, answerClicked) => {
+            handleQuestionClick(question, questions, setQuestions, answerClicked);
+          }
+        }
         getNerdfactorIcon={(question) => nerdfactorIcon(question)}
       />
     </>

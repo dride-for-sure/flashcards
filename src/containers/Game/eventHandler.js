@@ -26,8 +26,8 @@ export const handleShuffleClick = (difficulty, setGameMode, possibleQuestions, s
   );
 };
 
-export const handleQuestionClick = (question, questions, setQuestions) => (
-  question.answer.a.correct === true
+export const handleQuestionClick = (question, questions, setQuestions, answerClicked) => (
+  question.answer[answerClicked].correct === true
     ? setQuestions(
       selectNextQuestion(missedThisQuestion(question, questions)),
     )
