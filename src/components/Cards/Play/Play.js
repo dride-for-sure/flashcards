@@ -1,8 +1,12 @@
 import PropTypes from 'prop-types';
-import { deleteAllQuestions, selectNextQuestion } from '../../../common/helper';
 import Button from './styles';
 
-export default function PlayControls({ setQuestions, questions, gameMode, setGameMode }) {
+export default function PlayControls(
+  {
+    gameMode,
+    onPlayClick,
+  },
+) {
   const btn = () => {
     if (gameMode === 'play') {
       return 'Give up!';
@@ -18,32 +22,13 @@ export default function PlayControls({ setQuestions, questions, gameMode, setGam
     <Button
       disabled={gameMode !== 'ready' && gameMode !== 'play' && gameMode !== 'finish' && gameMode !== 'prepared'}
       gameMode={gameMode}
-      onClick={() => {
-        if (gameMode === 'prepared') {
-          setGameMode('play');
-          setQuestions(selectNextQuestion(questions));
-        } else {
-          setGameMode('empty');
-          setQuestions(deleteAllQuestions());
-        }
-      }}>
+      onClick={() => { onPlayClick(); }}>
       {btn()}
     </Button>
   );
 }
 
 PlayControls.propTypes = {
-  setQuestions: PropTypes.func.isRequired,
-  questions: PropTypes.arrayOf(PropTypes.shape({
-    topic: PropTypes.string,
-    description: PropTypes.string,
-    nerdfactor: PropTypes.string,
-    status: PropTypes.string,
-    answer: PropTypes.shape({
-      a: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
-      b: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
-    }),
-  })).isRequired,
   gameMode: PropTypes.string.isRequired,
-  setGameMode: PropTypes.func.isRequired,
+  onPlayClick: PropTypes.func.isRequired,
 };
