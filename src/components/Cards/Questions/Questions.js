@@ -30,13 +30,13 @@ export default function Questions(
             <span>
               <Button
                 disabled={question.status !== 'selected'}
-                onClick={() => { onQuestionClick(question); }}>
+                onClick={() => { onQuestionClick(question, 'a'); }}>
                 👉
                 {question.answer.a.description}
               </Button>
               <Button
                 disabled={question.status !== 'selected'}
-                onClick={() => { onQuestionClick(question); }}>
+                onClick={() => { onQuestionClick(question, 'b'); }}>
                 👉
                 {question.answer.b.description}
               </Button>
