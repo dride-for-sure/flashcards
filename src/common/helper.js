@@ -172,3 +172,12 @@ export const calcResult = (questions) => {
     total: missed + checked,
   };
 };
+
+export const nerdfactorIcon = (question) => {
+  if (question.nerdfactor === '3') {
+    return '🤯';
+  } if (question.nerdfactor === '2') {
+    return '💪';
+  }
+  return '🥱';
+};

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { addRandomQuestion, calcResult, checkThisQuestion, deleteAllQuestions, missedThisQuestion, selectNextQuestion, timeOutLimesZero } from '../../common/helper';
-import { nerdfactorIcon, possibleQuestions } from '../../store/store';
+import { addRandomQuestion, calcResult, checkThisQuestion, deleteAllQuestions, missedThisQuestion, nerdfactorIcon, selectNextQuestion, timeOutLimesZero } from '../../common/helper';
+import possibleQuestions from '../../store/store';
 import Congrats from './Congrats/Congrats';
 import Grid from './Grid/Grid';
 
