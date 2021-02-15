@@ -1,4 +1,4 @@
-export const possibleQuestions = [
+const possibleQuestions = [
   {
     topic: 'Arrays',
     description: 'Get every second element',
@@ -141,11 +141,4 @@ export const possibleQuestions = [
   },
 ];
 
-export const nerdfactorIcon = (question) => {
-  if (question.nerdfactor === '3') {
-    return '🤯';
-  } if (question.nerdfactor === '2') {
-    return '💪';
-  }
-  return '🥱';
-};
+export default possibleQuestions;
