@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { deleteAllQuestions, selectRandomQuestion } from '../../../common/helper';
+import { deleteAllQuestions, selectNextQuestion } from '../../../common/helper';
 import Button from './styles';
 
 export default function PlayControls({ setQuestions, questions, gameMode, setGameMode }) {
@@ -21,7 +21,7 @@ export default function PlayControls({ setQuestions, questions, gameMode, setGam
       onClick={() => {
         if (gameMode === 'prepared') {
           setGameMode('play');
-          setQuestions(selectRandomQuestion(questions));
+          setQuestions(selectNextQuestion(questions));
         } else {
           setGameMode('empty');
           setQuestions(deleteAllQuestions());
@@ -40,8 +40,8 @@ PlayControls.propTypes = {
     nerdfactor: PropTypes.string,
     status: PropTypes.string,
     answer: PropTypes.shape({
-      a: PropTypes.string,
-      b: PropTypes.string,
+      a: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
+      b: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
     }),
   })).isRequired,
   gameMode: PropTypes.string.isRequired,

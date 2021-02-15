@@ -43,26 +43,22 @@ export const addRandomQuestion = (difficulty, possibleQuestions) => {
 
 export const deleteAllQuestions = () => [];
 
-export const checkThisQuestion = (id, questions) => {
+export const checkThisQuestion = (selectedQuestion, questions) => {
   const updatedQuestions = [...questions];
-  return updatedQuestions.map((question) => (question.id === id
+  return updatedQuestions.map((question) => (question.id === selectedQuestion.id
     ? {
+      ...question,
       status: 'checked',
-      id: question.id,
-      topic: question.topic,
-      nerdfactor: question.nerdfactor,
     }
     : question));
 };
 
-export const missedThisQuestion = (id, questions) => {
+export const missedThisQuestion = (selectedQuestion, questions) => {
   const updatedQuestions = [...questions];
-  return updatedQuestions.map((question) => (question.id === id
+  return updatedQuestions.map((question) => (question.id === selectedQuestion.id
     ? {
+      ...question,
       status: 'missed',
-      id: question.id,
-      topic: question.topic,
-      nerdfactor: question.nerdfactor,
     }
     : question));
 };
@@ -80,17 +76,14 @@ export const updateCounter = (questions) => {
   return updatedCounter;
 };
 
-export const selectRandomQuestion = (questions) => {
+export const selectNextQuestion = (questions) => {
   const filteredQuestions = [...questions].filter(
     (question) => question.status === 'deactivated',
   );
   if (filteredQuestions.length === 0) {
     return questions;
   }
-  const updatedQuestion = {
-    ...filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)],
-  };
-  updatedQuestion.status = 'selected';
+  const updatedQuestion = { ...filteredQuestions[0], status: 'selected' };
   return [...questions].map((question) => {
     if (question.id === updatedQuestion.id) {
       return updatedQuestion;

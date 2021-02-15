@@ -45,8 +45,8 @@ Grid.propTypes = {
     nerdfactor: PropTypes.string,
     status: PropTypes.string,
     answer: PropTypes.shape({
-      a: PropTypes.string,
-      b: PropTypes.string,
+      a: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
+      b: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
     }),
   })).isRequired,
   setQuestions: PropTypes.func.isRequired,

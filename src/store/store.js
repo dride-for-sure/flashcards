@@ -5,8 +5,8 @@ const possibleQuestions = [
     nerdfactor: '3',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -15,8 +15,8 @@ const possibleQuestions = [
     nerdfactor: '2',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -25,8 +25,8 @@ const possibleQuestions = [
     nerdfactor: '2',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -35,8 +35,8 @@ const possibleQuestions = [
     nerdfactor: '1',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -45,8 +45,8 @@ const possibleQuestions = [
     nerdfactor: '3',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -55,8 +55,8 @@ const possibleQuestions = [
     nerdfactor: '1',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -65,8 +65,8 @@ const possibleQuestions = [
     nerdfactor: '2',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -75,8 +75,8 @@ const possibleQuestions = [
     nerdfactor: '1',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -85,8 +85,8 @@ const possibleQuestions = [
     nerdfactor: '3',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -95,8 +95,8 @@ const possibleQuestions = [
     nerdfactor: '1',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -105,8 +105,8 @@ const possibleQuestions = [
     nerdfactor: '2',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -115,8 +115,8 @@ const possibleQuestions = [
     nerdfactor: '1',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -125,8 +125,8 @@ const possibleQuestions = [
     nerdfactor: '3',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
   {
@@ -135,8 +135,8 @@ const possibleQuestions = [
     nerdfactor: '1',
     status: 'deactivated',
     answer: {
-      a: 'Ouputs 2',
-      b: 'null',
+      a: { description: 'Ouputs 2', correct: false },
+      b: { description: 'null', correct: true },
     },
   },
 ];

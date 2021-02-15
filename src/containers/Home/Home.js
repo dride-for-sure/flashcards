@@ -1,32 +1,39 @@
 import React, { useState } from 'react';
-import { checkThisQuestion, missedThisQuestion, selectRandomQuestion, timeOutLimesZero } from '../../common/helper';
+import { checkThisQuestion, missedThisQuestion, selectNextQuestion, timeOutLimesZero } from '../../common/helper';
 import Congratulations from './Congratulations/Congratulations';
 import Grid from './Grid/Grid';
 
 export default function Home() {
   const [questions, setQuestions] = useState([]);
-  const [gameMode, setGameMode] = useState('empty'); // empty, shuffle, prepared, play, finish
+  const [gameMode, setGameMode] = useState('empty');
+
+  const onMissed = (question) => setQuestions(
+    selectNextQuestion(missedThisQuestion(question, questions)),
+  );
+  const onChecked = (question) => setQuestions(
+    selectNextQuestion(checkThisQuestion(question, questions)),
+  );
 
   return (
     <>
       <Congratulations
-        setQuestions={(returned) => setQuestions(returned)}
+        setQuestions={(returnedQuestions) => setQuestions(returnedQuestions)}
         setGameMode={setGameMode}
       />
       <Grid
         questions={questions}
-        onMissed={(id) => {
-          setQuestions(selectRandomQuestion(missedThisQuestion(id, questions)));
+        onMissed={(question) => {
+          onMissed(question);
         }}
-        onChecked={(id) => {
-          setQuestions(selectRandomQuestion(checkThisQuestion(id, questions)));
+        onChecked={(question) => {
+          onChecked(question);
         }}
-        shuffleQuestions={(returned) => {
-          timeOutLimesZero(returned, setQuestions, setGameMode, 1000, 0);
+        shuffleQuestions={(returnedQuestions) => {
+          timeOutLimesZero(returnedQuestions, setQuestions, setGameMode, 1000, 0);
         }}
-        setQuestions={(returned) => setQuestions(returned)}
+        setQuestions={(returnedQuestions) => setQuestions(returnedQuestions)}
         gameMode={gameMode}
-        setGameMode={(returned) => setGameMode(returned)}
+        setGameMode={(returnedGameMode) => setGameMode(returnedGameMode)}
       />
     </>
   );
