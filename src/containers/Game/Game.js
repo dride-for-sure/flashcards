@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { addRandomQuestion, calcResult, checkThisQuestion, deleteAllQuestions, missedThisQuestion, nerdfactorIcon, selectNextQuestion, timeOutLimesZero } from '../../common/helper';
+import { calcResult, nerdfactorIcon } from '../../common/helper';
 import possibleQuestions from '../../store/store';
 import Congrats from './Congrats/Congrats';
+import { handleCongratsClick, handlePlayClick, handleQuestionClick, handleShuffleClick } from './eventHandler';
 import Grid from './Grid/Grid';
 
 export default function Game() {
@@ -19,46 +20,11 @@ export default function Game() {
     }
   }, [results]);
 
-  const handleCongratsClick = () => {
-    setQuestions(deleteAllQuestions());
-    setGameMode('empty');
-  };
-  const handlePlayClick = () => {
-    if (gameMode === 'prepared') {
-      setGameMode('play');
-      setQuestions(selectNextQuestion(questions));
-    } else {
-      setGameMode('empty');
-      setQuestions(deleteAllQuestions());
-    }
-  };
-  const handleShuffleClick = (difficulty) => {
-    setGameMode('shuffle');
-    timeOutLimesZero(
-      addRandomQuestion(
-        difficulty,
-        possibleQuestions,
-        5,
-      ), setQuestions, setGameMode, 1000, 0,
-    );
-  };
-  const handleQuestionMissed = (question) => setQuestions(
-    selectNextQuestion(missedThisQuestion(question, questions)),
-  );
-  const handleQuestionChecked = (question) => setQuestions(
-    selectNextQuestion(checkThisQuestion(question, questions)),
-  );
-  const handleQuestionClick = (question) => (
-    question.answer.a.correct === true
-      ? handleQuestionMissed(question)
-      : handleQuestionChecked(question)
-  );
-
   return (
     <>
       {gameMode === 'finish' && (
       <Congrats
-        handleCongratsClick={handleCongratsClick}
+        handleCongratsClick={() => handleCongratsClick(setQuestions, setGameMode)}
         results={results}
       />
       )}
@@ -66,9 +32,13 @@ export default function Game() {
         questions={questions}
         gameMode={gameMode}
         setGameMode={(returnedGameMode) => setGameMode(returnedGameMode)}
-        onPlayClick={handlePlayClick}
-        onShuffleClick={(difficulty) => handleShuffleClick(difficulty)}
-        onQuestionClick={(question) => handleQuestionClick(question)}
+        onPlayClick={() => handlePlayClick(gameMode, setGameMode, questions, setQuestions)}
+        onShuffleClick={
+          (difficulty) => {
+            handleShuffleClick(difficulty, setGameMode, possibleQuestions, setQuestions);
+          }
+        }
+        onQuestionClick={(question) => handleQuestionClick(question, questions, setQuestions)}
         getNerdfactorIcon={(question) => nerdfactorIcon(question)}
       />
     </>
