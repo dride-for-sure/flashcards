@@ -10,15 +10,15 @@ export const Container = styled.div`
   justify-content:center;
   z-index:100;
 
-  ${props => props.result === "win" && css`
+  ${(props) => props.result === 'win' && css`
     background-color: rgba(110,212,142,.8);
   `}
 
-  ${props => props.result === "loose" && css`
+  ${(props) => props.result === 'loose' && css`
     background-color: rgba(244,54,54,.8);
   `}
 
-  ${props => props.result === "draw" && css`
+  ${(props) => props.result === 'draw' && css`
     background-color: rgba(153,194,212,.8);
   `}
 `;

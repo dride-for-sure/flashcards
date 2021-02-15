@@ -1,25 +1,60 @@
+import PropTypes from 'prop-types';
 import { deleteAllQuestions } from '../../../common/helper';
 import { Button, Container, Message } from './styles';
 
-export const Congratulations = ({ setQuestions, gameMode }) => {
+export default function Congratulations({ setQuestions, gameMode }) {
+  if (gameMode !== 'finish') return null;
 
-  if (gameMode !== "finish") return null;
-
-  const result = "win";
+  const result = 'win';
   const count = <span>🤟 X / ☠️ Y</span>;
-  const btn = <Button onClick={() => setQuestions(deleteAllQuestions())}>Again, again and again!</Button>;
-  const win = <Message><span>🏅</span>{count}<span>Well done! Praise the nerd!</span>{btn}</Message>;
-  const draw = <Message><span>🤒</span>{count}<span>Well, trying is not enough...</span>{btn}</Message>;
-  const loose = <Message><span>☠️ </span>{count}<span>This was probably nothing</span>{btn}</Message >;
+  const btn = (
+    <Button onClick={
+    () => setQuestions(deleteAllQuestions())
+  }>
+      Again, again and again!
+    </Button>
+  );
+  const win = (
+    <Message>
+      <span>🏅</span>
+      {count}
+      <span>Well done! Praise the nerd!</span>
+      {btn}
+    </Message>
+  );
+  const draw = (
+    <Message>
+      <span>🤒</span>
+      {count}
+      <span>Well, trying is not enough...</span>
+      {btn}
+    </Message>
+  );
+  const loose = (
+    <Message>
+      <span>☠️ </span>
+      {count}
+      <span>This was probably nothing</span>
+      {btn}
+    </Message>
+  );
 
   return (
     <Container result={result}>
-      {result === "win" ? win : null}
-      {result === "draw" ? draw : null}
-      {result === "loose" ? loose : null}
-    </Container >
+      {result === 'win' ? win : null}
+      {result === 'draw' ? draw : null}
+      {result === 'loose' ? loose : null}
+    </Container>
 
   );
 }
 
-export default Congratulations;
+Congratulations.propTypes = {
+  setQuestions: PropTypes.func,
+  gameMode: PropTypes.string,
+};
+
+Congratulations.defaultProps = {
+  setQuestions: '',
+  gameMode: 'empty',
+};

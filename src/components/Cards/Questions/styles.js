@@ -31,7 +31,7 @@ export const Card = styled.div`
     }
     
    
-    ${props => props.nerdfactor === "3" && css`
+    ${(props) => props.nerdfactor === '3' && css`
         background-color: lightcoral;
         color: white;
 
@@ -41,7 +41,7 @@ export const Card = styled.div`
         } 
       `}
 
-    ${props => props.nerdfactor === "2" && css`
+    ${(props) => props.nerdfactor === '2' && css`
       background-color: sandybrown;
       color: white;
 
@@ -51,7 +51,7 @@ export const Card = styled.div`
       } 
     `}
 
-    ${props => props.nerdfactor === "1" && css`
+    ${(props) => props.nerdfactor === '1' && css`
       background-color: mediumseagreen;
       color: white;
 
@@ -61,11 +61,11 @@ export const Card = styled.div`
       } 
     `}
 
-    ${props => props.gameMode === "play" && css`
+    ${(props) => props.gameMode === 'play' && css`
       opacity: .5;
     `}
 
-    ${props => props.status === "selected" && css`
+    ${(props) => props.status === 'selected' && css`
       transform: scale(1.2) rotate(-2deg) translate(1%,2%);
       transition-duration: .8s;
       z-index: 2;
@@ -74,7 +74,7 @@ export const Card = styled.div`
       opacity: 1;
     `}
 
-    ${props => props.status === "checked" && css`
+    ${(props) => props.status === 'checked' && css`
       display: flex;
       justify-content: center;
       opacity: 0.5;
@@ -90,7 +90,7 @@ export const Card = styled.div`
       }
     `}
 
-    ${props => props.status === "missed" && css`
+    ${(props) => props.status === 'missed' && css`
       display: flex;
       justify-content: center;
       opacity: 0.5;
