@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import { Button, Container, Message } from './styles';
 
-export default function Congrats({ handleCongratsClick, gameMode, results }) {
-  if (gameMode !== 'finish') return null;
-
+export default function Congrats({ handleCongratsClick, results }) {
   const result = () => {
     if (results.missed > results.checked) {
       return ('loose');
@@ -26,9 +24,7 @@ export default function Congrats({ handleCongratsClick, gameMode, results }) {
   );
 
   const btn = (
-    <Button onClick={
-    () => handleCongratsClick()
-  }>
+    <Button onClick={() => handleCongratsClick()}>
       Again, again and again!
     </Button>
   );
@@ -72,7 +68,6 @@ export default function Congrats({ handleCongratsClick, gameMode, results }) {
 
 Congrats.propTypes = {
   handleCongratsClick: PropTypes.func.isRequired,
-  gameMode: PropTypes.string.isRequired,
   results: PropTypes.shape({
     missed: PropTypes.number,
     checked: PropTypes.number,

@@ -2,16 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Card } from './styles';
 
-export default function Questions({ questions, gameMode, onMissed, onChecked }) {
-  const nerdfactorIcon = (question) => {
-    if (question.nerdfactor === '3') {
-      return '🤯';
-    } if (question.nerdfactor === '2') {
-      return '💪';
-    }
-    return '🥱';
-  };
-
+export default function Questions(
+  {
+    questions,
+    gameMode,
+    getNerdfactorIcon,
+    onQuestionClick,
+  },
+) {
   return (
     <>
       {
@@ -22,7 +20,7 @@ export default function Questions({ questions, gameMode, onMissed, onChecked }) 
             key={question.id}
             gameMode={gameMode}>
             <span>
-              {nerdfactorIcon(question)}
+              {getNerdfactorIcon(question)}
             </span>
             <span>
               {question.topic}
@@ -32,25 +30,13 @@ export default function Questions({ questions, gameMode, onMissed, onChecked }) 
             <span>
               <Button
                 disabled={question.status !== 'selected'}
-                onClick={() => {
-                  if (question.answer.a.correct === true) {
-                    onMissed(question);
-                  } else {
-                    onChecked(question);
-                  }
-                }}>
+                onClick={() => { onQuestionClick(question); }}>
                 👉
                 {question.answer.a.description}
               </Button>
               <Button
                 disabled={question.status !== 'selected'}
-                onClick={() => {
-                  if (question.answer.b.correct === true) {
-                    onMissed(question);
-                  } else {
-                    onChecked(question);
-                  }
-                }}>
+                onClick={() => { onQuestionClick(question); }}>
                 👉
                 {question.answer.b.description}
               </Button>
@@ -74,7 +60,7 @@ Questions.propTypes = {
       b: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
     }),
   })).isRequired,
-  onMissed: PropTypes.func.isRequired,
-  onChecked: PropTypes.func.isRequired,
   gameMode: PropTypes.string.isRequired,
+  getNerdfactorIcon: PropTypes.func.isRequired,
+  onQuestionClick: PropTypes.func.isRequired,
 };

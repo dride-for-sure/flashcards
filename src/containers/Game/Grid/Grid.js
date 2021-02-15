@@ -8,32 +8,27 @@ import Container from './styles';
 export default function Grid(
   {
     questions,
-    setQuestions,
-    shuffleQuestions,
-    onMissed,
-    onChecked,
     gameMode,
-    setGameMode,
+    onPlayClick,
+    onShuffleClick,
+    getNerdfactorIcon,
+    onQuestionClick,
   },
 ) {
   return (
     <Container>
       <GameTitle />
       <Shuffle
-        questions={questions}
-        shuffleQuestions={shuffleQuestions}
         gameMode={gameMode}
-        setGameMode={setGameMode} />
+        onShuffleClick={onShuffleClick} />
       <Play
-        setQuestions={setQuestions}
-        questions={questions}
         gameMode={gameMode}
-        setGameMode={setGameMode} />
+        onPlayClick={onPlayClick} />
       <Questions
         questions={questions}
-        onMissed={onMissed}
-        onChecked={onChecked}
-        gameMode={gameMode} />
+        gameMode={gameMode}
+        getNerdfactorIcon={getNerdfactorIcon}
+        onQuestionClick={onQuestionClick} />
     </Container>
   );
 }
@@ -49,10 +44,9 @@ Grid.propTypes = {
       b: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
     }),
   })).isRequired,
-  setQuestions: PropTypes.func.isRequired,
-  shuffleQuestions: PropTypes.func.isRequired,
-  onMissed: PropTypes.func.isRequired,
-  onChecked: PropTypes.func.isRequired,
   gameMode: PropTypes.string.isRequired,
-  setGameMode: PropTypes.func.isRequired,
+  onPlayClick: PropTypes.func.isRequired,
+  onShuffleClick: PropTypes.func.isRequired,
+  getNerdfactorIcon: PropTypes.func.isRequired,
+  onQuestionClick: PropTypes.func.isRequired,
 };
