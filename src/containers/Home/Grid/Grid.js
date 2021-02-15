@@ -44,25 +44,15 @@ Grid.propTypes = {
     description: PropTypes.string,
     nerdfactor: PropTypes.string,
     status: PropTypes.string,
-    answer: PropTypes.arrayOf(PropTypes.shape({
+    answer: PropTypes.shape({
       a: PropTypes.string,
       b: PropTypes.string,
-    })),
-  })),
-  setQuestions: PropTypes.func,
-  shuffleQuestions: PropTypes.func,
-  onMissed: PropTypes.func,
-  onChecked: PropTypes.func,
-  gameMode: PropTypes.string,
-  setGameMode: PropTypes.func,
-};
-
-Grid.defaultProps = {
-  questions: [],
-  setQuestions: '',
-  shuffleQuestions: '',
-  onMissed: '',
-  onChecked: '',
-  gameMode: 'empty',
-  setGameMode: '',
+    }),
+  })).isRequired,
+  setQuestions: PropTypes.func.isRequired,
+  shuffleQuestions: PropTypes.func.isRequired,
+  onMissed: PropTypes.func.isRequired,
+  onChecked: PropTypes.func.isRequired,
+  gameMode: PropTypes.string.isRequired,
+  setGameMode: PropTypes.func.isRequired,
 };

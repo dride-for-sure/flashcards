@@ -50,15 +50,10 @@ Questions.propTypes = {
     description: PropTypes.string,
     nerdfactor: PropTypes.string,
     status: PropTypes.string,
-    answer: PropTypes.arrayOf(PropTypes.shape({
+    answer: PropTypes.shape({
       a: PropTypes.string,
       b: PropTypes.string,
-    })),
-  })),
-  gameMode: PropTypes.string,
-};
-
-Questions.defaultProps = {
-  questions: [],
-  gameMode: 'empty',
+    }),
+  })).isRequired,
+  gameMode: PropTypes.string.isRequired,
 };

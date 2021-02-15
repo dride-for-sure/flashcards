@@ -27,30 +27,23 @@ export default function PlayControls({ setQuestions, questions, gameMode, setGam
           setQuestions(deleteAllQuestions());
         }
       }}>
-      {btn}
+      {btn()}
     </Button>
   );
 }
 
 PlayControls.propTypes = {
-  setQuestions: PropTypes.func,
+  setQuestions: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf(PropTypes.shape({
     topic: PropTypes.string,
     description: PropTypes.string,
     nerdfactor: PropTypes.string,
     status: PropTypes.string,
-    answer: PropTypes.arrayOf(PropTypes.shape({
+    answer: PropTypes.shape({
       a: PropTypes.string,
       b: PropTypes.string,
-    })),
-  })),
-  gameMode: PropTypes.string,
-  setGameMode: PropTypes.func,
-};
-
-PlayControls.defaultProps = {
-  setQuestions: '',
-  questions: [],
-  gameMode: 'empty',
-  setGameMode: '',
+    }),
+  })).isRequired,
+  gameMode: PropTypes.string.isRequired,
+  setGameMode: PropTypes.func.isRequired,
 };

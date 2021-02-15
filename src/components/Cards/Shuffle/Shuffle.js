@@ -43,13 +43,7 @@ export default function Shuffle({ shuffleQuestions, gameMode, setGameMode }) {
 }
 
 Shuffle.propTypes = {
-  shuffleQuestions: PropTypes.func,
-  gameMode: PropTypes.string,
-  setGameMode: PropTypes.func,
-};
-
-Shuffle.defaultProps = {
-  shuffleQuestions: '',
-  gameMode: 'empty',
-  setGameMode: '',
+  shuffleQuestions: PropTypes.func.isRequired,
+  gameMode: PropTypes.string.isRequired,
+  setGameMode: PropTypes.func.isRequired,
 };
