@@ -16,15 +16,15 @@ export const ShuffleCard = styled.div`
   text-align:left;
   border: 5px dotted transparent;
 
-  ${props => props.disabled && css`
+  ${(props) => props.disabled && css`
     opacity: .5;
   `}
 
-  ${props => props.gameMode === "empty" && css`
+  ${(props) => props.gameMode === 'empty' && css`
     border-color: grey;
   `}
 
-  ${props => props.disabled && css`
+  ${(props) => props.disabled && css`
     opacity: .5;
   `}
 

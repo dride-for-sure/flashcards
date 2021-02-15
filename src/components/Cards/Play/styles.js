@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export const Button = styled.button`
+const Button = styled.button`
   background-color: #666;
   padding: 20px;
   box-sizing: border-box;
@@ -17,11 +17,11 @@ export const Button = styled.button`
   text-align:left;
   border: 5px dotted transparent;
 
-  ${props => props.gameMode === "play" && css`
+  ${(props) => props.gameMode === 'play' && css`
     background-color: khaki;
   `}
 
-  ${props => props.gameMode === "prepared" && css`
+  ${(props) => props.gameMode === 'prepared' && css`
     border: 5px dotted grey;
   `}
 
@@ -29,7 +29,7 @@ export const Button = styled.button`
     opacity: .5;
   }
 
-  &:not(:disabled) {
+  &:not(:disabled){
     cursor: pointer;
     
     &:hover {
@@ -37,3 +37,5 @@ export const Button = styled.button`
     }
   }
 `;
+
+export default Button;
