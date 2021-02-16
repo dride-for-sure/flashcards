@@ -1,19 +1,24 @@
-import React from 'react';
-import { nerdfactorIcon } from '../../common/helper';
-import useGameState from '../../hooks/useGameState';
+import React, { useEffect, useState } from 'react';
+import { calcResult, nerdfactorIcon } from '../../common/helper';
 import possibleQuestions from '../../store/store';
 import Congrats from './Congrats/Congrats';
 import { handleCongratsClick, handlePlayClick, handleQuestionClick, handleShuffleClick } from './eventHandler';
 import Grid from './Grid/Grid';
 
 export default function Game() {
-  const [
-    questions,
-    setQuestions,
-    gameMode,
-    setGameMode,
-    results,
-  ] = useGameState();
+  const [questions, setQuestions] = useState([]);
+  const [gameMode, setGameMode] = useState('empty');
+  const [results, setResults] = useState({});
+
+  useEffect(() => {
+    setResults(calcResult(questions));
+  }, [questions]);
+
+  useEffect(() => {
+    if (questions.length > 0 && questions.length === results.total) {
+      setGameMode('finish');
+    }
+  }, [results]);
 
   return (
     <>
