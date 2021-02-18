@@ -1,9 +1,9 @@
-import Logo from './styles';
+import Container from './styles';
 
 export default function GameLogo() {
   return (
-    <Logo>
+    <Container>
       <span>⛩️</span>
-    </Logo>
+    </Container>
   );
 }

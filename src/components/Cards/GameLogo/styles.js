@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Logo = styled.div`
+const Container = styled.div`
   position:relative;
   padding: 20px;
   display:flex;
@@ -15,4 +15,4 @@ const Logo = styled.div`
   }
 `;
 
-export default Logo;
+export default Container;
