@@ -1,22 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const Button = styled.button`
-  background-color: #666;
-  padding: 20px;
-  box-sizing: border-box;
-  height: 200px;
-  font-family: 'Times New Roman', Times, serif;
-  color: white;
-  outline: none;
-  font-weight: 600;
-  z-index:2;
-  background-color: thistle;
-  font-size: 2rem;
-  display:flex;
-  text-transform: uppercase;
-  text-align:left;
-  border: 5px dotted transparent;
-
+const Container = styled.div`
   ${(props) => props.gameMode === 'play' && css`
     background-color: khaki;
   `}
@@ -24,6 +8,9 @@ const Button = styled.button`
   ${(props) => props.gameMode === 'prepared' && css`
     border: 5px dotted grey;
   `}
+
+  background-color: thistle;
+  border: 5px dotted transparent;
 
   &:disabled {
     opacity: .5;
@@ -36,6 +23,15 @@ const Button = styled.button`
       opacity: 0.8;
     }
   }
+
+  > h1 {
+    flex-grow:2;
+    font-weight: 600;
+    font-size: 2rem;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+  }
 `;
 
-export default Button;
+export default Container;

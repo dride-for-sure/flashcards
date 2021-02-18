@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { handleCongratsClick, handlePlayClick, handleQuestionClick, handleShuffleClick } from '../../common/eventHandler';
 import { calcResult, nerdfactorIcon } from '../../common/helper';
 import playersDb from '../../store/playersDb';
 import possibleQuestions from '../../store/store';
 import Congrats from './Congrats/Congrats';
-import { handleCongratsClick, handlePlayClick, handleQuestionClick, handleShuffleClick } from './eventHandler';
 import Grid from './Grid/Grid';
 
 export default function Game() {
