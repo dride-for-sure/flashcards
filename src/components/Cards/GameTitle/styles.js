@@ -28,4 +28,5 @@ export const H1 = styled.h1`
 
 export const Span = styled.span`
   font-style: italic;
+  flex-grow: 2;
 `;

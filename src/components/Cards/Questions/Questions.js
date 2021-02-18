@@ -50,16 +50,18 @@ export default function Questions(
 }
 
 Questions.propTypes = {
-  questions: PropTypes.arrayOf(PropTypes.shape({
-    topic: PropTypes.string,
-    description: PropTypes.string,
-    nerdfactor: PropTypes.string,
-    status: PropTypes.string,
-    answer: PropTypes.shape({
-      a: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
-      b: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
+  questions: PropTypes.arrayOf(
+    PropTypes.shape({
+      topic: PropTypes.string,
+      description: PropTypes.string,
+      nerdfactor: PropTypes.string,
+      status: PropTypes.string,
+      answer: PropTypes.shape({
+        a: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
+        b: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
+      }),
     }),
-  })).isRequired,
+  ).isRequired,
   gameMode: PropTypes.string.isRequired,
   getNerdfactorIcon: PropTypes.func.isRequired,
   onQuestionClick: PropTypes.func.isRequired,
