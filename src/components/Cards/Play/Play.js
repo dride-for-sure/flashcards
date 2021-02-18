@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Button from './styles';
+import Container from './styles';
 
 export default function PlayControls(
   {
@@ -19,12 +19,12 @@ export default function PlayControls(
   };
 
   return (
-    <Button
+    <Container
       disabled={gameMode !== 'ready' && gameMode !== 'play' && gameMode !== 'finish' && gameMode !== 'prepared'}
       gameMode={gameMode}
       onClick={() => { onPlayClick(); }}>
-      {btn()}
-    </Button>
+      <h1>{btn()}</h1>
+    </Container>
   );
 }
 

@@ -1,20 +1,7 @@
 import styled, { css } from 'styled-components';
 
-const Button = styled.button`
-  background-color: #666;
-  padding: 20px;
-  box-sizing: border-box;
-  height: 200px;
-  font-family: 'Times New Roman', Times, serif;
-  color: white;
-  outline: none;
-  font-weight: 600;
-  z-index:2;
+const Container = styled.div`
   background-color: thistle;
-  font-size: 2rem;
-  display:flex;
-  text-transform: uppercase;
-  text-align:left;
   border: 5px dotted transparent;
 
   ${(props) => props.gameMode === 'play' && css`
@@ -36,6 +23,10 @@ const Button = styled.button`
       opacity: 0.8;
     }
   }
+
+  > h1 {
+    flex-grow:2;
+  }
 `;
 
-export default Button;
+export default Container;
