@@ -4,9 +4,11 @@ const Container = styled.div`
   background-color: darkseagreen;
 
   > h1 {
-    text-transform: uppercase;
-    padding: 0;
-    margin: 0;
+      font-weight: 600;
+      font-size: 2rem;
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0;
   }
 
   > span {

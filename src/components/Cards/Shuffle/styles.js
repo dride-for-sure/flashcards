@@ -1,21 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export const ShuffleCard = styled.div`
-  background-color: #666;
-  padding: 20px;
-  box-sizing: border-box;
-  height: 200px;
-  color: white;
-  outline: none;
-  font-weight: 600;
-  z-index:2;
-  background-color: turquoise;
-  display:flex;
-  flex-direction: column;
-  font-family: 'Times New Roman', Times, serif;
-  text-align:left;
-  border: 5px dotted transparent;
-
+export const Container = styled.div`
   ${(props) => props.disabled && css`
     opacity: .5;
   `}
@@ -28,22 +13,21 @@ export const ShuffleCard = styled.div`
     opacity: .5;
   `}
 
-  > span {
-    &:first-of-type{
+  background-color: turquoise;
+  border: 5px dotted transparent;
+
+  > h1 {
+      font-weight: 600;
       font-size: 2rem;
       text-transform: uppercase;
-    }
-    &:last-of-type{
+      margin: 0;
+      padding: 0;
+  }
 
-    }
-
-    > fieldset {
-      border:0;
-
-      > input {
-        display:none;
-      }
-    }
+  span {
+    flex-grow: 2;
+    font-size: 2rem;
+    text-transform: uppercase;
   }
 `;
 

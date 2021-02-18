@@ -8,22 +8,14 @@ const Container = styled.div`
 
   > div {
     position:relative;
-    padding: 20px;
     display:flex;
     flex-direction: column;
+    justify-content: center;
     box-sizing: border-box;
     height: 200px;
-    justify-content: center;
+    padding: 20px;
     color: white;
     font-family: 'Times New Roman', Times, serif;
-
-    > h1 {
-      font-weight: 600;
-      font-size: 2rem;
-      text-transform: uppercase;
-      margin: 0;
-      padding: 0;
-    }
   }
 `;
 

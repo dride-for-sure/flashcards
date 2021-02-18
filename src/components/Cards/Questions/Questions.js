@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, Card } from './styles';
+import { Button, Container } from './styles';
 
 export default function Questions(
   {
@@ -14,7 +14,7 @@ export default function Questions(
     <>
       {
         questions.map((question) => (
-          <Card
+          <Container
             status={question.status}
             nerdfactor={question.nerdfactor}
             key={question.id}
@@ -22,10 +22,9 @@ export default function Questions(
             <span>
               {getNerdfactorIcon(question)}
             </span>
-            <span>
+            <h1>
               {question.topic}
-              {' '}
-            </span>
+            </h1>
             <span>{question.description}</span>
             <span>
               <Button
@@ -41,8 +40,7 @@ export default function Questions(
                 {question.answer.b.description}
               </Button>
             </span>
-            <span> Timer</span>
-          </Card>
+          </Container>
         ))
       }
     </>

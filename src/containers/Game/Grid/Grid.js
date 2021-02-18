@@ -28,7 +28,7 @@ export default function Grid(
       <Play
         gameMode={gameMode}
         onPlayClick={onPlayClick} />
-      {gameMode === 'play' && (
+      {gameMode !== 'lobby' && (
         <Questions
           questions={questions}
           gameMode={gameMode}

@@ -1,4 +1,4 @@
-import { addRandomQuestion, checkThisQuestion, deleteAllQuestions, missedThisQuestion, selectNextQuestion, timeOutLimesZero } from '../../common/helper';
+import { addRandomQuestion, checkThisQuestion, deleteAllQuestions, missedThisQuestion, selectNextQuestion, timeOutLimesZero } from './helper';
 
 export const handleCongratsClick = (setQuestions, setGameMode) => {
   setQuestions(deleteAllQuestions());

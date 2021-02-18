@@ -1,9 +1,6 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
-  background-color: thistle;
-  border: 5px dotted transparent;
-
   ${(props) => props.gameMode === 'play' && css`
     background-color: khaki;
   `}
@@ -11,6 +8,9 @@ const Container = styled.div`
   ${(props) => props.gameMode === 'prepared' && css`
     border: 5px dotted grey;
   `}
+
+  background-color: thistle;
+  border: 5px dotted transparent;
 
   &:disabled {
     opacity: .5;
@@ -26,6 +26,11 @@ const Container = styled.div`
 
   > h1 {
     flex-grow:2;
+    font-weight: 600;
+    font-size: 2rem;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
   }
 `;
 

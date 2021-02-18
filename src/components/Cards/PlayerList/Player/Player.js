@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import SinglePlayer from './styles';
+import Container from './styles';
 
 export default function Player({ player }) {
   const skill = (() => {
@@ -13,15 +13,15 @@ export default function Player({ player }) {
   )();
 
   return (
-    <SinglePlayer skill={skill}>
+    <Container skill={skill}>
       <span>
         {skill === 'master' && '🥷'}
         {skill === 'ninja' && '💪'}
         {skill === 'noob' && '👶'}
       </span>
-      <span>{player.name}</span>
+      <h1>{player.name}</h1>
       <span>{`Won ${player.history.won} and lost ${player.history.lost}`}</span>
-    </SinglePlayer>
+    </Container>
   );
 }
 

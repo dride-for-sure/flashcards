@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { Difficulty, ShuffleCard } from './styles';
+import { Container, Difficulty } from './styles';
 
 export default function Shuffle({ gameMode, onShuffleClick }) {
   const disabled = gameMode !== 'empty' && gameMode !== 'ready' && gameMode !== 'prepared';
 
   return (
-    <ShuffleCard disabled={disabled} gameMode={gameMode}>
-      <span>Shuffle that deck</span>
+    <Container disabled={disabled} gameMode={gameMode}>
+      <h1>Shuffle that deck</h1>
       <span>
         <Difficulty
           disabled={disabled}
@@ -27,7 +27,7 @@ export default function Shuffle({ gameMode, onShuffleClick }) {
           🤯
         </Difficulty>
       </span>
-    </ShuffleCard>
+    </Container>
   );
 }
 
