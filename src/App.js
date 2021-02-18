@@ -1,13 +1,16 @@
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Game from './containers/Game/Game';
 import GlobalStyle from './GlobalStyles';
 
-function App() {
+export default function App() {
   return (
-    <>
+    <Router>
       <GlobalStyle />
-      <Game />
-    </>
+      <Switch>
+        <Route path="/:id?">
+          <Game />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
-
-export default App;

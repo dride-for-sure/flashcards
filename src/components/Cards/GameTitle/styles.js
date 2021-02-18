@@ -8,6 +8,16 @@ export const Head = styled.header`
   padding: 20px;
   box-sizing: border-box;
   height: 200px;
+
+  > a {
+    text-decoration: none;
+    color: white;
+    text-align: right;
+
+    &:hover {
+      opacity: .7;
+    }  
+  }
 `;
 
 export const H1 = styled.h1`
@@ -18,4 +28,5 @@ export const H1 = styled.h1`
 
 export const Span = styled.span`
   font-style: italic;
+  flex-grow: 2;
 `;

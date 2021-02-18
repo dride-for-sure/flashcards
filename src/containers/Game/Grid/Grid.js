@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
+import GameLogo from '../../../components/Cards/GameLogo/GameLogo';
 import GameTitle from '../../../components/Cards/GameTitle/GameTitle';
 import Play from '../../../components/Cards/Play/Play';
+import PlayerList from '../../../components/Cards/PlayerList/PlayerList';
 import Questions from '../../../components/Cards/Questions/Questions';
 import Shuffle from '../../../components/Cards/Shuffle/Shuffle';
 import Container from './styles';
@@ -13,10 +15,12 @@ export default function Grid(
     onShuffleClick,
     getNerdfactorIcon,
     onQuestionClick,
+    players,
   },
 ) {
   return (
     <Container>
+      <GameLogo />
       <GameTitle />
       <Shuffle
         gameMode={gameMode}
@@ -24,11 +28,16 @@ export default function Grid(
       <Play
         gameMode={gameMode}
         onPlayClick={onPlayClick} />
-      <Questions
-        questions={questions}
-        gameMode={gameMode}
-        getNerdfactorIcon={getNerdfactorIcon}
-        onQuestionClick={onQuestionClick} />
+      {gameMode === 'play' && (
+        <Questions
+          questions={questions}
+          gameMode={gameMode}
+          getNerdfactorIcon={getNerdfactorIcon}
+          onQuestionClick={onQuestionClick} />
+      )}
+      {gameMode === 'lobby' && (
+        <PlayerList players={players} />
+      )}
     </Container>
   );
 }
@@ -49,4 +58,14 @@ Grid.propTypes = {
   onShuffleClick: PropTypes.func.isRequired,
   getNerdfactorIcon: PropTypes.func.isRequired,
   onQuestionClick: PropTypes.func.isRequired,
+  players: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      history: PropTypes.shape({
+        won: PropTypes.number,
+        lost: PropTypes.number,
+      }),
+    }),
+  ).isRequired,
 };
