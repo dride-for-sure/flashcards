@@ -31,7 +31,7 @@ const selectAndShuffleQuestions = (
 ) => {
   const updatedIteration = iteration + 1;
   const updatedDelay = 1.1 ** updatedIteration;
-  const updatedQuestions = addRandomQuestion(difficulty, possibleQuestions, 25);
+  const updatedQuestions = addRandomQuestion(difficulty, possibleQuestions, 5);
   setQuestions(updatedQuestions);
 
   if (updatedDelay > maxDelay) {

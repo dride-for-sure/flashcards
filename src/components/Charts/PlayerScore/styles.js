@@ -13,6 +13,7 @@ const Container = styled.div`
   white-space: nowrap;
   overflow: hidden;
   transition: width 3s ease-in-out;
+  box-sizing: border-box;
 `;
 
 export default Container;
