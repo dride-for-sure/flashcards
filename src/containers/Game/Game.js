@@ -10,7 +10,7 @@ import Grid from './Grid/Grid';
 
 export default function Game() {
   const [questions, setQuestions] = useState([]);
-  const [gameMode, setGameMode] = useState('lobby'); // lobby, play, finish
+  const [gameMode, setGameMode] = useState('lobby');
   const [results, setResults] = useState({});
   const [players, setPlayers] = useState([]);
 
