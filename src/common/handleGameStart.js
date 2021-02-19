@@ -28,7 +28,7 @@ const addRandomQuestion = (
   return updatedQuestions;
 };
 
-const selectAndShuffleQuestions = (
+const shuffleRandomQuestions = (
   res, difficulty, possibleQuestions, setQuestions, maxDelay, iteration, clearTimer,
 ) => {
   const updatedIteration = iteration + 1;
@@ -42,7 +42,7 @@ const selectAndShuffleQuestions = (
     return;
   }
 
-  const timer = setTimeout(() => selectAndShuffleQuestions(
+  const timer = setTimeout(() => shuffleRandomQuestions(
     res, difficulty, possibleQuestions, setQuestions, maxDelay, updatedIteration, timer,
   ), updatedDelay);
 };
@@ -71,7 +71,7 @@ const handleGameStart = async (
   });
   setGameMode('shuffle');
   const shuffledQuestions = await new Promise((res) => {
-    selectAndShuffleQuestions(res, difficulty, possibleQuestions, setQuestions, 800, 1);
+    shuffleRandomQuestions(res, difficulty, possibleQuestions, setQuestions, 800, 1);
   });
   setGameMode('play');
   setQuestions(selectNextQuestion(shuffledQuestions));
