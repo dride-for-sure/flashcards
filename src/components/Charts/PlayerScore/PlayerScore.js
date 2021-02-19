@@ -16,9 +16,7 @@ export default function PlayerScore({ player, calcPlayerScoreColor, calcPlayerSc
   }, []);
 
   return (
-    <Container
-      color={barColor}
-      width={barWidth}>
+    <Container color={barColor} width={barWidth}>
       {player.name}
     </Container>
   );
