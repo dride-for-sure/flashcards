@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { handleCongratsClick, handlePlayClick, handleQuestionClick, handleShuffleClick } from '../../common/eventHandler';
-import { calcResult, nerdfactorIcon } from '../../common/helper';
+import { calcResult, handleCongrats } from '../../common/handleCongrats';
+import handleGameStart from '../../common/handleGameStart';
+import { handleQuestions } from '../../common/handleQuestions';
 import playersDb from '../../store/playersDb';
 import possibleQuestions from '../../store/store';
 import Congrats from './Congrats/Congrats';
@@ -8,7 +9,7 @@ import Grid from './Grid/Grid';
 
 export default function Game() {
   const [questions, setQuestions] = useState([]);
-  const [gameMode, setGameMode] = useState('lobby');
+  const [gameMode, setGameMode] = useState('lobby'); // lobby, play, finish
   const [results, setResults] = useState({});
   const [players, setPlayers] = useState([]);
 
@@ -30,7 +31,7 @@ export default function Game() {
     <>
       {gameMode === 'finish' && (
       <Congrats
-        handleCongratsClick={() => handleCongratsClick(setQuestions, setGameMode)}
+        handleCongratsClick={() => handleCongrats(setQuestions, setGameMode)}
         results={results}
       />
       )}
@@ -38,18 +39,12 @@ export default function Game() {
         questions={questions}
         gameMode={gameMode}
         setGameMode={(returnedGameMode) => setGameMode(returnedGameMode)}
-        onPlayClick={() => handlePlayClick(gameMode, setGameMode, questions, setQuestions)}
-        onShuffleClick={
-          (difficulty) => {
-            handleShuffleClick(difficulty, setGameMode, possibleQuestions, setQuestions);
-          }
-        }
-        onQuestionClick={
-          (question, answerClicked) => {
-            handleQuestionClick(question, questions, setQuestions, answerClicked);
-          }
-        }
-        getNerdfactorIcon={(question) => nerdfactorIcon(question)}
+        onStartGameClick={(difficulty) => {
+          handleGameStart(difficulty, possibleQuestions, setQuestions, setGameMode);
+        }}
+        onQuestionClick={(question, answerClicked) => {
+          handleQuestions(question, questions, setQuestions, answerClicked);
+        }}
         players={players}
       />
     </>

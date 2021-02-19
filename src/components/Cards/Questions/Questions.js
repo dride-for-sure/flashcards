@@ -6,10 +6,18 @@ export default function Questions(
   {
     questions,
     gameMode,
-    getNerdfactorIcon,
     onQuestionClick,
   },
 ) {
+  const nerdfactorIcon = (question) => {
+    if (question.nerdfactor === '3') {
+      return '🤯';
+    } if (question.nerdfactor === '2') {
+      return '💪';
+    }
+    return '🥱';
+  };
+
   return (
     <>
       {
@@ -20,7 +28,7 @@ export default function Questions(
             key={question.id}
             gameMode={gameMode}>
             <span>
-              {getNerdfactorIcon(question)}
+              {nerdfactorIcon(question)}
             </span>
             <h1>
               {question.topic}
@@ -61,6 +69,5 @@ Questions.propTypes = {
     }),
   ).isRequired,
   gameMode: PropTypes.string.isRequired,
-  getNerdfactorIcon: PropTypes.func.isRequired,
   onQuestionClick: PropTypes.func.isRequired,
 };
