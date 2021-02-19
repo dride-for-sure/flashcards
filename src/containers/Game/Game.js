@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { handlePlayerScoreColor, handlePlayerScoreWidth } from '../../common/handleCharts';
 import { calcResult, handleCongrats } from '../../common/handleCongrats';
 import handleGameStart from '../../common/handleGameStart';
 import { handleQuestions } from '../../common/handleQuestions';
@@ -46,6 +47,12 @@ export default function Game() {
           handleQuestions(question, questions, setQuestions, answerClicked);
         }}
         players={players}
+        calcPlayerScoreColor={
+          (player, setBarColor) => handlePlayerScoreColor(player, questions, setBarColor)
+}
+        calcPlayerScoreWidth={
+          (player, setBarWidth) => handlePlayerScoreWidth(player, questions, setBarWidth)
+}
       />
     </>
   );

@@ -4,6 +4,7 @@ import GameTitle from '../../../components/Cards/GameTitle/GameTitle';
 import PlayerList from '../../../components/Cards/PlayerList/PlayerList';
 import Questions from '../../../components/Cards/Questions/Questions';
 import StartGame from '../../../components/Cards/StartGame/StartGame';
+import Charts from '../../../components/Charts/Charts';
 import Container from './styles';
 
 export default function Grid(
@@ -13,25 +14,35 @@ export default function Grid(
     onStartGameClick,
     onQuestionClick,
     players,
+    calcPlayerScoreColor,
+    calcPlayerScoreWidth,
   },
 ) {
   return (
-    <Container>
-      <GameLogo />
-      <GameTitle />
-      <StartGame
-        gameMode={gameMode}
-        onStartGameClick={onStartGameClick} />
-      {gameMode !== 'lobby' && (
+    <>
+      <Container>
+        <GameLogo />
+        <GameTitle />
+        <StartGame
+          gameMode={gameMode}
+          onStartGameClick={onStartGameClick} />
+        {gameMode !== 'lobby' && (
         <Questions
           questions={questions}
           gameMode={gameMode}
           onQuestionClick={onQuestionClick} />
-      )}
-      {gameMode === 'lobby' && (
+        )}
+        {gameMode === 'lobby' && (
         <PlayerList players={players} />
+        )}
+      </Container>
+      {gameMode === 'play' && (
+      <Charts
+        players={players}
+        calcPlayerScoreColor={calcPlayerScoreColor}
+        calcPlayerScoreWidth={calcPlayerScoreWidth} />
       )}
-    </Container>
+    </>
   );
 }
 
@@ -59,4 +70,6 @@ Grid.propTypes = {
       }),
     }),
   ).isRequired,
+  calcPlayerScoreColor: PropTypes.func.isRequired,
+  calcPlayerScoreWidth: PropTypes.func.isRequired,
 };
