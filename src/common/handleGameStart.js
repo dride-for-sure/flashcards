@@ -1,7 +1,9 @@
 import { selectNextQuestion } from './handleQuestions';
 import uuid from './uuid';
 
-const addRandomQuestion = (difficulty, possibleQuestions, total) => {
+const addRandomQuestion = (
+  difficulty, possibleQuestions, total,
+) => {
   let filteredQuestions;
   if (difficulty === 'easy') {
     filteredQuestions = possibleQuestions.filter(
@@ -44,19 +46,17 @@ const selectAndShuffleQuestions = (
   ), updatedDelay);
 };
 
+// TODO:
+// Wait for Backend to receive common flashcards for this round
+// setQuestions(selectNextQuestion(cardsFromBackend));
+
 const handleGameStart = async (
-  difficulty,
-  possibleQuestions,
-  setQuestions,
-  setGameMode,
+  difficulty, possibleQuestions, setQuestions, setGameMode,
 ) => {
   setGameMode('shuffle');
   const shuffledQuestions = await new Promise((res) => {
     selectAndShuffleQuestions(res, difficulty, possibleQuestions, setQuestions, 800, 1);
   });
-  // TODO:
-  // Wait for Backend to receive common flashcards for this round
-  // setQuestions(selectNextQuestion(cardsFromBackend));
   setGameMode('play');
   setQuestions(selectNextQuestion(shuffledQuestions));
 };
