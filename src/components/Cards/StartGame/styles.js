@@ -1,18 +1,6 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Container = styled.div`
-  ${(props) => props.disabled && css`
-    opacity: .5;
-  `}
-
-  ${(props) => props.gameMode === 'empty' && css`
-    border-color: grey;
-  `}
-
-  ${(props) => props.disabled && css`
-    opacity: .5;
-  `}
-
   background-color: turquoise;
   border: 5px dotted transparent;
 
@@ -38,7 +26,7 @@ export const Difficulty = styled.button`
   font-size: 2rem;
   outline: none;
 
-  &:not(:disabled):hover {
+  &:hover {
     cursor: pointer;
     opacity: 0.8;
   }

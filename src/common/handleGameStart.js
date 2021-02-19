@@ -1,7 +1,9 @@
 import { selectNextQuestion } from './handleQuestions';
 import uuid from './uuid';
 
-const addRandomQuestion = (difficulty, possibleQuestions, total) => {
+const addRandomQuestion = (
+  difficulty, possibleQuestions, total,
+) => {
   let filteredQuestions;
   if (difficulty === 'easy') {
     filteredQuestions = possibleQuestions.filter(
@@ -27,7 +29,7 @@ const addRandomQuestion = (difficulty, possibleQuestions, total) => {
 };
 
 const selectAndShuffleQuestions = (
-  res, difficulty, possibleQuestions, setQuestions, maxDelay, iteration,
+  res, difficulty, possibleQuestions, setQuestions, maxDelay, iteration, clearTimer,
 ) => {
   const updatedIteration = iteration + 1;
   const updatedDelay = 1.1 ** updatedIteration;
@@ -35,28 +37,42 @@ const selectAndShuffleQuestions = (
   setQuestions(updatedQuestions);
 
   if (updatedDelay > maxDelay) {
+    clearTimeout(clearTimer);
     res(updatedQuestions);
     return;
   }
 
-  setTimeout(() => selectAndShuffleQuestions(
-    res, difficulty, possibleQuestions, setQuestions, maxDelay, updatedIteration,
+  const timer = setTimeout(() => selectAndShuffleQuestions(
+    res, difficulty, possibleQuestions, setQuestions, maxDelay, updatedIteration, timer,
   ), updatedDelay);
 };
 
+const countdown = (res, setCountdown, count, clearTimer) => {
+  setCountdown(count);
+  if (count === 0) {
+    clearTimeout(clearTimer);
+    res();
+    return;
+  }
+  const countLeft = count - 1;
+  const timer = setTimeout(() => countdown(res, setCountdown, countLeft, timer), 1000);
+};
+
+// TODO:
+// Wait for Backend to receive common flashcards for this round
+// setQuestions(selectNextQuestion(cardsFromBackend));
+
 const handleGameStart = async (
-  difficulty,
-  possibleQuestions,
-  setQuestions,
-  setGameMode,
+  difficulty, possibleQuestions, setQuestions, setGameMode, setCountdown,
 ) => {
+  setGameMode('countdown');
+  await new Promise((res) => {
+    countdown(res, setCountdown, 5);
+  });
   setGameMode('shuffle');
   const shuffledQuestions = await new Promise((res) => {
     selectAndShuffleQuestions(res, difficulty, possibleQuestions, setQuestions, 800, 1);
   });
-  // TODO:
-  // Wait for Backend to receive common flashcards for this round
-  // setQuestions(selectNextQuestion(cardsFromBackend));
   setGameMode('play');
   setQuestions(selectNextQuestion(shuffledQuestions));
 };
