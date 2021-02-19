@@ -2,7 +2,7 @@ import { deleteAllQuestions } from './handleQuestions';
 
 export const handleCongrats = (setQuestions, setGameMode) => {
   setQuestions(deleteAllQuestions());
-  setGameMode('empty');
+  setGameMode('lobby');
 };
 
 export const calcResult = (questions) => {
