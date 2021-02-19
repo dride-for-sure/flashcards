@@ -1,23 +1,4 @@
-const checkThisQuestion = (selectedQuestion, questions) => {
-  const updatedQuestions = [...questions];
-  return updatedQuestions.map((question) => (question.id === selectedQuestion.id
-    ? {
-      ...question,
-      status: 'checked',
-    }
-    : question));
-};
-
-const missedThisQuestion = (selectedQuestion, questions) => {
-  const updatedQuestions = [...questions];
-  return updatedQuestions.map((question) => (question.id === selectedQuestion.id
-    ? {
-      ...question,
-      status: 'missed',
-    }
-    : question));
-};
-
+// NOTE: Possibility to randomize the selection
 export const selectNextQuestion = (questions) => {
   const filteredQuestions = [...questions].filter(
     (question) => question.status === 'deactivated',
@@ -36,12 +17,22 @@ export const selectNextQuestion = (questions) => {
 
 export const deleteAllQuestions = () => [];
 
+const changeQuestionStatus = (selectedQuestion, questions, status) => {
+  const updatedQuestions = [...questions];
+  return updatedQuestions.map((question) => (question.id === selectedQuestion.id
+    ? {
+      ...question,
+      status,
+    }
+    : question));
+};
+
 export const handleQuestions = (question, questions, setQuestions, answerClicked) => (
   question.answer[answerClicked].correct === true
     ? setQuestions(
-      selectNextQuestion(missedThisQuestion(question, questions)),
+      selectNextQuestion(changeQuestionStatus(question, questions, 'missed')),
     )
     : setQuestions(
-      selectNextQuestion(checkThisQuestion(question, questions)),
+      selectNextQuestion(changeQuestionStatus(question, questions, 'checked')),
     )
 );
