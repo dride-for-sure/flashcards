@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Countdown from '../../../components/Cards/Countdown/Countdown';
 import GameLogo from '../../../components/Cards/GameLogo/GameLogo';
 import GameTitle from '../../../components/Cards/GameTitle/GameTitle';
 import PlayerList from '../../../components/Cards/PlayerList/PlayerList';
@@ -16,6 +17,7 @@ export default function Grid(
     players,
     calcPlayerScoreColor,
     calcPlayerScoreWidth,
+    countdown,
   },
 ) {
   return (
@@ -23,16 +25,21 @@ export default function Grid(
       <Container>
         <GameLogo />
         <GameTitle />
+        {gameMode === 'lobby' && (
         <StartGame
-          gameMode={gameMode}
           onStartGameClick={onStartGameClick} />
+        )}
+        {gameMode === 'countdown' && (
+        <Countdown
+          countdown={countdown} />
+        )}
         {gameMode !== 'lobby' && (
         <Questions
           questions={questions}
           gameMode={gameMode}
           onQuestionClick={onQuestionClick} />
         )}
-        {gameMode === 'lobby' && (
+        {(gameMode === 'lobby' || gameMode === 'countdown') && (
         <PlayerList players={players} />
         )}
       </Container>
@@ -72,4 +79,5 @@ Grid.propTypes = {
   ).isRequired,
   calcPlayerScoreColor: PropTypes.func.isRequired,
   calcPlayerScoreWidth: PropTypes.func.isRequired,
+  countdown: PropTypes.number.isRequired,
 };

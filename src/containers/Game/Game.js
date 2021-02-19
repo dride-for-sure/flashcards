@@ -13,6 +13,7 @@ export default function Game() {
   const [gameMode, setGameMode] = useState('lobby');
   const [results, setResults] = useState({});
   const [players, setPlayers] = useState([]);
+  const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
     setPlayers(playersDb);
@@ -41,7 +42,7 @@ export default function Game() {
         gameMode={gameMode}
         setGameMode={(returnedGameMode) => setGameMode(returnedGameMode)}
         onStartGameClick={(difficulty) => {
-          handleGameStart(difficulty, possibleQuestions, setQuestions, setGameMode);
+          handleGameStart(difficulty, possibleQuestions, setQuestions, setGameMode, setCountdown);
         }}
         onQuestionClick={(question, answerClicked) => {
           handleQuestions(question, questions, setQuestions, answerClicked);
@@ -49,10 +50,11 @@ export default function Game() {
         players={players}
         calcPlayerScoreColor={
           (player, setBarColor) => handlePlayerScoreColor(player, questions, setBarColor)
-}
+        }
         calcPlayerScoreWidth={
           (player, setBarWidth) => handlePlayerScoreWidth(player, questions, setBarWidth)
-}
+        }
+        countdown={countdown}
       />
     </>
   );
