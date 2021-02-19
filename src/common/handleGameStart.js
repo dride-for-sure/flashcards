@@ -54,6 +54,9 @@ const handleGameStart = async (
   const shuffledQuestions = await new Promise((res) => {
     selectAndShuffleQuestions(res, difficulty, possibleQuestions, setQuestions, 800, 1);
   });
+  // TODO:
+  // Wait for Backend to receive common flashcards for this round
+  // setQuestions(selectNextQuestion(cardsFromBackend));
   setGameMode('play');
   setQuestions(selectNextQuestion(shuffledQuestions));
 };

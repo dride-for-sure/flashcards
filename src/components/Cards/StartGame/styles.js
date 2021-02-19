@@ -22,10 +22,11 @@ export const Container = styled.div`
       text-transform: uppercase;
       margin: 0;
       padding: 0;
+      flex-grow:1
   }
 
   span {
-    flex-grow: 2;
+    flex-grow: 1;
     font-size: 2rem;
     text-transform: uppercase;
   }

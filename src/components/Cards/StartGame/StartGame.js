@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import { Container, Difficulty } from './styles';
 
 export default function StartGame({ gameMode, onStartGameClick }) {
-  const disabled = false;
+  const disabled = gameMode !== 'lobby';
 
   return (
     <Container disabled={disabled} gameMode={gameMode}>
-      <h1>Shuffle that deck</h1>
+      <h1>To start choose a level</h1>
       <span>
         <Difficulty
           disabled={disabled}
