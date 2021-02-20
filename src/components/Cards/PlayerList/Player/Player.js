@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import getPlayerCardStyle from '../../../../common/handleCardStyle';
 import Container from './styles';
 
 export default function Player({ player }) {
-  const playerCardStyle = getPlayerCardStyle();
+  const [playerCardStyle, setPlayerCardStyle] = useState({});
+
+  useEffect(() => {
+    setPlayerCardStyle(() => getPlayerCardStyle());
+  }, []);
 
   return (
     <Container background={playerCardStyle.background}>

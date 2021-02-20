@@ -31,15 +31,15 @@ export default function Grid(
         <StartGame
           onStartGameClick={onStartGameClick} />
         )}
+        {gameMode === 'countdown' && (
+        <Countdown
+          countdown={countdown} />
+        )}
         {(gameMode === 'lobby' || gameMode === 'countdown') && (
         <PlayerList
           players={players}
           playerInfos={playerInfos}
           setPlayerInfos={setPlayerInfos} />
-        )}
-        {gameMode === 'countdown' && (
-        <Countdown
-          countdown={countdown} />
         )}
         {gameMode !== 'lobby' && (
         <Questions
