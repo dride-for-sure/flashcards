@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import Player from './Player/Player';
+import SetPlayerName from './PlayerInfos/SetPlayerName';
 
-export default function PlayerList({ players }) {
+export default function PlayerList({ players, playerInfos, setPlayerInfos }) {
   return (
     <>
+      <SetPlayerName playerInfos={playerInfos} setPlayerInfos={setPlayerInfos} />
       {players.map((player) => <Player key={player.id} player={player} />)}
     </>
   );
@@ -20,4 +22,9 @@ PlayerList.propTypes = {
       }),
     }),
   ).isRequired,
+  playerInfos: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
+  setPlayerInfos: PropTypes.func.isRequired,
 };

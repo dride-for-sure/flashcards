@@ -14,6 +14,7 @@ export default function Game() {
   const [results, setResults] = useState({});
   const [players, setPlayers] = useState([]);
   const [countdown, setCountdown] = useState(0);
+  const [playerInfos, setPlayerInfos] = useState({});
 
   useEffect(() => {
     setPlayers(playersDb);
@@ -55,6 +56,8 @@ export default function Game() {
           (player, setBarWidth) => handlePlayerScoreWidth(player, questions, setBarWidth)
         }
         countdown={countdown}
+        playerInfos={playerInfos}
+        setPlayerInfos={(returnedPlayerInfos) => setPlayerInfos(returnedPlayerInfos)}
       />
     </>
   );
