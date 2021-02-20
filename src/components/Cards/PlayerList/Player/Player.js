@@ -1,26 +1,16 @@
 import PropTypes from 'prop-types';
+import getPlayerCardStyle from '../../../../common/handleCardStyle';
 import Container from './styles';
 
 export default function Player({ player }) {
-  const skill = (() => {
-    if (player.history.won > 5) {
-      return 'master';
-    } if (player.history.won > 2) {
-      return 'ninja';
-    }
-    return 'noob';
-  }
-  )();
+  const playerCardStyle = getPlayerCardStyle();
 
   return (
-    <Container skill={skill}>
+    <Container background={playerCardStyle.background}>
       <span>
-        {skill === 'master' && '🥷'}
-        {skill === 'ninja' && '💪'}
-        {skill === 'noob' && '👶'}
+        {playerCardStyle.icon}
       </span>
       <h1>{player.name}</h1>
-      <span>{`Won ${player.history.won} and lost ${player.history.lost}`}</span>
     </Container>
   );
 }
@@ -29,9 +19,5 @@ Player.propTypes = {
   player: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
-    history: PropTypes.shape({
-      won: PropTypes.number,
-      lost: PropTypes.number,
-    }),
   }).isRequired,
 };

@@ -18,6 +18,8 @@ export default function Grid(
     calcPlayerScoreColor,
     calcPlayerScoreWidth,
     countdown,
+    playerInfos,
+    setPlayerInfos,
   },
 ) {
   return (
@@ -29,6 +31,12 @@ export default function Grid(
         <StartGame
           onStartGameClick={onStartGameClick} />
         )}
+        {(gameMode === 'lobby' || gameMode === 'countdown') && (
+        <PlayerList
+          players={players}
+          playerInfos={playerInfos}
+          setPlayerInfos={setPlayerInfos} />
+        )}
         {gameMode === 'countdown' && (
         <Countdown
           countdown={countdown} />
@@ -38,9 +46,6 @@ export default function Grid(
           questions={questions}
           gameMode={gameMode}
           onQuestionClick={onQuestionClick} />
-        )}
-        {(gameMode === 'lobby' || gameMode === 'countdown') && (
-        <PlayerList players={players} />
         )}
       </Container>
       {gameMode === 'play' && (
@@ -80,4 +85,9 @@ Grid.propTypes = {
   calcPlayerScoreColor: PropTypes.func.isRequired,
   calcPlayerScoreWidth: PropTypes.func.isRequired,
   countdown: PropTypes.number.isRequired,
+  playerInfos: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
+  setPlayerInfos: PropTypes.func.isRequired,
 };
