@@ -3,6 +3,7 @@ import { handlePlayerScoreColor, handlePlayerScoreWidth } from '../../common/han
 import { calcResult, handleCongrats } from '../../common/handleCongrats';
 import handleGameStart from '../../common/handleGameStart';
 import { handleQuestions } from '../../common/handleQuestions';
+import StompLobby from '../../components/Stomp/StompLobby';
 import playersDb from '../../store/playersDb';
 import possibleQuestions from '../../store/store';
 import Congrats from './Congrats/Congrats';
@@ -15,6 +16,7 @@ export default function Game() {
   const [players, setPlayers] = useState([]);
   const [countdown, setCountdown] = useState(0);
   const [playerInfos, setPlayerInfos] = useState({});
+  const [gameStatus, setGameStatus] = useStatus({});
 
   useEffect(() => {
     setPlayers(playersDb);
@@ -32,6 +34,10 @@ export default function Game() {
 
   return (
     <>
+      <StompLobby
+        gameStatus={gameStatus}
+        setGameStatus={(updatedGameStatus) => setGameStatus(updatedGameStatus)}
+      />
       {gameMode === 'finish' && (
       <Congrats
         handleCongratsClick={() => handleCongrats(setQuestions, setGameMode)}
