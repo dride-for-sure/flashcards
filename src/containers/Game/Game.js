@@ -15,12 +15,15 @@ export default function Game() {
   const [gameMode, setGameMode] = useState('lobby');
   const [results, setResults] = useState({});
   const [players, setPlayers] = useState([]);
-  const [countdown, setCountdown] = useState(0);
 
   // API communication states
   // Rename playerinfos -> player
   const [thisPlayer, setThisPlayer] = useState();
   const [gameStatus, setGameStatus] = useState();
+  // Gamestart
+  const [gameStarted, setGameStarted] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  // Play
   const [answers, setAnswers] = useState();
 
   useEffect(() => {
@@ -31,6 +34,13 @@ export default function Game() {
   useEffect(() => {
     sendAnswers(answers);
   }, [answers]);
+
+  useEffect(() => {
+    if (gameStatus.status === 'play' && !gameStarted) {
+      setGameStarted(true);
+      handleGameStart(gameStatus, setCountdown);
+    }
+  }, [gameStatus]);
   // ###
 
   useEffect(() => {
