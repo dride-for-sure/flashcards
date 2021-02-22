@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Button, Container, Message } from './styles';
 
-export default function Congrats({ handleCongratsClick, results }) {
+export default function Awards({ handleCongratsClick, results }) {
   const result = () => {
     if (results.missed > results.checked) {
       return ('loose');
@@ -66,7 +66,7 @@ export default function Congrats({ handleCongratsClick, results }) {
   );
 }
 
-Congrats.propTypes = {
+Awards.propTypes = {
   handleCongratsClick: PropTypes.func.isRequired,
   results: PropTypes.shape({
     missed: PropTypes.number,

@@ -1,6 +1,6 @@
 import { deleteAllQuestions } from './handleQuestions';
 
-export const handleCongrats = (setQuestions, setGameMode) => {
+export const handleAwards = (setQuestions, setGameMode) => {
   setQuestions(deleteAllQuestions());
   setGameMode('lobby');
 };

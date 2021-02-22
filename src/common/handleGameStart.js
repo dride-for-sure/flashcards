@@ -1,49 +1,29 @@
 import { selectNextQuestion } from './handleQuestions';
-import uuid from './uuid';
 
-const addRandomQuestion = (
-  difficulty, possibleQuestions, total,
-) => {
-  let filteredQuestions;
-  if (difficulty === 'easy') {
-    filteredQuestions = possibleQuestions.filter(
-      (question) => question.nerdfactor === '1',
-    );
-  } else if (difficulty === 'moderat') {
-    filteredQuestions = possibleQuestions.filter(
-      (question) => question.nerdfactor !== '3',
-    );
-  } else {
-    filteredQuestions = possibleQuestions;
-  }
-  const updatedQuestions = [];
-  for (let i = 0; i < total; i += 1) {
-    updatedQuestions.push({
-      id: uuid(),
-      ...filteredQuestions[
-        Math.floor(Math.random() * filteredQuestions.length)
-      ],
-    });
-  }
-  return updatedQuestions;
-};
-
-const shuffleRandomQuestions = (
-  res, difficulty, possibleQuestions, setQuestions, maxDelay, iteration, clearTimer,
+const shuffleCards = (
+  res, cards, setCards, maxDelay, iteration, clearTimer,
 ) => {
   const updatedIteration = iteration + 1;
   const updatedDelay = 1.1 ** updatedIteration;
-  const updatedQuestions = addRandomQuestion(difficulty, possibleQuestions, 5);
-  setQuestions(updatedQuestions);
+
+  const sourceCards = [...cards];
+  const updatedCards = [];
+
+  while (sourceCards.length > 0) {
+    const random = Math.floor(Math.random() * sourceCards.length);
+    updatedCards.push(sourceCards.splice(random, 1));
+  }
+
+  setCards(updatedCards);
 
   if (updatedDelay > maxDelay) {
     clearTimeout(clearTimer);
-    res(updatedQuestions);
+    res(updatedCards);
     return;
   }
 
-  const timer = setTimeout(() => shuffleRandomQuestions(
-    res, difficulty, possibleQuestions, setQuestions, maxDelay, updatedIteration, timer,
+  const timer = setTimeout(() => shuffleCards(
+    res, cards, setCards, maxDelay, updatedIteration, timer,
   ), updatedDelay);
 };
 
@@ -58,23 +38,17 @@ const countdown = (res, setCountdown, count, clearTimer) => {
   const timer = setTimeout(() => countdown(res, setCountdown, countLeft, timer), 1000);
 };
 
-// TODO:
-// Wait for Backend to receive common flashcards for this round
-// setQuestions(selectNextQuestion(cardsFromBackend));
-
 const handleGameStart = async (
-  difficulty, possibleQuestions, setQuestions, setGameMode, setCountdown,
+  game, history, cards, setCards, setCountdown,
 ) => {
-  setGameMode('countdown');
   await new Promise((res) => {
-    countdown(res, setCountdown, 5);
+    countdown(res, setCountdown, 10);
   });
-  setGameMode('shuffle');
-  const shuffledQuestions = await new Promise((res) => {
-    shuffleRandomQuestions(res, difficulty, possibleQuestions, setQuestions, 800, 1);
+  history.push(`/play/${game.id}`);
+  const shuffledCards = await new Promise((res) => {
+    shuffleCards(res, cards, setCards, 800, 1);
   });
-  setGameMode('play');
-  setQuestions(selectNextQuestion(shuffledQuestions));
+  setCards(selectNextQuestion(shuffledCards));
 };
 
 export default handleGameStart;

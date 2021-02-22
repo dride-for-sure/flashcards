@@ -1,23 +1,23 @@
 import PropTypes from 'prop-types';
 import { Container, Difficulty } from './styles';
 
-export default function StartGame({ onStartGameClick }) {
+export default function StartGame({ onGameStart }) {
   return (
     <Container>
       <h1>To start choose a level</h1>
       <span>
         <Difficulty
-          onClick={() => { onStartGameClick('easy'); }}
+          onClick={() => { onGameStart('easy'); }}
           title="Easy peasy">
           🥱
         </Difficulty>
         <Difficulty
-          onClick={() => { onStartGameClick('moderat'); }}
+          onClick={() => { onGameStart('moderat'); }}
           title="For everyday">
           💪
         </Difficulty>
         <Difficulty
-          onClick={() => { onStartGameClick('hard'); }}
+          onClick={() => { onGameStart('hard'); }}
           title="100% pain">
           🤯
         </Difficulty>
@@ -27,5 +27,5 @@ export default function StartGame({ onStartGameClick }) {
 }
 
 StartGame.propTypes = {
-  onStartGameClick: PropTypes.func.isRequired,
+  onGameStart: PropTypes.func.isRequired,
 };
