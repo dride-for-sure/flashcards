@@ -4,6 +4,7 @@ import { calcResult, handleCongrats } from '../../common/handleCongrats';
 import handleGameStart from '../../common/handleGameStart';
 import { handleQuestions } from '../../common/handleQuestions';
 import StompMessages from '../../components/StompMessages/StompMessages';
+import { joinLobby, sendAnswers } from '../../services/gameAPI';
 import playersDb from '../../store/playersDb';
 import possibleQuestions from '../../store/store';
 import Congrats from './Congrats/Congrats';
@@ -15,9 +16,22 @@ export default function Game() {
   const [results, setResults] = useState({});
   const [players, setPlayers] = useState([]);
   const [countdown, setCountdown] = useState(0);
-  const [playerInfos, setPlayerInfos] = useState({});
 
+  // API communication states
+  // Rename playerinfos -> player
+  const [playerInfos, setPlayerInfos] = useState();
   const [gameStatus, setGameStatus] = useState();
+  const [answers, setAnswers] = useState();
+
+  useEffect(() => {
+    joinLobby(playerInfos)
+      .then((initGameStatus) => setGameStatus(initGameStatus));
+  }, []);
+
+  useEffect(() => {
+    sendAnswers(answers);
+  }, [answers]);
+  // ###
 
   useEffect(() => {
     setPlayers(playersDb);
