@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import PlayerScore from './PlayerScore/PlayerScore';
 import Container from './styles';
 
-export default function Charts({ players, calcPlayerScoreColor, calcPlayerScoreWidth }) {
+export default function Charts({ game, calcPlayerScoreColor, calcPlayerScoreWidth }) {
   return (
     <Container>
-      {players.map((player) => (
+      {game.player.map((player) => (
         <PlayerScore
           key={player.id}
           player={player}
@@ -18,16 +18,20 @@ export default function Charts({ players, calcPlayerScoreColor, calcPlayerScoreW
 }
 
 Charts.propTypes = {
-  players: PropTypes.arrayOf(
-    PropTypes.shape({
+  game: PropTypes.shape({
+    id: PropTypes.string,
+    status: PropTypes.string,
+    player: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
-      history: PropTypes.shape({
-        won: PropTypes.number,
-        lost: PropTypes.number,
-      }),
-    }),
-  ).isRequired,
+      points: PropTypes.number,
+    })),
+    questions: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      title: PropTypes.string,
+      question: PropTypes.string,
+    })),
+  }).isRequired,
   calcPlayerScoreColor: PropTypes.func.isRequired,
   calcPlayerScoreWidth: PropTypes.func.isRequired,
 };

@@ -2,17 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Container } from './styles';
 
-export default function Questions(
-  {
-    questions,
-    gameMode,
-    onQuestionClick,
-  },
-) {
-  const nerdfactorIcon = (question) => {
-    if (question.nerdfactor === '3') {
+export default function Questions({ game, onQuestionAnswered }) {
+  const questionLevel = (level) => {
+    if (level === '3') {
       return '🤯';
-    } if (question.nerdfactor === '2') {
+    } if (level === '2') {
       return '💪';
     }
     return '🥱';
@@ -21,31 +15,28 @@ export default function Questions(
   return (
     <>
       {
-        questions.map((question) => (
+        game.questions.map((question) => (
           <Container
             status={question.status}
-            nerdfactor={question.nerdfactor}
-            key={question.id}
-            gameMode={gameMode}>
+            level={question.level}
+            key={question.id}>
             <span>
-              {nerdfactorIcon(question)}
+              {questionLevel(question.level)}
             </span>
             <h1>
-              {question.topic}
+              {question.title}
             </h1>
             <span>{question.description}</span>
             <span>
               <Button
-                disabled={question.status !== 'selected'}
-                onClick={() => { onQuestionClick(question, 'a'); }}>
+                onClick={() => { onQuestionAnswered(question.id, 'a'); }}>
                 👉
-                {question.answer.a.description}
+                {question.answers.a}
               </Button>
               <Button
-                disabled={question.status !== 'selected'}
-                onClick={() => { onQuestionClick(question, 'b'); }}>
+                onClick={() => { onQuestionAnswered(question.id, 'b'); }}>
                 👉
-                {question.answer.b.description}
+                {question.answer.b}
               </Button>
             </span>
           </Container>
@@ -56,18 +47,25 @@ export default function Questions(
 }
 
 Questions.propTypes = {
-  questions: PropTypes.arrayOf(
-    PropTypes.shape({
-      topic: PropTypes.string,
+  game: PropTypes.shape({
+    id: PropTypes.string,
+    status: PropTypes.string,
+    player: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      points: PropTypes.number,
+    })),
+    questions: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      level: PropTypes.number,
+      title: PropTypes.string,
       description: PropTypes.string,
-      nerdfactor: PropTypes.string,
-      status: PropTypes.string,
-      answer: PropTypes.shape({
-        a: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
-        b: PropTypes.shape({ description: PropTypes.string, correct: PropTypes.bool }),
+      answers: PropTypes.shape({
+        a: PropTypes.string,
+        b: PropTypes.string,
       }),
-    }),
-  ).isRequired,
-  gameMode: PropTypes.string.isRequired,
-  onQuestionClick: PropTypes.func.isRequired,
+      status: PropTypes.string,
+    })),
+  }).isRequired,
+  onQuestionAnswered: PropTypes.func.isRequired,
 };
