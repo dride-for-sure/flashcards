@@ -19,12 +19,12 @@ export default function Game() {
 
   // API communication states
   // Rename playerinfos -> player
-  const [playerInfos, setPlayerInfos] = useState();
+  const [thisPlayer, setThisPlayer] = useState();
   const [gameStatus, setGameStatus] = useState();
   const [answers, setAnswers] = useState();
 
   useEffect(() => {
-    joinLobby(playerInfos)
+    joinLobby(thisPlayer)
       .then((initGameStatus) => setGameStatus(initGameStatus));
   }, []);
 
@@ -79,8 +79,8 @@ export default function Game() {
           (player, setBarWidth) => handlePlayerScoreWidth(player, questions, setBarWidth)
         }
         countdown={countdown}
-        playerInfos={playerInfos}
-        setPlayerInfos={(returnedPlayerInfos) => setPlayerInfos(returnedPlayerInfos)}
+        thisPlayer={thisPlayer}
+        setThisPlayer={(returnedThisPlayer) => setThisPlayer(returnedThisPlayer)}
       />
     </>
   );

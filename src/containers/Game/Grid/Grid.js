@@ -18,8 +18,8 @@ export default function Grid(
     calcPlayerScoreColor,
     calcPlayerScoreWidth,
     countdown,
-    playerInfos,
-    setPlayerInfos,
+    thisPlayer,
+    setThisPlayer,
   },
 ) {
   return (
@@ -38,8 +38,8 @@ export default function Grid(
         {(gameMode === 'lobby' || gameMode === 'countdown') && (
         <PlayerList
           players={players}
-          playerInfos={playerInfos}
-          setPlayerInfos={setPlayerInfos} />
+          thisPlayer={thisPlayer}
+          setThisPlayer={setThisPlayer} />
         )}
         {gameMode !== 'lobby' && (
         <Questions
@@ -85,9 +85,9 @@ Grid.propTypes = {
   calcPlayerScoreColor: PropTypes.func.isRequired,
   calcPlayerScoreWidth: PropTypes.func.isRequired,
   countdown: PropTypes.number.isRequired,
-  playerInfos: PropTypes.shape({
+  thisPlayer: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
   }).isRequired,
-  setPlayerInfos: PropTypes.func.isRequired,
+  setThisPlayer: PropTypes.func.isRequired,
 };
