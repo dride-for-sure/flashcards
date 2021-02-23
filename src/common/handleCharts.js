@@ -1,9 +1,8 @@
-export const handlePlayerScoreColor = (player, questions, setBarColor) => {
+export const handlePlayerScoreColor = (player, game, setBarColor) => {
   const s = 80;
   const l = 70;
   const maxH = 130;
-  const count = questions.length;
-  const factor = count / player.results.checked;
+  const factor = game.maxPoints / player.points;
   const h = maxH / factor;
   const hsl = `hsl(${h},${s}%,${l}%)`;
   setBarColor(hsl);
@@ -23,10 +22,8 @@ const addWidthRandomness = (length, setBarWidth) => {
   return setTimeout(() => addWidthRandomness(length, setBarWidth), delay);
 };
 
-export const handlePlayerScoreWidth = (player, questions, setBarWidth) => {
-  const count = questions.length;
-  const factor = count / player.results.checked;
+export const handlePlayerScoreWidth = (player, game, setBarWidth) => {
+  const factor = game.maxPoints / player.points;
   const length = 100 / factor;
-
   addWidthRandomness(length, setBarWidth);
 };
