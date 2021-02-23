@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
-import { handleAwards } from './common/handleAwards';
+import { handleAnswers } from './common/handleAnswers';
+import { calcGameResults, handleGameRestart } from './common/handleAwards';
 import { handlePlayerScoreColor, handlePlayerScoreWidth } from './common/handleCharts';
 import handleGameStart from './common/handleGameStart';
-import { handleQuestions } from './common/handleQuestions';
-import Awards from './components/Awards/Awards';
 import Messages from './components/Messages/Messages';
 import Lobby from './containers/Lobby/Lobby';
 import Play from './containers/Play/Play';
 import GlobalStyle from './GlobalStyles';
-import { joinGame, startGame } from './services/gameAPI';
+import { joinGame, sendAnswer, startGame } from './services/gameAPI';
 
 export default function Game() {
   const [player, setPlayer] = useState();
@@ -17,6 +16,8 @@ export default function Game() {
   const [game, setGame] = useState();
   const [cards, setCards] = useState();
   const [countdown, setCountdown] = useState();
+  const [started, setStarted] = useState();
+  const [results, setResults] = useState();
   const history = useHistory();
 
   useEffect(() => {
@@ -25,8 +26,13 @@ export default function Game() {
   }, [player]);
 
   useEffect(() => {
-    if (game.status === 'play' && countdown === '') {
-      handleGameStart(game, history, cards, setCards, setCountdown);
+    if (game.status === 'play' && !started) {
+      handleGameStart(game, history, game, setCards, setCountdown);
+      setStarted(true);
+    }
+
+    if (game.status === 'finish') {
+      setResults(calcGameResults(game, player));
     }
   }, [game]);
 
@@ -43,19 +49,16 @@ export default function Game() {
           />
         )}
         <Switch>
-          <Route path="/result/:gameId">
-            <Awards
-              game={game}
-              onGameRestart={() => {
-                handleAwards(setGame);
-              }}
-            />
-          </Route>
           <Route path="/play/:gameId">
             <Play
               game={game}
-              onQuestionAnswered={(returnedGame) => {
-                handleQuestions(returnedGame, setGame);
+              player={player}
+              results={results}
+              onGameRestart={() => {
+                handleGameRestart(setGame);
+              }}
+              onCardAnswered={(cardId, choosenAnswer) => {
+                handleAnswers(cards, setCards, cardId, choosenAnswer, sendAnswer);
               }}
               calcPlayerScoreColor={(selectedPlayer, setBarColor) => {
                 handlePlayerScoreColor(selectedPlayer, game, setBarColor);
