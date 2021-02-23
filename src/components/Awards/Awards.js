@@ -1,76 +1,69 @@
-import PropTypes from 'prop-types';
+import { onGameRestartType, playerType, resultsType } from '../../types/types';
 import { Button, Container, Message } from './styles';
 
-export default function Awards({ handleCongratsClick, results }) {
-  const result = () => {
-    if (results.missed > results.checked) {
-      return ('loose');
-    } if (results.missed === results.checked) {
-      return ('draw');
-    }
-    return ('win');
-  };
-
+export default function Awards({ results, player, onGameRestart }) {
   const count = (
     <span>
-      🤟
+      {player.points}
       {' '}
-      {results.checked}
+      /
       {' '}
-      / ☠️
-      {' '}
-      {results.missed}
+      {results.maxPoints}
     </span>
   );
 
   const btn = (
-    <Button onClick={() => handleCongratsClick()}>
+    <Button onClick={() => onGameRestart()}>
       Again, again and again!
     </Button>
   );
 
-  const win = (
-    <Message>
-      <span>🏅</span>
-      {count}
-      <span>Well done! Praise the nerd!</span>
-      {btn}
-    </Message>
-  );
-
-  const draw = (
-    <Message>
-      <span>🤒</span>
-      {count}
-      <span>Well, trying is not enough...</span>
-      {btn}
-    </Message>
-  );
-
-  const loose = (
-    <Message>
-      <span>☠️ </span>
-      {count}
-      <span>This was probably nothing</span>
-      {btn}
-    </Message>
+  const message = (
+    <>
+      {results.position === 1 && (
+      <Message>
+        <span>🏅</span>
+        {count}
+        <span>Well done! Praise the master!</span>
+        {btn}
+      </Message>
+      )}
+      {results.position === 2 && (
+      <Message>
+        <span>🏅</span>
+        {count}
+        <span>Well done! You will do it next time!</span>
+        {btn}
+      </Message>
+      )}
+      {results.position === 3 && (
+      <Message>
+        <span>🏅</span>
+        {count}
+        <span>Well done! Close, very close!</span>
+        {btn}
+      </Message>
+      )}
+      {results.position > 3 && (
+      <Message>
+        <span>🤒</span>
+        {count}
+        <span>Well, trying is not enough...</span>
+        {btn}
+      </Message>
+      )}
+    </>
   );
 
   return (
-    <Container result={result()}>
-      {result() === 'win' ? win : null}
-      {result() === 'draw' ? draw : null}
-      {result() === 'loose' ? loose : null}
+    <Container position={results.position}>
+      {message}
     </Container>
-
   );
 }
 
 Awards.propTypes = {
-  handleCongratsClick: PropTypes.func.isRequired,
-  results: PropTypes.shape({
-    missed: PropTypes.number,
-    checked: PropTypes.number,
-    total: PropTypes.number,
-  }).isRequired,
+  results: resultsType.isRequired,
+  player: playerType.isRequired,
+  onGameRestart: onGameRestartType.isRequired,
 };

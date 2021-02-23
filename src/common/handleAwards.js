@@ -1,17 +1,27 @@
-import { deleteAllQuestions } from './handleQuestions';
+import { deleteAllCards } from './handleAnswers';
 
-export const handleAwards = (setQuestions, setGameMode) => {
-  setQuestions(deleteAllQuestions());
+export const handleGameRestart = (setQuestions, setGameMode) => {
+  setQuestions(deleteAllCards());
   setGameMode('lobby');
 };
 
-export const calcResult = (questions) => {
-  const missed = questions.reduce((acc, value) => (value.status === 'missed' ? acc + 1 : acc), 0);
-  const checked = questions.reduce((acc, value) => (value.status === 'checked' ? acc + 1 : acc), 0);
-
+export const calcGameResults = (game) => {
+  let n = 0;
+  const ranking = game.players
+    .sort((a, b) => b.points - a.points)
+    .reduce((acc, player) => {
+      if (acc.length === 0) {
+        acc.push({ ...player, position: 1 });
+      } else if (acc[acc.length - 1].points === player.points) {
+        acc.push({ ...player, position: acc[acc.length - 1].position });
+        n += 1;
+      } else {
+        acc.push({ ...player, position: acc[acc.length - 1].position + n + 1 });
+        n = 0;
+      }
+      return acc;
+    }, []);
   return {
-    missed,
-    checked,
-    total: missed + checked,
-  };
+    ranking,
+    maxPoints: game.maxPoints };
 };
