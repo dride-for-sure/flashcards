@@ -4,24 +4,24 @@ import uuid from '../../../../common/uuid';
 import Player from '../Player/Player';
 import { Container, Input } from './styles';
 
-export default function SetPlayerName({ playerInfos, setPlayerInfos }) {
+export default function SetPlayerName({ player, setPlayer }) {
   const [playerName, setPlayerName] = useState('');
   const headline = 'Your ninja name?';
   const inputPlaceholder = 'It has one, right?';
 
-  const hasPlayerInfos = playerInfos && Object.keys(playerInfos).length === 0;
+  const hasThisPlayer = player && Object.keys(player).length === 0;
   const hasPlayerName = playerName.length > 0 && playerName.length < 25;
   const handleSubmit = (event) => {
     event.preventDefault();
     if (hasPlayerName) {
-      setPlayerInfos({ id: uuid(), name: playerName });
+      setPlayer({ id: uuid(), name: playerName });
       setPlayerName('');
     }
   };
 
   return (
     <>
-      { hasPlayerInfos && (
+      { hasThisPlayer && (
       <Container>
         <h1>{headline}</h1>
         <form onSubmit={(event) => handleSubmit(event)}>
@@ -29,17 +29,17 @@ export default function SetPlayerName({ playerInfos, setPlayerInfos }) {
         </form>
       </Container>
       )}
-      { !hasPlayerInfos && (
-      <Player key={playerInfos.id} player={playerInfos} />
+      { !hasThisPlayer && (
+      <Player key={player.id} player={player} />
       )}
     </>
   );
 }
 
 SetPlayerName.propTypes = {
-  playerInfos: PropTypes.shape({
+  player: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
   }).isRequired,
-  setPlayerInfos: PropTypes.func.isRequired,
+  setPlayer: PropTypes.func.isRequired,
 };

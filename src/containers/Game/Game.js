@@ -3,6 +3,8 @@ import { handlePlayerScoreColor, handlePlayerScoreWidth } from '../../common/han
 import { calcResult, handleCongrats } from '../../common/handleCongrats';
 import handleGameStart from '../../common/handleGameStart';
 import { handleQuestions } from '../../common/handleQuestions';
+import StompMessages from '../../components/StompMessages/StompMessages';
+import { joinLobby, sendAnswers } from '../../services/gameAPI';
 import playersDb from '../../store/playersDb';
 import possibleQuestions from '../../store/store';
 import Congrats from './Congrats/Congrats';
@@ -13,8 +15,33 @@ export default function Game() {
   const [gameMode, setGameMode] = useState('lobby');
   const [results, setResults] = useState({});
   const [players, setPlayers] = useState([]);
+
+  // API communication states
+  // Rename playerinfos -> player
+  const [thisPlayer, setThisPlayer] = useState();
+  const [gameStatus, setGameStatus] = useState();
+  // Gamestart
+  const [gameStarted, setGameStarted] = useState(false);
   const [countdown, setCountdown] = useState(0);
-  const [playerInfos, setPlayerInfos] = useState({});
+  // Play
+  const [answers, setAnswers] = useState();
+
+  useEffect(() => {
+    joinLobby(thisPlayer)
+      .then((initGameStatus) => setGameStatus(initGameStatus));
+  }, []);
+
+  useEffect(() => {
+    sendAnswers(answers);
+  }, [answers]);
+
+  useEffect(() => {
+    if (gameStatus.status === 'play' && !gameStarted) {
+      setGameStarted(true);
+      handleGameStart(gameStatus, setCountdown);
+    }
+  }, [gameStatus]);
+  // ###
 
   useEffect(() => {
     setPlayers(playersDb);
@@ -32,6 +59,12 @@ export default function Game() {
 
   return (
     <>
+      {gameStatus && (
+      <StompMessages
+        gameStatus={gameStatus}
+        setGameStatus={(updatedGameStatus) => setGameStatus(updatedGameStatus)}
+      />
+      )}
       {gameMode === 'finish' && (
       <Congrats
         handleCongratsClick={() => handleCongrats(setQuestions, setGameMode)}
@@ -56,8 +89,8 @@ export default function Game() {
           (player, setBarWidth) => handlePlayerScoreWidth(player, questions, setBarWidth)
         }
         countdown={countdown}
-        playerInfos={playerInfos}
-        setPlayerInfos={(returnedPlayerInfos) => setPlayerInfos(returnedPlayerInfos)}
+        thisPlayer={thisPlayer}
+        setThisPlayer={(returnedThisPlayer) => setThisPlayer(returnedThisPlayer)}
       />
     </>
   );

@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
+import { calcPlayerScoreColorType, calcPlayerScoreWidthType, gameType } from '../../types/types';
 import PlayerScore from './PlayerScore/PlayerScore';
 import Container from './styles';
 
-export default function Charts({ players, calcPlayerScoreColor, calcPlayerScoreWidth }) {
+export default function Charts({ game, calcPlayerScoreColor, calcPlayerScoreWidth }) {
   return (
     <Container>
-      {players.map((player) => (
+      {game.player.map((player) => (
         <PlayerScore
           key={player.id}
           player={player}
@@ -18,16 +18,7 @@ export default function Charts({ players, calcPlayerScoreColor, calcPlayerScoreW
 }
 
 Charts.propTypes = {
-  players: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      history: PropTypes.shape({
-        won: PropTypes.number,
-        lost: PropTypes.number,
-      }),
-    }),
-  ).isRequired,
-  calcPlayerScoreColor: PropTypes.func.isRequired,
-  calcPlayerScoreWidth: PropTypes.func.isRequired,
+  game: gameType.isRequired,
+  calcPlayerScoreColor: calcPlayerScoreColorType.isRequired,
+  calcPlayerScoreWidth: calcPlayerScoreWidthType.isRequired,
 };

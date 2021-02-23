@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { calcPlayerScoreColorType, calcPlayerScoreWidthType, playerType } from '../../../types/types';
 import Container from './styles';
 
 export default function PlayerScore({ player, calcPlayerScoreColor, calcPlayerScoreWidth }) {
@@ -23,14 +23,7 @@ export default function PlayerScore({ player, calcPlayerScoreColor, calcPlayerSc
 }
 
 PlayerScore.propTypes = {
-  player: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    history: PropTypes.shape({
-      won: PropTypes.number,
-      lost: PropTypes.number,
-    }),
-  }).isRequired,
-  calcPlayerScoreColor: PropTypes.func.isRequired,
-  calcPlayerScoreWidth: PropTypes.func.isRequired,
+  player: playerType.isRequired,
+  calcPlayerScoreColor: calcPlayerScoreColorType.isRequired,
+  calcPlayerScoreWidth: calcPlayerScoreWidthType.isRequired,
 };
