@@ -34,21 +34,17 @@ Play.propTypes = {
   game: PropTypes.shape({
     id: PropTypes.string,
     status: PropTypes.string,
-    player: PropTypes.arrayOf(PropTypes.shape({
+    players: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
       points: PropTypes.number,
     })),
-    questions: PropTypes.arrayOf(PropTypes.shape({
+    cards: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
       level: PropTypes.number,
-      title: PropTypes.string,
-      description: PropTypes.string,
-      answers: PropTypes.shape({
-        a: PropTypes.string,
-        b: PropTypes.string,
-      }),
-      status: PropTypes.string,
+      subject: PropTypes.string,
+      question: PropTypes.string,
+      choices: PropTypes.arrayOf(PropTypes.string),
     })),
   }).isRequired,
   onQuestionAnswered: PropTypes.func.isRequired,
