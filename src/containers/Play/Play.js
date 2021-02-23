@@ -1,26 +1,34 @@
-import PropTypes from 'prop-types';
+import Awards from '../../components/Awards/Awards';
+import FlashCard from '../../components/Cards/FlashCard/FlashCard';
 import GameLogo from '../../components/Cards/GameLogo/GameLogo';
 import GameTitle from '../../components/Cards/GameTitle/GameTitle';
-import Questions from '../../components/Cards/Questions/Questions';
 import Charts from '../../components/Charts/Charts';
+import { calcPlayerScoreColorType, calcPlayerScoreWidthType, gameType, onCardAnsweredType, onGameRestartType, playerType, resultsType } from '../../types/types';
 import Container from './styles';
 
 export default function Play(
   {
     game,
-    onQuestionAnswered,
+    results,
+    player,
+    onCardAnswered,
     calcPlayerScoreColor,
     calcPlayerScoreWidth,
+    onGameRestart,
   },
 ) {
   return (
     <>
+      <Awards
+        results={results}
+        player={player}
+        onGameRestart={onGameRestart} />
       <Container>
         <GameLogo />
         <GameTitle />
-        <Questions
+        <FlashCard
           game={game}
-          onQuestionAnswered={onQuestionAnswered} />
+          onCardAnswered={onCardAnswered} />
       </Container>
       <Charts
         game={game}
@@ -31,23 +39,11 @@ export default function Play(
 }
 
 Play.propTypes = {
-  game: PropTypes.shape({
-    id: PropTypes.string,
-    status: PropTypes.string,
-    players: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      points: PropTypes.number,
-    })),
-    cards: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      level: PropTypes.number,
-      subject: PropTypes.string,
-      question: PropTypes.string,
-      choices: PropTypes.arrayOf(PropTypes.string),
-    })),
-  }).isRequired,
-  onQuestionAnswered: PropTypes.func.isRequired,
-  calcPlayerScoreColor: PropTypes.func.isRequired,
-  calcPlayerScoreWidth: PropTypes.func.isRequired,
+  game: gameType.isRequired,
+  onCardAnswered: onCardAnsweredType.isRequired,
+  calcPlayerScoreColor: calcPlayerScoreColorType.isRequired,
+  calcPlayerScoreWidth: calcPlayerScoreWidthType.isRequired,
+  results: resultsType.isRequired,
+  player: playerType.isRequired,
+  onGameRestart: onGameRestartType.isRequired,
 };
