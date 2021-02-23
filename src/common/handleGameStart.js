@@ -1,4 +1,4 @@
-import { selectNextQuestion } from './handleQuestions';
+import { selectNextCard } from './handleAnswers';
 
 const shuffleCards = (
   res, cards, setCards, maxDelay, iteration, clearTimer,
@@ -39,16 +39,16 @@ const countdown = (res, setCountdown, count, clearTimer) => {
 };
 
 const handleGameStart = async (
-  game, history, cards, setCards, setCountdown,
+  game, history, setCards, setCountdown,
 ) => {
   await new Promise((res) => {
     countdown(res, setCountdown, 10);
   });
   history.push(`/play/${game.id}`);
   const shuffledCards = await new Promise((res) => {
-    shuffleCards(res, cards, setCards, 800, 1);
+    shuffleCards(res, game.cards, setCards, 800, 1);
   });
-  setCards(selectNextQuestion(shuffledCards));
+  setCards(selectNextCard(shuffledCards));
 };
 
 export default handleGameStart;
