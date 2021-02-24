@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Answer {
 
  private UUID uuid;
- private int chosen;
+ private Chosen chosen;
  private int points;
 
 }
