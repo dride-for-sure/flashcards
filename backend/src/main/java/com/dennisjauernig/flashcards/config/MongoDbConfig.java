@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Data
-@ConfigurationProperties (prefix = "spring.data.mongodb")
+@ConfigurationProperties ( prefix = "spring.data.mongodb" )
 public class MongoDbConfig {
 
  private String host;

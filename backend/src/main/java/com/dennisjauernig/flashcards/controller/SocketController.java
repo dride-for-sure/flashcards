@@ -29,40 +29,42 @@ public class SocketController {
  private final MessagingService messagingService;
 
  @Autowired
- public SocketController (AnswerService answerService,
-													LobbyService lobbyService,
-													InitGameService initGameService,
-													MessagingService messagingService) {
-	this.answerService = answerService;
-	this.lobbyService = lobbyService;
-	this.initGameService = initGameService;
-	this.messagingService = messagingService;
+ public SocketController (
+         AnswerService answerService,
+         LobbyService lobbyService,
+         InitGameService initGameService,
+         MessagingService messagingService ) {
+  this.answerService = answerService;
+  this.lobbyService = lobbyService;
+  this.initGameService = initGameService;
+  this.messagingService = messagingService;
  }
 
- @MessageMapping ("/lobby")
- @SendTo ("/topic/lobby")
- public Lobby addPlayerToLobby (AddPlayerDto dto) {
-	return lobbyService.addPlayerToLobby( dto )
-								 .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-												 "User: " + dto.getUuid() + " could not join" ) );
+ @MessageMapping ( "/lobby" )
+ @SendTo ( "/topic/lobby" )
+ public Lobby addPlayerToLobby ( AddPlayerDto dto ) {
+  return lobbyService.addPlayerToLobby( dto )
+                     .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
+                             "User: " + dto.getUuid() + " could not join" ) );
  }
 
- @MessageMapping ("/games")
- public void initGame (StartGameDto dto) {
-	Game game = initGameService.initGame( dto )
-											.orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-															"Card is not available" ) );
-	messagingService.sendGameUpdates( game );
+ @MessageMapping ( "/games" )
+ public void initGame ( StartGameDto dto ) {
+  Game game = initGameService.initGame( dto )
+                             .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
+                                     "Card is not available" ) );
+  messagingService.sendGameUpdates( game );
  }
 
- @MessageMapping ("/games/{gameId}/{playerId}")
- @SendTo ("/topic/games/{gameId}")
- public Answer receivedAnswer (@DestinationVariable UUID gameId,
-															 @DestinationVariable UUID playerId,
-															 ReceivedAnswerDto dto) {
-	return answerService.receivedAnswer( gameId, playerId, dto )
-								 .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-												 "Answer: " + dto.getUuid() + " within the game: " + gameId + " could not be " +
-																 "received" ) );
+ @MessageMapping ( "/games/{gameId}/{playerId}" )
+ @SendTo ( "/topic/games/{gameId}" )
+ public Answer receivedAnswer (
+         @DestinationVariable UUID gameId,
+         @DestinationVariable UUID playerId,
+         ReceivedAnswerDto dto ) {
+  return answerService.receivedAnswer( gameId, playerId, dto )
+                      .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
+                              "Answer: " + dto.getUuid() + " within the game: " + gameId + " could not be " +
+                                      "received" ) );
  }
 }

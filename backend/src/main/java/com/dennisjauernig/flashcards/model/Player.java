@@ -11,8 +11,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder (toBuilder = true)
-@Document (collection = "player")
+@Builder ( toBuilder = true )
+@Document ( collection = "player" )
 public class Player {
 
  private UUID uuid;

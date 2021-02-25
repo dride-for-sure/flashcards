@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder (toBuilder = true)
+@Builder ( toBuilder = true )
 public class Game {
 
  private UUID gameUuid;

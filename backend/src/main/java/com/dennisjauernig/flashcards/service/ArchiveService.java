@@ -10,11 +10,11 @@ public class ArchiveService {
 
  private final ArchiveDb archiveDb;
 
- public ArchiveService (ArchiveDb archiveDb) {
-	this.archiveDb = archiveDb;
+ public ArchiveService ( ArchiveDb archiveDb ) {
+  this.archiveDb = archiveDb;
  }
 
- public void addToArchive (Game updatedGame) {
-	updatedGame.getPlayerList().stream().map( this.archiveDb::save );
+ public void addToArchive ( Game updatedGame ) {
+  updatedGame.getPlayerList().stream().map( this.archiveDb::save );
  }
 }
