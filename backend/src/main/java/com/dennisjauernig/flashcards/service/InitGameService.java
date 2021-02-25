@@ -22,71 +22,71 @@ public class InitGameService {
  private final LobbyDb lobbyDb;
 
  @Autowired
- public InitGameService (LobbyDb lobbyDb, GamesDb gamesDb, CardsDb cardsDb) {
-	this.lobbyDb = lobbyDb;
-	this.gamesDb = gamesDb;
-	this.cardsDb = cardsDb;
+ public InitGameService ( LobbyDb lobbyDb, GamesDb gamesDb, CardsDb cardsDb ) {
+  this.lobbyDb = lobbyDb;
+  this.gamesDb = gamesDb;
+  this.cardsDb = cardsDb;
  }
 
- public Optional<Game> initGame (StartGameDto dto) {
-	if ( !gamesDb.hasGame( dto.getUuid() ) && dto.getUuid().equals( this.lobbyDb.getLobbyUuid() ) ) {
-	 Game game = gameFactory( dto );
-	 this.lobbyDb.resetLobby();
-	 return Optional.of( this.gamesDb.addGame( game ) );
-	}
-	return Optional.empty();
+ public Optional<Game> initGame ( StartGameDto dto ) {
+  if ( !gamesDb.hasGame( dto.getUuid() ) && dto.getUuid().equals( this.lobbyDb.getLobbyUuid() ) ) {
+   Game game = gameFactory( dto );
+   this.lobbyDb.resetLobby();
+   return Optional.of( this.gamesDb.addGame( game ) );
+  }
+  return Optional.empty();
  }
 
- private Game gameFactory (StartGameDto dto) {
-	UUID gameUuid = dto.getUuid();
-	GameStatus gameStatus = GameStatus.PLAY;
-	List<Player> playerList = createGamePlayerListFromLobby();
-	List<CardWithoutSolution> cardList = generateRandomCardList( dto.getLevel() );
-	int maxPoints = getMaxPointsFromCardList( cardList );
-	return new Game( gameUuid, gameStatus, playerList, cardList, maxPoints );
+ private Game gameFactory ( StartGameDto dto ) {
+  UUID gameUuid = dto.getUuid();
+  GameStatus gameStatus = GameStatus.PLAY;
+  List<Player> playerList = createGamePlayerListFromLobby();
+  List<CardWithoutSolution> cardList = generateRandomCardList( dto.getLevel() );
+  int maxPoints = getMaxPointsFromCardList( cardList );
+  return new Game( gameUuid, gameStatus, playerList, cardList, maxPoints );
  }
 
  private List<Player> createGamePlayerListFromLobby () {
-	return this.lobbyDb.getGamePlayer().stream()
-								 .map( player -> player.toBuilder()
-																				 .uuid( player.getUuid() )
-																				 .name( player.getName() )
-																				 .points( 0 )
-																				 .cardsSolved( 0 )
-																				 .build() )
-								 .collect( Collectors.toList() );
+  return this.lobbyDb.getGamePlayer().stream()
+                     .map( player -> player.toBuilder()
+                                           .uuid( player.getUuid() )
+                                           .name( player.getName() )
+                                           .points( 0 )
+                                           .cardsSolved( 0 )
+                                           .build() )
+                     .collect( Collectors.toList() );
  }
 
- private List<CardWithoutSolution> generateRandomCardList (int level) {
-	List<Card> filteredByLevel = filterCardsByLevel( this.cardsDb.findAll(), level );
-	List<Card> cards = new ArrayList<>();
-	while ( cards.size() < 25 ) {
-	 cards.add( filteredByLevel.get( (int) ( Math.random() * filteredByLevel.size() ) ) );
-	}
-	return removeSolutionsFromCardList( cards );
+ private List<CardWithoutSolution> generateRandomCardList ( int level ) {
+  List<Card> filteredByLevel = filterCardsByLevel( this.cardsDb.findAll(), level );
+  List<Card> cards = new ArrayList<>();
+  while ( cards.size() < 25 ) {
+   cards.add( filteredByLevel.get( ( int ) ( Math.random() * filteredByLevel.size() ) ) );
+  }
+  return removeSolutionsFromCardList( cards );
  }
 
- private int getMaxPointsFromCardList (List<CardWithoutSolution> cardList) {
-	return cardList.stream()
-								 .map( CardWithoutSolution::getLevel )
-								 .reduce( 0, Integer::sum );
+ private int getMaxPointsFromCardList ( List<CardWithoutSolution> cardList ) {
+  return cardList.stream()
+                 .map( CardWithoutSolution::getLevel )
+                 .reduce( 0, Integer::sum );
  }
 
- private List<Card> filterCardsByLevel (List<Card> cardList, int level) {
-	return cardList.stream()
-								 .filter( card -> card.getLevel() <= level )
-								 .collect( Collectors.toList() );
+ private List<Card> filterCardsByLevel ( List<Card> cardList, int level ) {
+  return cardList.stream()
+                 .filter( card -> card.getLevel() <= level )
+                 .collect( Collectors.toList() );
  }
 
- private List<CardWithoutSolution> removeSolutionsFromCardList (List<Card> cardList) {
-	return cardList.stream()
-								 .map( card -> new CardWithoutSolution(
-												 card.getUuid(),
-												 card.getLevel(),
-												 card.getSubject(),
-												 card.getQuestion(),
-												 card.getChoices() ) )
-								 .collect( Collectors.toList() );
+ private List<CardWithoutSolution> removeSolutionsFromCardList ( List<Card> cardList ) {
+  return cardList.stream()
+                 .map( card -> new CardWithoutSolution(
+                         card.getUuid(),
+                         card.getLevel(),
+                         card.getSubject(),
+                         card.getQuestion(),
+                         card.getChoices() ) )
+                 .collect( Collectors.toList() );
  }
 }
 

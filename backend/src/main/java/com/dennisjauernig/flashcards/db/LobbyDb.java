@@ -15,34 +15,34 @@ public class LobbyDb {
  private Lobby lobbyDb = new Lobby( UUID.randomUUID(), new ArrayList<>() );
 
  public Lobby getLobby () {
-	return lobbyDb;
+  return lobbyDb;
  }
 
  public UUID getLobbyUuid () {
-	return lobbyDb.getUuid();
+  return lobbyDb.getUuid();
  }
 
- public void addPlayerToLobby (AddPlayerDto dto) {
-	List<Player> playerInLobby = lobbyDb.getPlayers();
-	playerInLobby.add( Player.builder()
-														 .uuid( dto.getUuid() )
-														 .name( dto.getName() )
-														 .cardsSolved( 0 )
-														 .points( 0 )
-														 .build() );
-	lobbyDb = new Lobby( lobbyDb.getUuid(), playerInLobby );
+ public void addPlayerToLobby ( AddPlayerDto dto ) {
+  List<Player> playerInLobby = lobbyDb.getPlayers();
+  playerInLobby.add( Player.builder()
+                           .uuid( dto.getUuid() )
+                           .name( dto.getName() )
+                           .cardsSolved( 0 )
+                           .points( 0 )
+                           .build() );
+  lobbyDb = new Lobby( lobbyDb.getUuid(), playerInLobby );
  }
 
- public boolean hasLobbyPlayer (AddPlayerDto dto) {
-	return lobbyDb.getPlayers().stream()
-								 .anyMatch( existingPlayer -> existingPlayer.getUuid().equals( dto.getUuid() ) );
+ public boolean hasLobbyPlayer ( AddPlayerDto dto ) {
+  return lobbyDb.getPlayers().stream()
+                .anyMatch( existingPlayer -> existingPlayer.getUuid().equals( dto.getUuid() ) );
  }
 
  public List<Player> getGamePlayer () {
-	return lobbyDb.getPlayers();
+  return lobbyDb.getPlayers();
  }
 
  public void resetLobby () {
-	lobbyDb = new Lobby( UUID.randomUUID(), new ArrayList<>() );
+  lobbyDb = new Lobby( UUID.randomUUID(), new ArrayList<>() );
  }
 }

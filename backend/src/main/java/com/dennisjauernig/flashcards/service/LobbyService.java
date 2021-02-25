@@ -12,15 +12,15 @@ public class LobbyService {
 
  private final LobbyDb lobbyDb;
 
- public LobbyService (LobbyDb lobbyDb) {
-	this.lobbyDb = lobbyDb;
+ public LobbyService ( LobbyDb lobbyDb ) {
+  this.lobbyDb = lobbyDb;
  }
 
- public Optional<Lobby> addPlayerToLobby (AddPlayerDto dto) {
-	if ( !lobbyDb.hasLobbyPlayer( dto ) ) {
-	 lobbyDb.addPlayerToLobby( dto );
-	 return Optional.of( lobbyDb.getLobby() );
-	}
-	return Optional.empty();
+ public Optional<Lobby> addPlayerToLobby ( AddPlayerDto dto ) {
+  if ( !lobbyDb.hasLobbyPlayer( dto ) ) {
+   lobbyDb.addPlayerToLobby( dto );
+   return Optional.of( lobbyDb.getLobby() );
+  }
+  return Optional.empty();
  }
 }

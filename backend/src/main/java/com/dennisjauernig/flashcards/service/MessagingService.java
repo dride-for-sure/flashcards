@@ -11,11 +11,11 @@ public class MessagingService {
  private final SimpMessagingTemplate simpMessagingTemplate;
 
  @Autowired
- public MessagingService (SimpMessagingTemplate simpMessagingTemplate) {
-	this.simpMessagingTemplate = simpMessagingTemplate;
+ public MessagingService ( SimpMessagingTemplate simpMessagingTemplate ) {
+  this.simpMessagingTemplate = simpMessagingTemplate;
  }
 
- public void sendGameUpdates (Game game) {
-	simpMessagingTemplate.convertAndSend( "/topic/games/" + game.getGameUuid(), game );
+ public void sendGameUpdates ( Game game ) {
+  simpMessagingTemplate.convertAndSend( "/topic/games/" + game.getGameUuid(), game );
  }
 }

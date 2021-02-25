@@ -10,5 +10,5 @@ public interface CardsDb extends PagingAndSortingRepository<Card, UUID> {
 
  public List<Card> findAll ();
 
- public List<Card> findAllById (UUID uuid);
+ public List<Card> findAllById ( UUID uuid );
 }
