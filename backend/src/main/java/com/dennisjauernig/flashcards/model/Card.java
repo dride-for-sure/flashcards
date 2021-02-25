@@ -19,5 +19,6 @@ public class Card {
  private String subject;
  private String question;
  private List<String> choices;
+ private AnswerChosen solution;
 
 }

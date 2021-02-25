@@ -1,4 +1,4 @@
-package com.dennisjauernig.flashcards.model;
+package com.dennisjauernig.flashcards.controller.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReceivedAnswerDto {
+public class StartGameDto {
 
  private UUID uuid;
- private int chosen;
+ private int level;
+ private UUID gameMaster;
 
 }
