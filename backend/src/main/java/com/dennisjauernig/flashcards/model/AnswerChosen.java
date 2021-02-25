@@ -1,6 +1,7 @@
 package com.dennisjauernig.flashcards.model;
 
-public enum Chosen {
+public enum AnswerChosen {
+ NONE,
  A,
  B
 }

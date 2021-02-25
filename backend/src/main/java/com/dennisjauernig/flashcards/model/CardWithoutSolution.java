@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StartGameDto {
+public class CardWithoutSolution {
 
  private UUID uuid;
  private int level;
- private UUID gameMaster;
-
+ private String subject;
+ private String question;
+ private List<String> choices;
 }

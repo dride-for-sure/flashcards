@@ -13,7 +13,6 @@ import java.util.UUID;
 public class Lobby {
 
  private UUID uuid;
- private GameStatus status;
  private List<Player> players;
 
 }

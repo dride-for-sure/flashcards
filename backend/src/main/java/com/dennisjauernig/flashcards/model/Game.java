@@ -11,13 +11,13 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder (toBuilder = true)
 public class Game {
 
- private UUID uuid;
- private GameStatus status;
- private List<Player> players;
- private List<Card> cards;
+ private UUID gameUuid;
+ private GameStatus gameStatus;
+ private List<Player> playerList;
+ private List<CardWithoutSolution> cardList;
  private int maxPoints;
 
 }
