@@ -1,6 +1,5 @@
 package com.dennisjauernig.flashcards.db;
 
-import com.dennisjauernig.flashcards.controller.model.NewPlayerDto;
 import com.dennisjauernig.flashcards.model.Lobby;
 import com.dennisjauernig.flashcards.model.Player;
 import org.springframework.stereotype.Repository;
@@ -22,22 +21,20 @@ public class LobbyDb {
   return this.lobbyDb.getUuid();
  }
 
- public Lobby addPlayerToLobby ( NewPlayerDto dto ) {
+ public Lobby addPlayerToLobby ( Player newPlayer ) {
   List<Player> playerInLobby = this.lobbyDb.getPlayers();
-  playerInLobby.add( Player.builder()
-                           .uuid( dto.getUuid() )
-                           .name( dto.getName() )
-                           .cardsSolved( 0 )
-                           .points( 0 )
-                           .build() );
-  this.lobbyDb = new Lobby( this.lobbyDb.getUuid(), playerInLobby );
+  playerInLobby.add( newPlayer );
+  this.lobbyDb = Lobby.builder()
+                      .uuid( lobbyDb.getUuid() )
+                      .players( playerInLobby )
+                      .build();
   return this.lobbyDb;
  }
 
- public boolean hasLobbyPlayer ( NewPlayerDto dto ) {
+ public boolean hasLobbyPlayer ( UUID playerUuid ) {
   return this.lobbyDb.getPlayers().stream()
                      .anyMatch( existingPlayer -> existingPlayer.getUuid()
-                                                                .equals( dto.getUuid() ) );
+                                                                .equals( playerUuid ) );
  }
 
  public List<Player> getGamePlayer () {
