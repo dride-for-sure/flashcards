@@ -59,10 +59,10 @@ public class SocketController {
  @MessageMapping ( "/games/{gameId}/{playerId}" )
  @SendTo ( "/topic/games/{gameId}" )
  public Answer receivedAnswer (
-         @DestinationVariable UUID gameId,
-         @DestinationVariable UUID playerId,
+         @DestinationVariable String gameId,
+         @DestinationVariable String playerId,
          ReceivedAnswerDto dto ) {
-  return answerService.receivedAnswer( gameId, playerId, dto )
+  return answerService.receivedAnswer( UUID.fromString( gameId ), UUID.fromString( playerId ), dto )
                       .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
                               "Answer: " + dto.getUuid() + " within the game: " + gameId + " could not be " +
                                       "received" ) );
