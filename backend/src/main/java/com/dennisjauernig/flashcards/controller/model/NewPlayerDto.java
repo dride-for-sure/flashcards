@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddPlayerDto {
+public class NewPlayerDto {
 
  private UUID uuid;
  private String name;

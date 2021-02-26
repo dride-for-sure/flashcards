@@ -1,8 +1,9 @@
 package com.dennisjauernig.flashcards.service;
 
-import com.dennisjauernig.flashcards.controller.model.AddPlayerDto;
+import com.dennisjauernig.flashcards.controller.model.NewPlayerDto;
 import com.dennisjauernig.flashcards.db.LobbyDb;
 import com.dennisjauernig.flashcards.model.Lobby;
+import com.dennisjauernig.flashcards.model.Player;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,10 +17,15 @@ public class LobbyService {
   this.lobbyDb = lobbyDb;
  }
 
- public Optional<Lobby> addPlayerToLobby ( AddPlayerDto dto ) {
-  if ( !lobbyDb.hasLobbyPlayer( dto ) ) {
-   lobbyDb.addPlayerToLobby( dto );
-   return Optional.of( lobbyDb.getLobby() );
+ public Optional<Lobby> addPlayerToLobby ( NewPlayerDto dto ) {
+  if ( !this.lobbyDb.hasLobbyPlayer( dto.getUuid() ) ) {
+   Player playerToAdd = Player.builder()
+                              .uuid( dto.getUuid() )
+                              .name( dto.getName() )
+                              .points( 0 )
+                              .cardsSolved( 0 )
+                              .build();
+   return Optional.of( this.lobbyDb.addPlayerToLobby( playerToAdd ) );
   }
   return Optional.empty();
  }

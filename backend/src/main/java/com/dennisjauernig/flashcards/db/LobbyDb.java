@@ -1,6 +1,6 @@
 package com.dennisjauernig.flashcards.db;
 
-import com.dennisjauernig.flashcards.controller.model.AddPlayerDto;
+import com.dennisjauernig.flashcards.controller.model.NewPlayerDto;
 import com.dennisjauernig.flashcards.model.Lobby;
 import com.dennisjauernig.flashcards.model.Player;
 import org.springframework.stereotype.Repository;
@@ -15,34 +15,36 @@ public class LobbyDb {
  private Lobby lobbyDb = new Lobby( UUID.randomUUID(), new ArrayList<>() );
 
  public Lobby getLobby () {
-  return lobbyDb;
+  return this.lobbyDb;
  }
 
  public UUID getLobbyUuid () {
-  return lobbyDb.getUuid();
+  return this.lobbyDb.getUuid();
  }
 
- public void addPlayerToLobby ( AddPlayerDto dto ) {
-  List<Player> playerInLobby = lobbyDb.getPlayers();
+ public Lobby addPlayerToLobby ( NewPlayerDto dto ) {
+  List<Player> playerInLobby = this.lobbyDb.getPlayers();
   playerInLobby.add( Player.builder()
                            .uuid( dto.getUuid() )
                            .name( dto.getName() )
                            .cardsSolved( 0 )
                            .points( 0 )
                            .build() );
-  lobbyDb = new Lobby( lobbyDb.getUuid(), playerInLobby );
+  this.lobbyDb = new Lobby( this.lobbyDb.getUuid(), playerInLobby );
+  return this.lobbyDb;
  }
 
- public boolean hasLobbyPlayer ( AddPlayerDto dto ) {
-  return lobbyDb.getPlayers().stream()
-                .anyMatch( existingPlayer -> existingPlayer.getUuid().equals( dto.getUuid() ) );
+ public boolean hasLobbyPlayer ( NewPlayerDto dto ) {
+  return this.lobbyDb.getPlayers().stream()
+                     .anyMatch( existingPlayer -> existingPlayer.getUuid()
+                                                                .equals( dto.getUuid() ) );
  }
 
  public List<Player> getGamePlayer () {
-  return lobbyDb.getPlayers();
+  return this.lobbyDb.getPlayers();
  }
 
  public void resetLobby () {
-  lobbyDb = new Lobby( UUID.randomUUID(), new ArrayList<>() );
+  this.lobbyDb = new Lobby( UUID.randomUUID(), new ArrayList<>() );
  }
 }
