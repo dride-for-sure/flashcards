@@ -4,13 +4,13 @@ import Container from './styled';
 export default function Waiting({ gameMasterName }) {
   return (
     <Container>
-      <h1>Waiting</h1>
+      <h1>Be prepared!</h1>
       <span>
-        This round master
+        The master
         {' '}
-        {gameMasterName}
+        <b>{gameMasterName}</b>
         {' '}
-        has to start the game
+        of this round starts the game immediately...
       </span>
     </Container>
   );
