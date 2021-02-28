@@ -20,7 +20,7 @@ export default function Lobby() {
     history.push(`/games/${difficulty}/${uuidv4()}`);
   };
 
-  const startWebsocketConnection = () => {
+  const handleWebsocketConnection = () => {
     const socket = new window.WebSocket('ws://localhost:8080/api/games') || {};
     socket.onopen = () => {
       console.log('Socket Open, send playerDetails');
@@ -46,7 +46,7 @@ export default function Lobby() {
   };
 
   useEffect(() => {
-    startWebsocketConnection();
+    handleWebsocketConnection();
   }, []);
 
   if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
