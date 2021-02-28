@@ -15,6 +15,5 @@ public class StartGameDto {
 
  private UUID uuid;
  private int level;
- private UUID gameMaster;
 
 }

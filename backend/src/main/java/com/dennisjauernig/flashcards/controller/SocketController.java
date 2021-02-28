@@ -1,6 +1,6 @@
 package com.dennisjauernig.flashcards.controller;
 
-import com.dennisjauernig.flashcards.controller.model.AddPlayerDto;
+import com.dennisjauernig.flashcards.controller.model.NewPlayerDto;
 import com.dennisjauernig.flashcards.controller.model.ReceivedAnswerDto;
 import com.dennisjauernig.flashcards.controller.model.StartGameDto;
 import com.dennisjauernig.flashcards.model.Answer;
@@ -42,7 +42,7 @@ public class SocketController {
 
  @MessageMapping ( "/lobby" )
  @SendTo ( "/topic/lobby" )
- public Lobby addPlayerToLobby ( AddPlayerDto dto ) {
+ public Lobby addPlayerToLobby ( NewPlayerDto dto ) {
   return lobbyService.addPlayerToLobby( dto )
                      .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
                              "User: " + dto.getUuid() + " could not join" ) );
@@ -59,10 +59,10 @@ public class SocketController {
  @MessageMapping ( "/games/{gameId}/{playerId}" )
  @SendTo ( "/topic/games/{gameId}" )
  public Answer receivedAnswer (
-         @DestinationVariable UUID gameId,
-         @DestinationVariable UUID playerId,
+         @DestinationVariable String gameId,
+         @DestinationVariable String playerId,
          ReceivedAnswerDto dto ) {
-  return answerService.receivedAnswer( gameId, playerId, dto )
+  return answerService.receivedAnswer( UUID.fromString( gameId ), UUID.fromString( playerId ), dto )
                       .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
                               "Answer: " + dto.getUuid() + " within the game: " + gameId + " could not be " +
                                       "received" ) );

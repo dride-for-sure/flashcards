@@ -1,64 +1,73 @@
-import PropTypes from 'prop-types';
-import Countdown from '../../components/Cards/Countdown/Countdown';
-import GameLogo from '../../components/Cards/GameLogo/GameLogo';
-import GameTitle from '../../components/Cards/GameTitle/GameTitle';
-import PlayerList from '../../components/Cards/PlayerList/PlayerList';
-import StartGame from '../../components/Cards/StartGame/StartGame';
-import Container from './styles';
+import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
+import Logo from '../../components/Tiles/Logo/Logo';
+import NewGame from '../../components/Tiles/NewGame/NewGame';
+import OpenGame from '../../components/Tiles/OpenGame/OpenGame';
+import Title from '../../components/Tiles/Title/Title';
+import { usePlayerDetails } from '../../contexts/playerDetails';
 
-export default function Lobby(
-  {
-    game,
-    player,
-    setPlayer,
-    countdown,
-    onGameStart,
-  },
-) {
+export default function Lobby() {
+  const [games, setGames] = useState([]);
+  const [playerDetails] = usePlayerDetails();
+  const [webSocket, setWebSocket] = useState();
+  const history = useHistory();
+
+  const handleListGames = (data) => {
+    setGames(JSON.parse(data));
+  };
+
+  const handleOpenNewGame = (difficulty) => {
+    history.push(`/games/${difficulty}/${uuidv4()}`);
+  };
+
+  const handleWebsocketConnection = () => {
+    const socket = new window.WebSocket('ws://localhost:8080/api/games') || {};
+    socket.onopen = () => {
+      console.log('Socket Open, send playerDetails');
+      setWebSocket(socket);
+      socket.send(JSON.stringify(playerDetails));
+    };
+
+    socket.onclose = (event) => {
+      if (event.wasClean) {
+        console.log('Socket closed expected: ', event.code, event.reason);
+      } else {
+        console.log('Socket closed unexpected: ', event.code, event.reason);
+      }
+      // Try reconnect -> display error else
+      // alert('The mortal coding combat is temporarily not available. Please come back later...');
+    };
+
+    socket.onmessage = (event) => {
+      console.log('Socket Message: ', event);
+      handleListGames(event.data);
+    };
+
+    socket.onerror = (event) => {
+      console.log('Socket Error: ', event);
+    };
+  };
+
+  const closeWebsocket = () => {
+    console.log('Player leaves the lobby -> socket close');
+    webSocket.close(1001, 'Player leaves the lobby');
+  };
+
+  useEffect(() => {
+    if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
+    handleWebsocketConnection();
+    return () => {
+      if (webSocket) { closeWebsocket(); }
+    };
+  }, []);
+
   return (
     <>
-      <Container>
-        <GameLogo />
-        <GameTitle />
-        {countdown === '' && (
-          <StartGame
-            onGameStart={onGameStart} />
-        )}
-        {countdown !== '' && (
-          <Countdown
-            countdown={countdown} />
-        )}
-        <PlayerList
-          game={game}
-          player={player}
-          setPlayer={setPlayer} />
-      </Container>
+      <Logo />
+      <Title />
+      <NewGame onGameOpen={handleOpenNewGame} />
+      {games.map((game) => <OpenGame key={game.id} game={game} />)}
     </>
   );
 }
-
-Lobby.propTypes = {
-  game: PropTypes.shape({
-    id: PropTypes.string,
-    status: PropTypes.string,
-    players: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      points: PropTypes.number,
-    })),
-    cards: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      level: PropTypes.number,
-      subject: PropTypes.string,
-      question: PropTypes.string,
-      choices: PropTypes.arrayOf(PropTypes.string),
-    })),
-  }).isRequired,
-  player: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-  }).isRequired,
-  setPlayer: PropTypes.func.isRequired,
-  countdown: PropTypes.number.isRequired,
-  onGameStart: PropTypes.func.isRequired,
-};
