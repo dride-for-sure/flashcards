@@ -1,97 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import { handlePlayerScoreColor, handlePlayerScoreWidth } from '../../common/handleCharts';
-import { calcResult, handleCongrats } from '../../common/handleCongrats';
-import handleGameStart from '../../common/handleGameStart';
-import { handleQuestions } from '../../common/handleQuestions';
-import StompMessages from '../../components/StompMessages/StompMessages';
-import { joinLobby, sendAnswers } from '../../services/gameAPI';
-import playersDb from '../../store/playersDb';
-import possibleQuestions from '../../store/store';
-import Congrats from './Congrats/Congrats';
-import Grid from './Grid/Grid';
+import { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { validate as uuidValidate } from 'uuid';
+import Awards from '../../components/Awards/Awards';
+import ScoreBar from '../../components/Charts/ScoreBar/ScoreBar';
+import Charts from '../../components/Charts/styles';
+import GameMaster from '../../components/Tiles/GameMaster/GameMaster';
+import Loading from '../../components/Tiles/Loading/Loading';
+import Logo from '../../components/Tiles/Logo/Logo';
+import Question from '../../components/Tiles/Question/Question';
+import Waiting from '../../components/Tiles/Waiting/Waiting';
+import { usePlayerDetails } from '../../contexts/playerDetails';
 
 export default function Game() {
-  const [questions, setQuestions] = useState([]);
-  const [gameMode, setGameMode] = useState('lobby');
-  const [results, setResults] = useState({});
-  const [players, setPlayers] = useState([]);
+  const [game, setGame] = useState();
+  const [playerDetails] = usePlayerDetails();
+  const [webSocket, setWebSocket] = useState();
+  const { difficulty, gameId } = useParams();
+  const history = useHistory();
 
-  // API communication states
-  // Rename playerinfos -> player
-  const [thisPlayer, setThisPlayer] = useState();
-  const [gameStatus, setGameStatus] = useState();
-  // Gamestart
-  const [gameStarted, setGameStarted] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-  // Play
-  const [answers, setAnswers] = useState();
+  const handleGameUpdates = () => {
+    const socket = new window.WebSocket(`ws://localhost:8080/api/games/${difficulty}/${gameId}/${playerDetails.id}`) || {};
+    socket.onopen = () => {
+      console.log('Socket Open');
+      setWebSocket(socket);
+    };
+
+    socket.onclose = (event) => {
+      if (event.wasClean) {
+        console.log('Socket closed expected: ', event.code, event.reason);
+      } else {
+        console.log('Socket closed unexpected: ', event.code, event.reason);
+      }
+      // Try reconnect -> display error else
+      // alert('The mortal coding combat is temporarily not available. Please come back later...');
+    };
+
+    socket.onmessage = (event) => {
+      console.log('Socket Message: ', event);
+      setGame(JSON.parse(event.data));
+    };
+
+    socket.onerror = (event) => {
+      console.log('Socket Error: ', event);
+    };
+  };
+
+  const handleSendAnswer = (id, choice) => {
+    console.log('Socket send answer:', choice);
+    webSocket.send(JSON.stringify({ id, choice }));
+  };
+
+  const handleCloseWebsocket = () => {
+    console.log('Player leaves the game -> socket close');
+    webSocket.close(1001, 'Player leaves the game');
+  };
+
+  const handleGameStart = () => {
+    const socket = new window.WebSocket(`ws://localhost:8080/api/games/${difficulty}/${gameId}`) || {};
+    socket.onopen = () => {
+      console.log('Socket send game start');
+      socket.send(JSON.stringify({ id: gameId, gameMaster: playerDetails.id, start: true }));
+      socket.close(1000, 'Game has been started');
+    };
+  };
 
   useEffect(() => {
-    joinLobby(thisPlayer)
-      .then((initGameStatus) => setGameStatus(initGameStatus));
+    handleGameUpdates();
+    return () => {
+      if (webSocket) { handleCloseWebsocket(); }
+    };
   }, []);
 
-  useEffect(() => {
-    sendAnswers(answers);
-  }, [answers]);
+  if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
+    history.push('/');
+    return null;
+  }
 
-  useEffect(() => {
-    if (gameStatus.status === 'play' && !gameStarted) {
-      setGameStarted(true);
-      handleGameStart(gameStatus, setCountdown);
-    }
-  }, [gameStatus]);
-  // ###
-
-  useEffect(() => {
-    setPlayers(playersDb);
-  });
-
-  useEffect(() => {
-    setResults(calcResult(questions));
-  }, [questions]);
-
-  useEffect(() => {
-    if (questions.length > 0 && questions.length === results.total) {
-      setGameMode('finish');
-    }
-  }, [results]);
+  if (!game) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <>
-      {gameStatus && (
-      <StompMessages
-        gameStatus={gameStatus}
-        setGameStatus={(updatedGameStatus) => setGameStatus(updatedGameStatus)}
-      />
-      )}
-      {gameMode === 'finish' && (
-      <Congrats
-        handleCongratsClick={() => handleCongrats(setQuestions, setGameMode)}
-        results={results}
-      />
-      )}
-      <Grid
-        questions={questions}
-        gameMode={gameMode}
-        setGameMode={(returnedGameMode) => setGameMode(returnedGameMode)}
-        onStartGameClick={(difficulty) => {
-          handleGameStart(difficulty, possibleQuestions, setQuestions, setGameMode, setCountdown);
-        }}
-        onQuestionClick={(question, answerClicked) => {
-          handleQuestions(question, questions, setQuestions, answerClicked);
-        }}
-        players={players}
-        calcPlayerScoreColor={
-          (player, setBarColor) => handlePlayerScoreColor(player, questions, setBarColor)
-        }
-        calcPlayerScoreWidth={
-          (player, setBarWidth) => handlePlayerScoreWidth(player, questions, setBarWidth)
-        }
-        countdown={countdown}
-        thisPlayer={thisPlayer}
-        setThisPlayer={(returnedThisPlayer) => setThisPlayer(returnedThisPlayer)}
-      />
+      <Awards />
+      <Logo />
+      {game.gameMaster.id === playerDetails.id
+      && <GameMaster onClick={handleGameStart} />}
+      {game.gameMaster.id !== playerDetails.id
+      && <Waiting gameMasterName={game.gameMaster.name} />}
+      {game.questions.map((question) => (
+        <Question
+          key={question.id}
+          question={question}
+          onClick={handleSendAnswer} />
+      ))}
+      <Charts>
+        {game.playerList.map((player) => (
+          <ScoreBar key={player.id} player={player} playerDetails={playerDetails} />
+        ))}
+      </Charts>
     </>
   );
 }
