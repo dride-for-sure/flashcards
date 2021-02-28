@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+const Charts = styled.div`
     position: fixed;
     bottom:0;
     right:0;
@@ -13,4 +13,4 @@ const Container = styled.div`
     user-select:none;
 `;
 
-export default Container;
+export default Charts;
