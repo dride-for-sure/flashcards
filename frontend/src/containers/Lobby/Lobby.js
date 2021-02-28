@@ -48,8 +48,8 @@ export default function Lobby() {
   };
 
   const closeWebsocket = () => {
-    console.log('Player leaves the game -> socket close');
-    webSocket.close(1001, 'Player leaves the game');
+    console.log('Player leaves the lobby -> socket close');
+    webSocket.close(1001, 'Player leaves the lobby');
   };
 
   useEffect(() => {
