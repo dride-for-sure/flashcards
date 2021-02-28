@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import Container from './styled';
+import { Container, StartGame } from './styled';
 
 export default function GameMaster({ onClick }) {
   return (
     <Container>
-      <button type="button" onClick={onClick}>⚔️</button>
+      <StartGame type="button" title="Lets fight!" onClick={onClick}>⚔️</StartGame>
     </Container>
   );
 }

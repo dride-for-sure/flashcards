@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+export const Container = styled.div`
   background-color: tan;
   justify-content: center !important;
   
@@ -11,4 +11,14 @@ const Container = styled.div`
   }
 `;
 
-export default Container;
+export const StartGame = styled.button`
+  border:0;
+  background-color: transparent;
+  font-size: 7rem;
+  outline: none;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+`;
