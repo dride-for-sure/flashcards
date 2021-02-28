@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import Game from '../../components/Tiles/Game/Game';
 import Logo from '../../components/Tiles/Logo/Logo';
 import OpenGame from '../../components/Tiles/OpenGame/OpenGame';
@@ -9,7 +9,7 @@ import { usePlayerDetails } from '../../contexts/playerDetails';
 
 export default function Lobby() {
   const [games, setGames] = useState([]);
-  const [playerName] = usePlayerDetails();
+  const [playerDetails] = usePlayerDetails();
   const history = useHistory();
 
   const handleListGames = (data) => {
@@ -21,18 +21,27 @@ export default function Lobby() {
   };
 
   const startWebsocketConnection = () => {
-    const ws = new window.WebSocket('ws://localhost:8080/api/games') || {};
-    ws.onopen = () => {
-      console.log('Opened socket');
+    const socket = new window.WebSocket('ws://localhost:8080/api/games') || {};
+    socket.onopen = () => {
+      console.log('Socket Open, send playerDetails');
+      socket.send(JSON.stringify(playerDetails));
     };
 
-    ws.onclose = (e) => {
-      console.log('Close socket: ', e.code, e.reason);
+    socket.onclose = (event) => {
+      if (event.wasClean) {
+        console.log('Socket closed expected: ', event.code, event.reason);
+      } else {
+        console.log('Socket closed unexpected: ', event.code, event.reason);
+      }
     };
 
-    ws.onmessage = (e) => {
-      console.log('Message:', e);
-      handleListGames(e.data);
+    socket.onmessage = (event) => {
+      console.log('Socket Message: ', event);
+      handleListGames(event.data);
+    };
+
+    socket.onerror = (event) => {
+      console.log('Socket Error: ', event);
     };
   };
 
@@ -40,10 +49,7 @@ export default function Lobby() {
     startWebsocketConnection();
   }, []);
 
-  if (!playerName) {
-    history.push('/');
-    return null;
-  }
+  if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
 
   return (
     <>
