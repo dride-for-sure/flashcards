@@ -35,6 +35,8 @@ export default function Lobby() {
       } else {
         console.log('Socket closed unexpected: ', event.code, event.reason);
       }
+      // Try reconnect -> display error else
+      // alert('The mortal coding combat is temporarily not available. Please come back later...');
     };
 
     socket.onmessage = (event) => {
@@ -53,13 +55,12 @@ export default function Lobby() {
   };
 
   useEffect(() => {
+    if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
     handleWebsocketConnection();
     return () => {
       if (webSocket) { closeWebsocket(); }
     };
   }, []);
-
-  if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
 
   return (
     <>
