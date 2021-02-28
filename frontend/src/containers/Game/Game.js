@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { validate as uuidValidate } from 'uuid';
-import Awards from '../../components/Awards/Awards';
 import ScoreBar from '../../components/Charts/ScoreBar/ScoreBar';
 import Charts from '../../components/Charts/styles';
+import Results from '../../components/Results/Results';
 import GameMaster from '../../components/Tiles/GameMaster/GameMaster';
 import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
@@ -31,8 +31,7 @@ export default function Game() {
       } else {
         console.log('Socket closed unexpected: ', event.code, event.reason);
       }
-      // Try reconnect -> display error else
-      // alert('The mortal coding combat is temporarily not available. Please come back later...');
+      // Try reconnect, finally show error
     };
 
     socket.onmessage = (event) => {
@@ -64,6 +63,10 @@ export default function Game() {
     };
   };
 
+  const handleGameRestart = () => {
+    history.push('/');
+  };
+
   useEffect(() => {
     handleGameUpdates();
     return () => {
@@ -84,7 +87,13 @@ export default function Game() {
 
   return (
     <>
-      <Awards />
+      {game.status === 'finish'
+      && (
+      <Results
+        results={game.results}
+        playerDetails={playerDetails}
+        onGameRestart={handleGameRestart} />
+      )}
       <Logo />
       {game.gameMaster.id === playerDetails.id
       && <GameMaster onClick={handleGameStart} />}
@@ -98,7 +107,10 @@ export default function Game() {
       ))}
       <Charts>
         {game.playerList.map((player) => (
-          <ScoreBar key={player.id} player={player} playerDetails={playerDetails} />
+          <ScoreBar
+            key={player.id}
+            player={player}
+            playerDetails={playerDetails} />
         ))}
       </Charts>
     </>
