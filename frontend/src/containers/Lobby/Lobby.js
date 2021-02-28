@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
-import Game from '../../components/Tiles/Game/Game';
 import Logo from '../../components/Tiles/Logo/Logo';
+import NewGame from '../../components/Tiles/NewGame/NewGame';
 import OpenGame from '../../components/Tiles/OpenGame/OpenGame';
 import Title from '../../components/Tiles/Title/Title';
 import { usePlayerDetails } from '../../contexts/playerDetails';
@@ -66,8 +66,8 @@ export default function Lobby() {
     <>
       <Logo />
       <Title />
-      <OpenGame onGameOpen={handleOpenNewGame} />
-      {games.map((game) => <Game key={game.id} game={game} />)}
+      <NewGame onGameOpen={handleOpenNewGame} />
+      {games.map((game) => <OpenGame key={game.id} game={game} />)}
     </>
   );
 }

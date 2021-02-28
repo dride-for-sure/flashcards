@@ -1,31 +1,19 @@
-import PropTypes from 'prop-types';
-import { Container, Difficulty } from './styles';
+import { Link } from 'react-router-dom';
+import { gameType } from '../../../types/types';
+import Container from './styles';
 
-export default function OpenGame({ onGameOpen }) {
+export default function OpenGame({ game }) {
   return (
-    <Container>
-      <h1>Fight your own game?</h1>
+    <Container background={game.difficulty}>
       <span>
-        <Difficulty
-          onClick={() => onGameOpen('easy')}
-          title="Easy peasy">
-          🥱
-        </Difficulty>
-        <Difficulty
-          onClick={() => onGameOpen('moderat')}
-          title="For everyday">
-          💪
-        </Difficulty>
-        <Difficulty
-          onClick={() => onGameOpen('hard')}
-          title="100% pain">
-          🤯
-        </Difficulty>
+        {game.icon}
       </span>
+      <h1>{game.gameMaster}</h1>
+      <Link to={`/games/${game.difficulty}/${game.id}`}>⚔️</Link>
     </Container>
   );
 }
 
 OpenGame.propTypes = {
-  onGameOpen: PropTypes.func.isRequired,
+  game: gameType.isRequired,
 };
