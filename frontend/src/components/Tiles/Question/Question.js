@@ -4,9 +4,9 @@ import { Button, Container } from './styles';
 
 export default function Question({ question, onClick }) {
   const levelIcon = (level) => {
-    if (level === '3') {
+    if (level === 'hard') {
       return '🤯';
-    } if (level === '2') {
+    } if (level === 'moderat') {
       return '💪';
     }
     return '🥱';
