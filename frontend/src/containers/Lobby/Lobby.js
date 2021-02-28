@@ -10,6 +10,7 @@ import { usePlayerDetails } from '../../contexts/playerDetails';
 export default function Lobby() {
   const [games, setGames] = useState([]);
   const [playerDetails] = usePlayerDetails();
+  const [webSocket, setWebSocket] = useState();
   const history = useHistory();
 
   const handleListGames = (data) => {
@@ -24,6 +25,7 @@ export default function Lobby() {
     const socket = new window.WebSocket('ws://localhost:8080/api/games') || {};
     socket.onopen = () => {
       console.log('Socket Open, send playerDetails');
+      setWebSocket(socket);
       socket.send(JSON.stringify(playerDetails));
     };
 
@@ -45,8 +47,16 @@ export default function Lobby() {
     };
   };
 
+  const closeWebsocket = () => {
+    console.log('Player leaves the game -> socket close');
+    webSocket.close(1001, 'Player leaves the game');
+  };
+
   useEffect(() => {
     handleWebsocketConnection();
+    return () => {
+      if (webSocket) { closeWebsocket(); }
+    };
   }, []);
 
   if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
