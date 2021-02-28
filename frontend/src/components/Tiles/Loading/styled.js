@@ -8,6 +8,7 @@ const Container = styled.div`
     font-size:7rem;
     align-self:center;
     animation: pulse-animation 3s infinite;
+    user-select: none;
   }
 
   @keyframes pulse-animation {
