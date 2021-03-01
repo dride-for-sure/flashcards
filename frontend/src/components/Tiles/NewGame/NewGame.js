@@ -4,7 +4,7 @@ import { Container, Difficulty } from './styles';
 export default function NewGame({ onGameOpen }) {
   return (
     <Container>
-      <h1>Fight your own game?</h1>
+      <h1>Your own arena?</h1>
       <span>
         <Difficulty
           onClick={() => onGameOpen('easy')}
