@@ -14,6 +14,7 @@ import java.util.List;
 public class Game {
 
  private String id;
+ private Difficulty difficulty;
  private GameStatus status;
  private GameMaster master;
  private List<Player> playerList;

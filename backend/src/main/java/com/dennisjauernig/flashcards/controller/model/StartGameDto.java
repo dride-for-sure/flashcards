@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class StartGameDto {
 
- private String id;
  private GameMaster master;
  private Boolean start;
 
