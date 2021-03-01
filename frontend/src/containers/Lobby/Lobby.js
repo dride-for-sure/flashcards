@@ -13,7 +13,7 @@ export default function Lobby() {
   const [webSocket, setWebSocket] = useState();
   const history = useHistory();
 
-  const handleWebsocketConnection = () => {
+  const handleLobbyUpdates = () => {
     const socket = new window.WebSocket('ws://localhost:8080/api/games') || {};
     socket.onopen = () => {
       console.log('Socket Open, send playerDetails');
@@ -51,7 +51,7 @@ export default function Lobby() {
 
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
-    handleWebsocketConnection();
+    handleLobbyUpdates();
     return () => {
       if (webSocket) { handleWebsocketClose(); }
     };
