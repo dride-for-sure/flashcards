@@ -26,12 +26,12 @@ export default function Question({ question, onClick }) {
       <span>{question.question}</span>
       <span>
         <Button
-          onClick={onClick(question.id, 'A')}>
+          onClick={() => onClick(question.id, 'A')}>
           👉
           {question.choices[0]}
         </Button>
         <Button
-          onClick={onClick(question.id, 'B')}>
+          onClick={() => onClick(question.id, 'B')}>
           👉
           {question.choices[1]}
         </Button>
