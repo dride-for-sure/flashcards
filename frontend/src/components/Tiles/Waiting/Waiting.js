@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { string } from 'prop-types';
 import Container from './styled';
 
 export default function Waiting({ gameMasterName }) {
@@ -17,5 +17,5 @@ export default function Waiting({ gameMasterName }) {
 }
 
 Waiting.propTypes = {
-  gameMasterName: PropTypes.string.isRequired,
+  gameMasterName: string.isRequired,
 };

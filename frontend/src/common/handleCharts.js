@@ -1,8 +1,8 @@
-export const handlePlayerScoreColor = (player, game, setBarColor) => {
+export const handlePlayerScoreColor = (player, maxPoints, setBarColor) => {
   const s = 80;
   const l = 70;
   const maxH = 130;
-  const factor = game.maxPoints / player.points;
+  const factor = maxPoints / player.points;
   const h = maxH / factor;
   const hsl = `hsl(${h},${s}%,${l}%)`;
   setBarColor(hsl);
@@ -22,8 +22,8 @@ const addWidthRandomness = (length, setBarWidth) => {
   return setTimeout(() => addWidthRandomness(length, setBarWidth), delay);
 };
 
-export const handlePlayerScoreWidth = (player, game, setBarWidth) => {
-  const factor = game.maxPoints / player.points;
+export const handlePlayerScoreWidth = (player, maxPoints, setBarWidth) => {
+  const factor = maxPoints / player.points;
   const length = 100 / factor;
   addWidthRandomness(length, setBarWidth);
 };

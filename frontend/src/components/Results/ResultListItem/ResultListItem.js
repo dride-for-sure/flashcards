@@ -1,4 +1,5 @@
-import PropTypes from 'prop-types';
+import { number } from 'prop-types';
+import { playerDetailsType, playerType } from '../../../types/types';
 import { Container } from '../styles';
 
 export default function ResultListItem({ position, player, playerDetails }) {
@@ -11,20 +12,13 @@ export default function ResultListItem({ position, player, playerDetails }) {
         .
       </span>
       <span>{player.name}</span>
-      <span>{player.points}</span>
+      <span>{player.score}</span>
     </Container>
   );
 }
 
 ResultListItem.propTypes = {
-  position: PropTypes.number.isRequired,
-  player: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    points: PropTypes.number,
-  }).isRequired,
-  playerDetails: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-  }).isRequired,
+  position: number.isRequired,
+  player: playerType.isRequired,
+  playerDetails: playerDetailsType.isRequired,
 };
