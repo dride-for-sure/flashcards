@@ -5,7 +5,6 @@ import com.dennisjauernig.flashcards.controller.model.ReceivedAnswerDto;
 import com.dennisjauernig.flashcards.controller.model.StartGameDto;
 import com.dennisjauernig.flashcards.model.Answer;
 import com.dennisjauernig.flashcards.model.Game;
-import com.dennisjauernig.flashcards.model.Lobby;
 import com.dennisjauernig.flashcards.service.AnswerService;
 import com.dennisjauernig.flashcards.service.InitGameService;
 import com.dennisjauernig.flashcards.service.LobbyService;
@@ -18,6 +17,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -40,12 +40,10 @@ public class SocketController {
   this.messagingService = messagingService;
  }
 
- @MessageMapping ( "/lobby" )
- @SendTo ( "/topic/lobby" )
- public Lobby addPlayerToLobby ( NewPlayerDto dto ) {
-  return lobbyService.addPlayerToLobby( dto )
-                     .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-                             "User: " + dto.getUuid() + " could not join" ) );
+ @MessageMapping ( "/games" )
+ @SendTo ( "/api/games" )
+ public List<Game> registerPlayer ( NewPlayerDto dto ) {
+  return lobbyService.registerPlayer( dto );
  }
 
  @MessageMapping ( "/games" )

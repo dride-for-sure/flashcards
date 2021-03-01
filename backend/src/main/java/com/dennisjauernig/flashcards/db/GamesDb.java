@@ -42,4 +42,8 @@ public class GamesDb {
                              .filter( game -> !game.getGameUuid().equals( uuid ) )
                              .collect( Collectors.toList() );
  }
+
+ public List<Game> listGames () {
+  return gamesDb;
+ }
 }
