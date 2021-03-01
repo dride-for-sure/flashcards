@@ -1,6 +1,6 @@
+import { node } from 'prop-types';
 import React, { useContext } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
-import { childrenType } from '../types/types';
 
 const PlayerDetailsContext = React.createContext();
 
@@ -19,5 +19,5 @@ export const usePlayerDetails = () => useContext(PlayerDetailsContext);
 export default PlayerDetailsProvider;
 
 PlayerDetailsProvider.propTypes = {
-  children: childrenType.isRequired,
+  children: node.isRequired,
 };
