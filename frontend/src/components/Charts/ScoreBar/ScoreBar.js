@@ -11,6 +11,7 @@ export default function ScoreBar({ maxPoints, player, playerDetails }) {
   useEffect(() => {
     const colorTimer = handlePlayerScoreColor(player, maxPoints, setBarColor);
     const widthTimer = handlePlayerScoreWidth(player, maxPoints, setBarWidth);
+
     return () => {
       clearTimeout(widthTimer);
       clearTimeout(colorTimer);
