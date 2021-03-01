@@ -12,6 +12,7 @@ const Container = styled.div`
   }
 
   > span {
+    margin-top: 10px;
     font-style: italic;
     flex-grow: 2;
   }
