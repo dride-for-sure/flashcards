@@ -31,7 +31,7 @@ public class InitGameService {
   this.cardsDb = cardsDb;
  }
 
- public Optional<Game> initGame ( StartGameDto dto ) {
+ public Optional<Game> startGame ( StartGameDto dto ) {
   if ( !gamesDb.hasGame( dto.getUuid() ) && dto.getUuid().equals( this.lobbyDb.getLobbyUuid() ) ) {
    Game game = gameFactory( dto );
    this.lobbyDb.resetLobby();
