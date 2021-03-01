@@ -6,18 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder ( toBuilder = true )
+@Builder
 public class Game {
 
- private UUID gameUuid;
- private GameStatus gameStatus;
+ private String id;
+ private GameStatus status;
+ private GameMaster master;
  private List<Player> playerList;
- private List<CardWithoutSolution> cardList;
- private int maxPoints;
-
+ private List<Question> questionList;
 }

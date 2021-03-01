@@ -3,7 +3,10 @@ package com.dennisjauernig.flashcards.service;
 import com.dennisjauernig.flashcards.controller.model.StartGameDto;
 import com.dennisjauernig.flashcards.db.GamesDb;
 import com.dennisjauernig.flashcards.db.LobbyDb;
-import com.dennisjauernig.flashcards.model.*;
+import com.dennisjauernig.flashcards.model.Game;
+import com.dennisjauernig.flashcards.model.GameStatus;
+import com.dennisjauernig.flashcards.model.Player;
+import com.dennisjauernig.flashcards.model.Question;
 import com.dennisjauernig.flashcards.repository.CardsDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +44,7 @@ public class InitGameService {
   UUID gameUuid = dto.getUuid();
   GameStatus gameStatus = GameStatus.PLAY;
   List<Player> playerList = createGamePlayerListFromLobby();
-  List<CardWithoutSolution> cardList = generateRandomCardList( dto.getLevel() );
+  List<Question> cardList = generateRandomCardList( dto.getLevel() );
   int maxPoints = getMaxPointsFromCardList( cardList );
   return new Game( gameUuid, gameStatus, playerList, cardList, maxPoints );
  }
@@ -57,7 +60,7 @@ public class InitGameService {
                      .collect( Collectors.toList() );
  }
 
- private List<CardWithoutSolution> generateRandomCardList ( int level ) {
+ private List<Question> generateRandomCardList ( int level ) {
   List<Card> filteredByLevel = filterCardsByLevel( this.cardsDb.findAll(), level );
   List<Card> cards = new ArrayList<>();
   while ( cards.size() < 25 ) {
@@ -66,9 +69,9 @@ public class InitGameService {
   return removeSolutionsFromCardList( cards );
  }
 
- private int getMaxPointsFromCardList ( List<CardWithoutSolution> cardList ) {
+ private int getMaxPointsFromCardList ( List<Question> cardList ) {
   return cardList.stream()
-                 .map( CardWithoutSolution::getLevel )
+                 .map( Question::getLevel )
                  .reduce( 0, Integer::sum );
  }
 
@@ -78,9 +81,9 @@ public class InitGameService {
                  .collect( Collectors.toList() );
  }
 
- private List<CardWithoutSolution> removeSolutionsFromCardList ( List<Card> cardList ) {
+ private List<Question> removeSolutionsFromCardList ( List<Card> cardList ) {
   return cardList.stream()
-                 .map( card -> new CardWithoutSolution(
+                 .map( card -> new Question(
                          card.getUuid(),
                          card.getLevel(),
                          card.getSubject(),

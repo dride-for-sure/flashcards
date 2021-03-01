@@ -6,19 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Card {
+public class Question {
 
- private UUID uuid;
- private int level;
- private String subject;
+ private String id;
+ private QuestionStatus status;
+ private Difficulty difficulty;
+ private String category;
  private String question;
- private List<String> choices;
- private AnswerChosen solution;
-
+ private List<String> answers;
+ private String icon;
+ private Integer points;
 }

@@ -1,7 +1,7 @@
 package com.dennisjauernig.flashcards.model;
 
-public enum AnswerChosen {
+public enum QuestionStatus {
  NONE,
- A,
- B
+ SELECTED,
+ SOLVED
 }

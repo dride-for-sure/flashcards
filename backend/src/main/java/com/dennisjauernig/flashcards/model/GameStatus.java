@@ -1,7 +1,7 @@
 package com.dennisjauernig.flashcards.model;
 
 public enum GameStatus {
- LOBBY,
+ WAITING,
  PLAY,
  FINISH
 }
