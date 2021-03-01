@@ -1,44 +1,55 @@
-import { arrayOf, func, number, shape, string } from 'prop-types';
+import { arrayOf, number, shape, string } from 'prop-types';
 
-export const gameType = shape({
+export const masterType = shape({
   id: string,
-  status: string,
-  players: arrayOf(shape({
-    id: string,
-    name: string,
-    points: number,
-  })),
-  cards: arrayOf(shape({
-    id: string,
-    level: number,
-    subject: string,
-    question: string,
-    choices: arrayOf(string),
-  })),
-  maxPoints: number,
+  name: string,
 });
 
 export const playerType = shape({
   id: string,
   name: string,
-  points: number,
+  score: number,
 });
 
-export const resultsType = shape({
-  ranking: arrayOf(shape({
-    id: string,
-    name: string,
-    points: number,
-    position: number,
-  })),
+export const playerListType = arrayOf(playerType);
+
+export const questionListItemType = shape({
+  id: string,
+  status: string,
+  difficulty: number,
+  category: string,
+  question: string,
+  answers: arrayOf(string),
+  icon: string,
+});
+
+export const questionListType = arrayOf(questionListItemType);
+
+export const gameType = shape({
+  id: string,
+  status: string,
+  master: masterType,
+  playerList: playerListType,
+  questionList: questionListType,
   maxPoints: number,
 });
 
-export const calcPlayerScoreColorType = func;
-export const calcPlayerScoreWidthType = func;
-export const onCardAnsweredType = func;
-export const setPlayerType = func;
-export const countdownType = number;
-export const onGameStartType = func;
-export const onGameRestartType = func;
-export const setGameType = func;
+export const gamesListItemType = shape({
+  id: string,
+  difficulty: number,
+  icon: string,
+  master: masterType,
+});
+
+export const gamesListType = arrayOf(gamesListItemType);
+
+export const playerDetailsType = shape({
+  id: string,
+  name: string,
+});
+
+export const startGameType = {
+  id: string,
+  master: masterType,
+  start: true,
+};
