@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
+import { func } from 'prop-types';
 import { Container, StartGame } from './styled';
 
-export default function GameMaster({ onClick }) {
+export default function GameMaster({ onGameStart }) {
   return (
     <Container>
-      <StartGame type="button" title="Lets fight!" onClick={onClick}>⚔️</StartGame>
+      <StartGame type="button" title="Lets fight!" onClick={() => onGameStart()}>⚔️</StartGame>
     </Container>
   );
 }
 
 GameMaster.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onGameStart: func.isRequired,
 };

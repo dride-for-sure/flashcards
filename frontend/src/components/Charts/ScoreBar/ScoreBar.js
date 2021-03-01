@@ -1,15 +1,17 @@
+import { number } from 'prop-types';
 import { useEffect, useState } from 'react';
 import { handlePlayerScoreColor, handlePlayerScoreWidth } from '../../../common/handleCharts';
-import { playerNameType, playerType } from '../../../types/types';
+import { playerDetailsType, playerType } from '../../../types/types';
 import Container from './styles';
 
-export default function ScoreBar({ player, playerDetails }) {
+export default function ScoreBar({ maxPoints, player, playerDetails }) {
   const [barWidth, setBarWidth] = useState();
   const [barColor, setBarColor] = useState();
 
   useEffect(() => {
-    const colorTimer = handlePlayerScoreColor(player, setBarColor);
-    const widthTimer = handlePlayerScoreWidth(player, setBarWidth);
+    const colorTimer = handlePlayerScoreColor(player, maxPoints, setBarColor);
+    const widthTimer = handlePlayerScoreWidth(player, maxPoints, setBarWidth);
+
     return () => {
       clearTimeout(widthTimer);
       clearTimeout(colorTimer);
@@ -25,6 +27,7 @@ export default function ScoreBar({ player, playerDetails }) {
 }
 
 ScoreBar.propTypes = {
+  maxPoints: number.isRequired,
   player: playerType.isRequired,
-  playerDetails: playerNameType.isRequired,
+  playerDetails: playerDetailsType.isRequired,
 };

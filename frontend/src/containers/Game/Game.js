@@ -30,8 +30,8 @@ export default function Game() {
         console.log('Socket closed expected: ', event.code, event.reason);
       } else {
         console.log('Socket closed unexpected: ', event.code, event.reason);
+        // Try reconnect, finally show error
       }
-      // Try reconnect, finally show error
     };
 
     socket.onmessage = (event) => {
@@ -58,7 +58,7 @@ export default function Game() {
     const socket = new window.WebSocket(`ws://localhost:8080/api/games/${difficulty}/${gameId}`) || {};
     socket.onopen = () => {
       console.log('Socket send game start');
-      socket.send(JSON.stringify({ id: gameId, gameMaster: playerDetails.id, start: true }));
+      socket.send(JSON.stringify({ id: gameId, master: playerDetails.id, start: true }));
       socket.close(1000, 'Game has been started');
     };
   };
@@ -90,25 +90,26 @@ export default function Game() {
       {game.status === 'finish'
       && (
       <Results
-        results={game.results}
+        playerList={game.playerList}
         playerDetails={playerDetails}
         onGameRestart={handleGameRestart} />
       )}
       <Logo />
-      {game.gameMaster.id === playerDetails.id
-      && <GameMaster onClick={handleGameStart} />}
-      {game.gameMaster.id !== playerDetails.id
-      && <Waiting gameMasterName={game.gameMaster.name} />}
-      {game.questions.map((question) => (
+      {game.master.id === playerDetails.id
+      && <GameMaster onGameStart={handleGameStart} />}
+      {game.master.id !== playerDetails.id
+      && <Waiting gameMasterName={game.master.name} />}
+      {game.questionList.map((question) => (
         <Question
           key={question.id}
           question={question}
-          onClick={handleSendAnswer} />
+          onSendAnswer={handleSendAnswer} />
       ))}
       <Charts>
         {game.playerList.map((player) => (
           <ScoreBar
             key={player.id}
+            maxPoints={game.maxPoints}
             player={player}
             playerDetails={playerDetails} />
         ))}

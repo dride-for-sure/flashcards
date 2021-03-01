@@ -6,7 +6,6 @@ export const Container = styled.div`
     position:relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     height: 100%;
 
     > label {

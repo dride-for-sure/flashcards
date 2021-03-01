@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { func } from 'prop-types';
 import { Container, Difficulty } from './styles';
 
 export default function NewGame({ onGameOpen }) {
@@ -27,5 +27,5 @@ export default function NewGame({ onGameOpen }) {
 }
 
 NewGame.propTypes = {
-  onGameOpen: PropTypes.func.isRequired,
+  onGameOpen: func.isRequired,
 };

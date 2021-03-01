@@ -13,15 +13,7 @@ export default function Lobby() {
   const [webSocket, setWebSocket] = useState();
   const history = useHistory();
 
-  const handleListGames = (data) => {
-    setGames(JSON.parse(data));
-  };
-
-  const handleOpenNewGame = (difficulty) => {
-    history.push(`/games/${difficulty}/${uuidv4()}`);
-  };
-
-  const handleWebsocketConnection = () => {
+  const handleLobbyUpdates = () => {
     const socket = new window.WebSocket('ws://localhost:8080/api/games') || {};
     socket.onopen = () => {
       console.log('Socket Open, send playerDetails');
@@ -34,14 +26,13 @@ export default function Lobby() {
         console.log('Socket closed expected: ', event.code, event.reason);
       } else {
         console.log('Socket closed unexpected: ', event.code, event.reason);
+        // Try reconnect, finally show error
       }
-      // Try reconnect -> display error else
-      // alert('The mortal coding combat is temporarily not available. Please come back later...');
     };
 
     socket.onmessage = (event) => {
       console.log('Socket Message: ', event);
-      handleListGames(event.data);
+      setGames(JSON.parse(event.data));
     };
 
     socket.onerror = (event) => {
@@ -49,16 +40,20 @@ export default function Lobby() {
     };
   };
 
-  const closeWebsocket = () => {
+  const handleWebsocketClose = () => {
     console.log('Player leaves the lobby -> socket close');
     webSocket.close(1001, 'Player leaves the lobby');
   };
 
+  const handleOpenNewGame = (difficulty) => {
+    history.push(`/games/${difficulty}/${uuidv4()}`);
+  };
+
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
-    handleWebsocketConnection();
+    handleLobbyUpdates();
     return () => {
-      if (webSocket) { closeWebsocket(); }
+      if (webSocket) { handleWebsocketClose(); }
     };
   }, []);
 

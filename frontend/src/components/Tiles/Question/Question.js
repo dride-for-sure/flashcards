@@ -1,39 +1,27 @@
+import { func } from 'prop-types';
 import React from 'react';
-import { funcType, questionType } from '../../../types/types';
+import { questionListItemType } from '../../../types/types';
 import { Button, Container } from './styles';
 
-export default function Question({ question, onClick }) {
-  const levelIcon = (level) => {
-    if (level === 'hard') {
-      return '🤯';
-    } if (level === 'moderat') {
-      return '💪';
-    }
-    return '🥱';
-  };
-
+export default function Question({ question, onSendAnswer }) {
   return (
     <Container
       status={question.status}
-      level={question.level}
+      level={question.difficulty}
       key={question.id}>
-      <span>
-        {levelIcon(question.level)}
-      </span>
-      <h1>
-        {question.subject}
-      </h1>
+      <span>{question.icon}</span>
+      <h1>{question.category}</h1>
       <span>{question.question}</span>
       <span>
         <Button
-          onClick={onClick(question.id, 'A')}>
+          onClick={() => onSendAnswer(question.id, 'A')}>
           👉
-          {question.choices[0]}
+          {question.answers[0]}
         </Button>
         <Button
-          onClick={onClick(question.id, 'B')}>
+          onClick={() => onSendAnswer(question.id, 'B')}>
           👉
-          {question.choices[1]}
+          {question.answers[1]}
         </Button>
       </span>
     </Container>
@@ -41,6 +29,6 @@ export default function Question({ question, onClick }) {
 }
 
 Question.propTypes = {
-  question: questionType.isRequired,
-  onClick: funcType.isRequired,
+  question: questionListItemType.isRequired,
+  onSendAnswer: func.isRequired,
 };
