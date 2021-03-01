@@ -1,11 +1,10 @@
 package com.dennisjauernig.flashcards.controller.model;
 
+import com.dennisjauernig.flashcards.model.GameMaster;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -13,7 +12,8 @@ import java.util.UUID;
 @Builder
 public class StartGameDto {
 
- private UUID uuid;
- private int level;
+ private String id;
+ private GameMaster master;
+ private Boolean start;
 
 }

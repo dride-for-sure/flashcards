@@ -1,4 +1,4 @@
-package com.dennisjauernig.flashcards.controller.model;
+package com.dennisjauernig.flashcards.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewPlayerDto {
+public class GameMaster {
 
  private String id;
  private String name;
-
 }
