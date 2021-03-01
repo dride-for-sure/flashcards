@@ -52,9 +52,9 @@ export default function Game() {
     };
   };
 
-  const handleSendAnswer = (id, choice) => {
-    console.log('Socket send answer:', choice);
-    webSocket.send(JSON.stringify({ id, choice }));
+  const handleSendAnswer = (id, selected) => {
+    console.log('Socket send answer:', selected);
+    webSocket.send(JSON.stringify({ id, selected }));
   };
 
   const handleCloseWebsocket = () => {
