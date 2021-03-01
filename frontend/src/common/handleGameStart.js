@@ -1,4 +1,21 @@
-import { selectNextCard } from './handleAnswers';
+// CURRENTLY NOT IN USE...
+// implement shuffle cards again, when backend is working
+
+const selectNextCard = (questions) => {
+  const filteredQuestions = [...questions].filter(
+    (question) => question.status === 'deactivated',
+  );
+  if (filteredQuestions.length === 0) {
+    return questions;
+  }
+  const updatedQuestion = { ...filteredQuestions[0], status: 'selected' };
+  return [...questions].map((question) => {
+    if (question.id === updatedQuestion.id) {
+      return updatedQuestion;
+    }
+    return question;
+  });
+};
 
 const shuffleCards = (
   res, cards, setCards, maxDelay, iteration, clearTimer,
