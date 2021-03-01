@@ -5,10 +5,10 @@ import useLocalStorage from '../hooks/useLocalStorage';
 const PlayerDetailsContext = React.createContext();
 
 const PlayerDetailsProvider = ({ children }) => {
-  const [PlayerDetails, setPlayerDetails] = useLocalStorage('flashCardGame', { id: '', name: '' });
+  const [playerDetails, setPlayerDetails] = useLocalStorage('flashCardGame', { id: '', name: '' });
 
   return (
-    <PlayerDetailsContext.Provider value={[PlayerDetails, setPlayerDetails]}>
+    <PlayerDetailsContext.Provider value={[playerDetails, setPlayerDetails]}>
       {children}
     </PlayerDetailsContext.Provider>
   );

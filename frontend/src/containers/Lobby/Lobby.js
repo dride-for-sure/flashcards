@@ -15,10 +15,15 @@ export default function Lobby() {
 
   const handleLobbyUpdates = () => {
     const socket = new window.WebSocket('ws://localhost:8080/api/games') || {};
+    let timeout = 250;
+    let reconnectInterval;
+
     socket.onopen = () => {
       console.log('Socket Open, send playerDetails');
       setWebSocket(socket);
       socket.send(JSON.stringify(playerDetails));
+      clearTimeout(reconnectInterval);
+      timeout = 250;
     };
 
     socket.onclose = (event) => {
@@ -26,7 +31,11 @@ export default function Lobby() {
         console.log('Socket closed expected: ', event.code, event.reason);
       } else {
         console.log('Socket closed unexpected: ', event.code, event.reason);
-        // Try reconnect, finally show error
+        timeout += timeout;
+        if (!socket || socket.readyState === WebSocket.CLOSED) {
+          console.log('Socket reconnect');
+          reconnectInterval = setTimeout(handleLobbyUpdates(), Math.min(5000, timeout));
+        }
       }
     };
 
@@ -40,7 +49,7 @@ export default function Lobby() {
     };
   };
 
-  const handleWebsocketClose = () => {
+  const handleCloseWebsocket = () => {
     console.log('Player leaves the lobby -> socket close');
     webSocket.close(1001, 'Player leaves the lobby');
   };
@@ -53,7 +62,9 @@ export default function Lobby() {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) { history.push('/'); }
     handleLobbyUpdates();
     return () => {
-      if (webSocket) { handleWebsocketClose(); }
+      if (webSocket) {
+        handleCloseWebsocket();
+      }
     };
   }, []);
 

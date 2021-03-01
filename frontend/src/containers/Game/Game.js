@@ -20,9 +20,13 @@ export default function Game() {
 
   const handleGameUpdates = () => {
     const socket = new window.WebSocket(`ws://localhost:8080/api/games/${difficulty}/${gameId}/${playerDetails.id}`) || {};
+    let timeout = 250;
+    let reconnectInterval;
     socket.onopen = () => {
       console.log('Socket Open');
       setWebSocket(socket);
+      clearTimeout(reconnectInterval);
+      timeout = 250;
     };
 
     socket.onclose = (event) => {
@@ -30,7 +34,11 @@ export default function Game() {
         console.log('Socket closed expected: ', event.code, event.reason);
       } else {
         console.log('Socket closed unexpected: ', event.code, event.reason);
-        // Try reconnect, finally show error
+        timeout += timeout;
+        if (!socket || socket.readyState === WebSocket.CLOSED) {
+          console.log('Socket reconnect');
+          reconnectInterval = setTimeout(handleGameUpdates(), Math.min(5000, timeout));
+        }
       }
     };
 
