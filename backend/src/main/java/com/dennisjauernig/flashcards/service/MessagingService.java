@@ -16,6 +16,7 @@ public class MessagingService {
  }
 
  public void sendGameUpdates ( Game game ) {
-  simpMessagingTemplate.convertAndSend( "/topic/games/" + game.getGameUuid(), game );
+  simpMessagingTemplate.convertAndSend(
+          "/api/games/" + game.getDifficulty() + "/" + game.getId(), game );
  }
 }

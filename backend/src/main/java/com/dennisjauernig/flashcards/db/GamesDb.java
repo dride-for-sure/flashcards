@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -14,14 +13,14 @@ public class GamesDb {
 
  private List<Game> gamesDb = new ArrayList<>();
 
- public boolean hasGame ( UUID uuid ) {
+ public boolean hasGame ( String id ) {
   return gamesDb.stream()
-                .anyMatch( game -> game.getGameUuid().equals( uuid ) );
+                .anyMatch( game -> game.getId().equals( id ) );
  }
 
- public Optional<Game> getGame ( UUID uuid ) {
+ public Optional<Game> getGame ( String id ) {
   return gamesDb.stream()
-                .filter( game -> game.getGameUuid().equals( uuid ) )
+                .filter( game -> game.getId().equals( id ) )
                 .findAny();
  }
 
@@ -32,14 +31,14 @@ public class GamesDb {
 
  public void updateGame ( Game updatedGame ) {
   this.gamesDb = this.gamesDb.stream()
-                             .map( game -> game.getGameUuid().equals( updatedGame.getGameUuid() )
+                             .map( game -> game.getId().equals( updatedGame.getId() )
                                      ? updatedGame : game )
                              .collect( Collectors.toList() );
  }
 
- public void deleteGame ( UUID uuid ) {
+ public void deleteGame ( String id ) {
   this.gamesDb = this.gamesDb.stream()
-                             .filter( game -> !game.getGameUuid().equals( uuid ) )
+                             .filter( game -> !game.getId().equals( id ) )
                              .collect( Collectors.toList() );
  }
 
