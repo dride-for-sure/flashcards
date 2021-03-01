@@ -50,7 +50,6 @@ export const playerDetailsType = shape({
 });
 
 export const startGameType = {
-  id: string,
   master: masterType,
   start: true,
 };
