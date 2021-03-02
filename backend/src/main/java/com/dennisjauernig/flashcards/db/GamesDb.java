@@ -29,10 +29,10 @@ public class GamesDb {
   return prepareGameDTO;
  }
 
- public void updateGame ( Game updatedPrepareGameDto ) {
+ public void updateGame ( Game updatedGame ) {
   this.gamesDb = this.gamesDb.stream()
-                             .map( game -> game.getId().equals( updatedPrepareGameDto.getId() )
-                                     ? updatedPrepareGameDto : game )
+                             .map( game -> game.getId().equals( updatedGame.getId() )
+                                     ? updatedGame : game )
                              .collect( Collectors.toList() );
  }
 
