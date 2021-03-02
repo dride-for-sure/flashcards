@@ -1,6 +1,5 @@
 package com.dennisjauernig.flashcards.controller.model;
 
-import com.dennisjauernig.flashcards.model.GameMaster;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StartGameDto {
+public class JoinGameDto {
 
- private GameMaster master;
+ private String id;
  private Boolean start;
 
 }
