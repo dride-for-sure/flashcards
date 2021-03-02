@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class PlayerJoinsGameDto {
 
  private String id;
+ private String name;
  private Boolean start;
 
 }

@@ -14,11 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PrepareGameDto {
+public class GameDto {
 
  private String id;
  private Difficulty difficulty;
  private GameStatus status;
  private GameMaster master;
  private List<PlayerDto> playerDtoList;
+ private List<QuestionDto> questionDtoList;
 }

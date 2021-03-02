@@ -24,16 +24,17 @@ public class GamesDb {
                 .findAny();
  }
 
- public Game addGame ( Game prepareGameDTO ) {
-  gamesDb.add( prepareGameDTO );
-  return prepareGameDTO;
+ public Game addGame ( Game gameToAdd ) {
+  gamesDb.add( gameToAdd );
+  return gameToAdd;
  }
 
- public void updateGame ( Game updatedGame ) {
+ public Game updateGame ( Game gameToUpdate ) {
   this.gamesDb = this.gamesDb.stream()
-                             .map( game -> game.getId().equals( updatedGame.getId() )
-                                     ? updatedGame : game )
+                             .map( game -> game.getId().equals( gameToUpdate.getId() )
+                                     ? gameToUpdate : game )
                              .collect( Collectors.toList() );
+  return gameToUpdate;
  }
 
  public void deleteGame ( String id ) {

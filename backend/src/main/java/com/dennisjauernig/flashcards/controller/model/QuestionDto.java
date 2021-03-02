@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder ( toBuilder = true )
 public class QuestionDto {
 
  private String id;
@@ -21,5 +21,5 @@ public class QuestionDto {
  private String category;
  private String question;
  private List<String> answers;
- private Integer points;
+ private int points;
 }

@@ -1,15 +1,17 @@
 package com.dennisjauernig.flashcards.controller;
 
-import com.dennisjauernig.flashcards.controller.model.*;
+import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.controller.model.PlayerJoinsGameDto;
 import com.dennisjauernig.flashcards.model.Difficulty;
-import com.dennisjauernig.flashcards.service.GameService;
-import com.dennisjauernig.flashcards.service.PlayerService;
-import com.dennisjauernig.flashcards.service.PrepareGameService;
+import com.dennisjauernig.flashcards.service.LobbyService;
+import com.dennisjauernig.flashcards.service.PlayService;
+import com.dennisjauernig.flashcards.service.PreparationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,43 +20,41 @@ import java.util.List;
 @Controller
 public class SocketController {
 
- private final GameService gameService;
- private final PlayerService playerService;
- private final PrepareGameService prepareGameService;
+ private final PlayService playService;
+ private final PreparationService preparationService;
+ private final LobbyService lobbyService;
 
  @Autowired
  public SocketController (
-         GameService gameService,
-         PlayerService playerService,
-         PrepareGameService prepareGameService ) {
-  this.gameService = gameService;
-  this.playerService = playerService;
-  this.prepareGameService = prepareGameService;
+         PlayService playService,
+         LobbyService lobbyService,
+         PreparationService preparationService ) {
+  this.playService = playService;
+  this.preparationService = preparationService;
+  this.lobbyService = lobbyService;
  }
 
- @MessageMapping ( "/games" )
- @SendTo ( "/api/games" )
- public List<OpenGameDto> registerPlayer ( NewPlayerDto dto ) {
-  return playerService.registerPlayer( dto );
+ @SubscribeMapping ( "/api/topic/games" )
+ public List<GameDto> sendOpenGames () {
+  return lobbyService.listOpenGames();
  }
 
  @MessageMapping ( "/games/{difficulty}/{gameId}" )
  @SendTo ( "/api/games/{difficulty}/{gameId}" )
- public PrepareGameDto prepareGame (
+ public GameDto prepareGame (
          @DestinationVariable Difficulty difficulty,
          @DestinationVariable String gameId, PlayerJoinsGameDto dto ) {
-  return prepareGameService.prepareGame( dto, gameId, difficulty )
-                           .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-                                   "Player could not join the game" ) );
+  return preparationService.prepareGame( dto, gameId, difficulty );
  }
+
 
  @MessageMapping ( "/games/{difficulty}/{gameId}/{playerId}" )
  @SendTo ( "/api/games/{difficulty}/{gameId}/{playerId}" )
- public UpdateGameDto updateGame (
+ public GameDto updateGame (
          @DestinationVariable String gameId,
          @DestinationVariable String playerId,
          ReceivedAnswerDto dto ) {
-  return gameService.updateGame( dto, gameId, playerId )
+  return playService.updateGame( dto, gameId, playerId )
                     .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
                             "Answer could not be processed" ) );
  }

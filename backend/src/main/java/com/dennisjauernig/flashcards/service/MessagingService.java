@@ -1,9 +1,11 @@
 package com.dennisjauernig.flashcards.service;
 
-import com.dennisjauernig.flashcards.model.Game;
+import com.dennisjauernig.flashcards.controller.model.GameDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MessagingService {
@@ -15,8 +17,7 @@ public class MessagingService {
   this.simpMessagingTemplate = simpMessagingTemplate;
  }
 
- public void sendGameUpdates ( Game game ) {
-  simpMessagingTemplate.convertAndSend(
-          "/api/games/" + game.getDifficulty() + "/" + game.getId(), game );
+ public void broadcastOpenGames ( List<GameDto> gameDtoList ) {
+  simpMessagingTemplate.convertAndSend( "/api/topic/games", gameDtoList );
  }
 }
