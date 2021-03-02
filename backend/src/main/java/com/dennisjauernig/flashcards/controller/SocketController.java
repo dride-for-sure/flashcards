@@ -4,7 +4,7 @@ import com.dennisjauernig.flashcards.controller.model.*;
 import com.dennisjauernig.flashcards.model.Difficulty;
 import com.dennisjauernig.flashcards.service.GameService;
 import com.dennisjauernig.flashcards.service.PlayerService;
-import com.dennisjauernig.flashcards.service.StartGameService;
+import com.dennisjauernig.flashcards.service.PrepareGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -20,16 +20,16 @@ public class SocketController {
 
  private final GameService gameService;
  private final PlayerService playerService;
- private final StartGameService startGameService;
+ private final PrepareGameService prepareGameService;
 
  @Autowired
  public SocketController (
          GameService gameService,
          PlayerService playerService,
-         StartGameService startGameService ) {
+         PrepareGameService prepareGameService ) {
   this.gameService = gameService;
   this.playerService = playerService;
-  this.startGameService = startGameService;
+  this.prepareGameService = prepareGameService;
  }
 
  @MessageMapping ( "/games" )
@@ -43,9 +43,9 @@ public class SocketController {
  public PrepareGameDto prepareGame (
          @DestinationVariable Difficulty difficulty,
          @DestinationVariable String gameId, PlayerJoinsGameDto dto ) {
-  return startGameService.prepareGame( dto, gameId, difficulty )
-                         .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-                                 "Player could not join the game" ) );
+  return prepareGameService.prepareGame( dto, gameId, difficulty )
+                           .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
+                                   "Player could not join the game" ) );
  }
 
  @MessageMapping ( "/games/{difficulty}/{gameId}/{playerId}" )
