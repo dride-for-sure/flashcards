@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PlayerJoinsGameDto {
+public class PlayerDto {
 
  private String id;
- private Boolean start;
+ private String name;
+ private int score;
 
 }
