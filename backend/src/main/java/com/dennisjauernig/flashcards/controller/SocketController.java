@@ -1,10 +1,7 @@
 package com.dennisjauernig.flashcards.controller;
 
-import com.dennisjauernig.flashcards.controller.model.NewPlayerDto;
-import com.dennisjauernig.flashcards.controller.model.PlayerJoinsGameDto;
-import com.dennisjauernig.flashcards.controller.model.ReceivedAnswerDto;
+import com.dennisjauernig.flashcards.controller.model.*;
 import com.dennisjauernig.flashcards.model.Difficulty;
-import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.service.GameService;
 import com.dennisjauernig.flashcards.service.PlayerService;
 import com.dennisjauernig.flashcards.service.StartGameService;
@@ -37,13 +34,13 @@ public class SocketController {
 
  @MessageMapping ( "/games" )
  @SendTo ( "/api/games" )
- public List<Game> registerPlayer ( NewPlayerDto dto ) {
+ public List<OpenGameDto> registerPlayer ( NewPlayerDto dto ) {
   return playerService.registerPlayer( dto );
  }
 
  @MessageMapping ( "/games/{difficulty}/{gameId}" )
  @SendTo ( "/api/games/{difficulty}/{gameId}" )
- public Game prepareGame (
+ public PrepareGameDto prepareGame (
          @DestinationVariable Difficulty difficulty,
          @DestinationVariable String gameId, PlayerJoinsGameDto dto ) {
   return startGameService.prepareGame( dto, gameId, difficulty )
@@ -53,7 +50,7 @@ public class SocketController {
 
  @MessageMapping ( "/games/{difficulty}/{gameId}/{playerId}" )
  @SendTo ( "/api/games/{difficulty}/{gameId}/{playerId}" )
- public Game updateGame (
+ public UpdateGameDto updateGame (
          @DestinationVariable String gameId,
          @DestinationVariable String playerId,
          ReceivedAnswerDto dto ) {
