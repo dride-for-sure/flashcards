@@ -13,11 +13,6 @@ public class GamesDb {
 
  private List<Game> gamesDb = new ArrayList<>();
 
- public boolean hasGame ( String id ) {
-  return gamesDb.stream()
-                .anyMatch( game -> game.getId().equals( id ) );
- }
-
  public Optional<Game> getGame ( String id ) {
   return gamesDb.stream()
                 .filter( game -> game.getId().equals( id ) )
@@ -35,12 +30,6 @@ public class GamesDb {
                                      ? gameToUpdate : game )
                              .collect( Collectors.toList() );
   return gameToUpdate;
- }
-
- public void deleteGame ( String id ) {
-  this.gamesDb = this.gamesDb.stream()
-                             .filter( game -> !game.getId().equals( id ) )
-                             .collect( Collectors.toList() );
  }
 
  public List<Game> listGames () {
