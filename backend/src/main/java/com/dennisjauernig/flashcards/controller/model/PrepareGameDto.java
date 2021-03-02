@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder ( toBuilder = true )
+@Builder
 public class PrepareGameDto {
 
  private String id;
