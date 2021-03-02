@@ -1,70 +1,67 @@
 package com.dennisjauernig.flashcards.controller;
 
-import com.dennisjauernig.flashcards.controller.model.NewPlayerDto;
-import com.dennisjauernig.flashcards.controller.model.ReceivedAnswerDto;
-import com.dennisjauernig.flashcards.controller.model.StartGameDto;
-import com.dennisjauernig.flashcards.model.Answer;
-import com.dennisjauernig.flashcards.model.Game;
-import com.dennisjauernig.flashcards.model.Lobby;
+import com.dennisjauernig.flashcards.controller.model.AnswerDto;
+import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.controller.model.PlayerDto;
+import com.dennisjauernig.flashcards.model.Difficulty;
 import com.dennisjauernig.flashcards.service.AnswerService;
-import com.dennisjauernig.flashcards.service.InitGameService;
 import com.dennisjauernig.flashcards.service.LobbyService;
-import com.dennisjauernig.flashcards.service.MessagingService;
+import com.dennisjauernig.flashcards.service.PreparationService;
+import com.dennisjauernig.flashcards.service.StartGameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.UUID;
+import java.util.List;
 
 @Controller
 public class SocketController {
 
  private final AnswerService answerService;
+ private final PreparationService preparationService;
  private final LobbyService lobbyService;
- private final InitGameService initGameService;
- private final MessagingService messagingService;
+ private final StartGameService startGameService;
 
  @Autowired
  public SocketController (
          AnswerService answerService,
          LobbyService lobbyService,
-         InitGameService initGameService,
-         MessagingService messagingService ) {
+         PreparationService preparationService,
+         StartGameService startGameService ) {
   this.answerService = answerService;
+  this.preparationService = preparationService;
   this.lobbyService = lobbyService;
-  this.initGameService = initGameService;
-  this.messagingService = messagingService;
+  this.startGameService = startGameService;
  }
 
- @MessageMapping ( "/lobby" )
- @SendTo ( "/topic/lobby" )
- public Lobby addPlayerToLobby ( NewPlayerDto dto ) {
-  return lobbyService.addPlayerToLobby( dto )
-                     .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-                             "User: " + dto.getUuid() + " could not join" ) );
+ @SubscribeMapping ( "/api/topic/games" )
+ public List<GameDto> sendOpenGames () {
+  return lobbyService.listOpenGames();
  }
 
- @MessageMapping ( "/games" )
- public void initGame ( StartGameDto dto ) {
-  Game game = initGameService.initGame( dto )
-                             .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-                                     "Card is not available" ) );
-  messagingService.sendGameUpdates( game );
+ @MessageMapping ( "/games/{difficulty}/{gameId}" )
+ @SendTo ( "/api/games/{difficulty}/{gameId}" )
+ public GameDto prepareGame (
+         @DestinationVariable Difficulty difficulty,
+         @DestinationVariable String gameId, PlayerDto playerDto ) {
+  return preparationService.prepareGame( playerDto, gameId, difficulty );
  }
 
- @MessageMapping ( "/games/{gameId}/{playerId}" )
- @SendTo ( "/topic/games/{gameId}" )
- public Answer receivedAnswer (
+ @MessageMapping ( "/games/{difficulty}/{gameId}/{playerId}/start" )
+ public void startGame (
+         @DestinationVariable String gameId,
+         @DestinationVariable String playerId ) {
+  startGameService.startGame( gameId, playerId );
+ }
+
+ @MessageMapping ( "/games/{difficulty}/{gameId}/{playerId}" )
+ public void updateGame (
          @DestinationVariable String gameId,
          @DestinationVariable String playerId,
-         ReceivedAnswerDto dto ) {
-  return answerService.receivedAnswer( UUID.fromString( gameId ), UUID.fromString( playerId ), dto )
-                      .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-                              "Answer: " + dto.getUuid() + " within the game: " + gameId + " could not be " +
-                                      "received" ) );
+         AnswerDto answerDto ) {
+  answerService.updateGame( gameId, playerId, answerDto );
  }
 }

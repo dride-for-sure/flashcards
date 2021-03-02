@@ -1,32 +1,26 @@
 package com.dennisjauernig.flashcards.service;
 
-import com.dennisjauernig.flashcards.controller.model.NewPlayerDto;
-import com.dennisjauernig.flashcards.db.LobbyDb;
-import com.dennisjauernig.flashcards.model.Lobby;
-import com.dennisjauernig.flashcards.model.Player;
+import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.db.GamesDb;
+import com.dennisjauernig.flashcards.model.GameStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LobbyService {
 
- private final LobbyDb lobbyDb;
+ private final GamesDb gamesDb;
 
- public LobbyService ( LobbyDb lobbyDb ) {
-  this.lobbyDb = lobbyDb;
+ public LobbyService ( GamesDb gamesDb ) {
+  this.gamesDb = gamesDb;
  }
 
- public Optional<Lobby> addPlayerToLobby ( NewPlayerDto dto ) {
-  if ( !this.lobbyDb.hasLobbyPlayer( dto.getUuid() ) ) {
-   Player playerToAdd = Player.builder()
-                              .uuid( dto.getUuid() )
-                              .name( dto.getName() )
-                              .points( 0 )
-                              .cardsSolved( 0 )
-                              .build();
-   return Optional.of( this.lobbyDb.addPlayerToLobby( playerToAdd ) );
-  }
-  return Optional.empty();
+ public List<GameDto> listOpenGames () {
+  return gamesDb.listGames().stream()
+                .filter( game -> game.getStatus().equals( GameStatus.PREPARE ) )
+                .map( openGame -> openGame.convertToDto() )
+                .collect( Collectors.toList() );
  }
 }

@@ -52,9 +52,9 @@ export default function Game() {
     };
   };
 
-  const handleSendAnswer = (id, choice) => {
-    console.log('Socket send answer:', choice);
-    webSocket.send(JSON.stringify({ id, choice }));
+  const handleSendAnswer = (id, selected) => {
+    console.log('Socket send answer:', selected);
+    webSocket.send(JSON.stringify({ id, selected }));
   };
 
   const handleCloseWebsocket = () => {
@@ -66,7 +66,7 @@ export default function Game() {
     const socket = new window.WebSocket(`ws://localhost:8080/api/games/${difficulty}/${gameId}`) || {};
     socket.onopen = () => {
       console.log('Socket send game start');
-      socket.send(JSON.stringify({ id: gameId, master: playerDetails.id, start: true }));
+      socket.send(JSON.stringify({ master: playerDetails.id, start: true }));
       socket.close(1000, 'Game has been started');
     };
   };
@@ -93,6 +93,18 @@ export default function Game() {
     );
   }
 
+  if (game.status === 'WAITING') {
+    return (
+      <>
+        <Logo />
+        {game.master.id === playerDetails.id
+        && <GameMaster onGameStart={handleGameStart} />}
+        {game.master.id !== playerDetails.id
+        && <Waiting gameMasterName={game.master.name} />}
+      </>
+    );
+  }
+
   return (
     <>
       {game.status === 'finish'
@@ -103,10 +115,6 @@ export default function Game() {
         onGameRestart={handleGameRestart} />
       )}
       <Logo />
-      {game.master.id === playerDetails.id
-      && <GameMaster onGameStart={handleGameStart} />}
-      {game.master.id !== playerDetails.id
-      && <Waiting gameMasterName={game.master.name} />}
       {game.questionList.map((question) => (
         <Question
           key={question.id}

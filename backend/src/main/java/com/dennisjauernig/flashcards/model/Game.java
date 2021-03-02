@@ -1,12 +1,14 @@
 package com.dennisjauernig.flashcards.model;
 
+import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -14,10 +16,73 @@ import java.util.UUID;
 @Builder ( toBuilder = true )
 public class Game {
 
- private UUID gameUuid;
- private GameStatus gameStatus;
+ private String id;
+ private Difficulty difficulty;
+ private GameStatus status;
+ private GameMaster master;
  private List<Player> playerList;
- private List<CardWithoutSolution> cardList;
- private int maxPoints;
+ private List<Question> questionList;
 
+ public GameDto convertToPlayerDto ( String playerId ) {
+  List<QuestionDto> questionDtoList =
+          this.getPlayerList()
+              .stream()
+              .filter( targetPlayer -> targetPlayer.getId().equals( playerId ) )
+              .findFirst()
+              .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId + " does not exists" ) )
+              .getQuestionList();
+
+  return GameDto.builder()
+                .id( this.getId() )
+                .difficulty( this.getDifficulty() )
+                .status( this.getStatus() )
+                .master( this.getMaster() )
+                .playerDtoList( this.getPlayerList()
+                                    .stream()
+                                    .map( player -> player.convertToDto() )
+                                    .collect( Collectors.toList() ) )
+                .questionDtoList( questionDtoList )
+                .build();
+ }
+
+ public GameDto convertToDto () {
+  return GameDto.builder()
+                .id( this.getId() )
+                .difficulty( this.getDifficulty() )
+                .status( this.getStatus() )
+                .master( this.getMaster() )
+                .playerDtoList( this.getPlayerList()
+                                    .stream()
+                                    .map( player -> player.convertToDto() )
+                                    .collect( Collectors.toList() ) )
+                .build();
+ }
+
+ public Game addPlayer ( Player playerToAdd ) {
+  return this.toBuilder()
+             .playerList( this.getPlayerList()
+                              .stream()
+                              .map( player -> {
+                               if ( player.getId()
+                                          .equals( playerToAdd.getId() ) ) {
+                                return playerToAdd;
+                               }
+                               return player;
+                              } )
+                              .collect( Collectors.toList() ) )
+             .build();
+ }
+
+ public Game start () {
+  return this.toBuilder()
+             .status( GameStatus.PLAY )
+             .build();
+ }
+
+ public Game finish () {
+  return this.toBuilder()
+             .status( GameStatus.FINISH )
+             .build();
+ }
 }
+

@@ -1,89 +1,92 @@
 package com.dennisjauernig.flashcards.service;
 
-import com.dennisjauernig.flashcards.controller.model.ReceivedAnswerDto;
+import com.dennisjauernig.flashcards.controller.model.AnswerDto;
+import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.db.GamesDb;
 import com.dennisjauernig.flashcards.model.*;
-import com.dennisjauernig.flashcards.repository.CardsDb;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.dennisjauernig.flashcards.repository.QuestionDb;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class AnswerService {
 
  private final GamesDb gamesDb;
- private final CardsDb cardsDb;
+ private final QuestionDb questionDb;
  private final MessagingService messagingService;
- private final ArchiveService archiveService;
 
- @Autowired
  public AnswerService (
          GamesDb gamesDb,
-         CardsDb cardsDb,
-         MessagingService messagingService,
-         ArchiveService archiveService ) {
+         QuestionDb questionDb,
+         MessagingService messagingService ) {
   this.gamesDb = gamesDb;
-  this.cardsDb = cardsDb;
+  this.questionDb = questionDb;
   this.messagingService = messagingService;
-  this.archiveService = archiveService;
  }
 
- public Optional<Answer> receivedAnswer ( UUID gameId, UUID playerId, ReceivedAnswerDto dto ) {
-  Optional<Game> game = this.gamesDb.getGame( gameId );
-  if ( game.isPresent() ) {
-   int pointsToAdd = calcAnswerPoints( dto );
-   List<Player> updatedPlayerList = updatePlayerStats( playerId, game.get(), pointsToAdd );
-   Game updatedGame = game.get().toBuilder()
-                          .playerList( updatedPlayerList )
-                          .build();
-   if ( hasGameFinished( updatedPlayerList, game.get().getMaxPoints() ) ) {
-    updatedGame.setGameStatus( GameStatus.FINISH );
-    this.archiveService.addToArchive( updatedGame );
-    this.gamesDb.deleteGame( updatedGame.getGameUuid() );
-   } else {
-    this.gamesDb.updateGame( updatedGame );
-   }
-   messagingService.sendGameUpdates( updatedGame );
-   return Optional.of( Answer.builder()
-                             .uuid( dto.getUuid() )
-                             .answerChosen( dto.getAnswerChosen() )
-                             .points( pointsToAdd )
-                             .build() );
+ public void updateGame ( String gameId, String playerId, AnswerDto answerDto ) {
+  Optional<Game> gameToUpdate = gamesDb.getGame( gameId );
+  if ( gameToUpdate.isPresent() ) {
+   Game updatedGame =
+           gameToUpdate.get()
+                       .toBuilder()
+                       .playerList(
+                               gameToUpdate.get()
+                                           .getPlayerList()
+                                           .stream()
+                                           .map( player -> player.getId().equals( playerId )
+                                                   ? updatePlayerAnswers( player, answerDto )
+                                                   : player )
+                                           .collect( Collectors.toList() ) )
+                       .build();
+   messagingService.broadcastGameUpdatesToPlayer( gamesDb.updateGame( hasPlayerFinished( updatedGame ) ) );
   }
-  return Optional.empty();
  }
 
- private boolean hasGameFinished ( List<Player> updatedPlayerList, int maxPoints ) {
-  return updatedPlayerList.stream()
-                          .allMatch( player -> player.getCardsSolved() == maxPoints );
+ private Game hasPlayerFinished ( Game game ) {
+  Optional<Boolean> finished = game.getPlayerList()
+                                   .stream()
+                                   .map( player ->
+                                           player.getQuestionList()
+                                                 .stream()
+                                                 .allMatch( questionDto ->
+                                                         questionDto.getStatus()
+                                                                    .equals( QuestionStatus.SOLVED ) ) )
+                                   .filter( aBoolean -> aBoolean )
+                                   .findFirst();
+  return finished.isPresent() ? game.finish() : game;
  }
 
- private List<Player> updatePlayerStats ( UUID playerId, Game game, int pointsToAdd ) {
-  return game.getPlayerList().stream()
-             .map( player -> player.getUuid().equals( playerId )
-                     ? player.toBuilder()
-                             .points( player.getPoints() + pointsToAdd )
-                             .cardsSolved( player.getCardsSolved() + 1 )
-                             .build()
-                     : player.toBuilder()
-                             .cardsSolved( player.getCardsSolved() + 1 )
-                             .build() )
-             .collect( Collectors.toList() );
+ private Player updatePlayerAnswers ( Player player, AnswerDto answerDto ) {
+  return player.toBuilder().questionList(
+          player.getQuestionList()
+                .stream()
+                .map( questionDto -> questionDto.getId().equals( answerDto.getId() )
+                        ? questionDto.toBuilder()
+                                     .status( QuestionStatus.SOLVED )
+                                     .points( calcQuestionPoints( questionDto, answerDto ) )
+                                     .build()
+                        : questionDto )
+                .collect( Collectors.toList() ) )
+               .build();
  }
 
- private int calcAnswerPoints ( ReceivedAnswerDto dto ) {
-  Card cardFromDb =
-          cardsDb.findAllById( dto.getUuid() )
-                 .stream()
-                 .findFirst()
-                 .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST, "Card is not available" ) );
-  return cardFromDb.getSolution().equals( dto.getAnswerChosen() ) ? cardFromDb.getLevel() : 0;
-
+ private int calcQuestionPoints ( QuestionDto questionDto, AnswerDto answerDto ) {
+  Solution solution = questionDb.findById( answerDto.getId() )
+                                .orElseThrow( () -> new IllegalArgumentException( "Question: " + answerDto
+                                        .getId() + " does not exist" ) ).getSolution();
+  if ( answerDto.getSelectedSolution().equals( solution ) ) {
+   if ( questionDto.getDifficulty().equals( Difficulty.EASY ) ) {
+    return 1;
+   } else if ( questionDto.getDifficulty().equals( Difficulty.MODERATE ) ) {
+    return 2;
+   } else {
+    return 3;
+   }
+  } else {
+   return 0;
+  }
  }
 }

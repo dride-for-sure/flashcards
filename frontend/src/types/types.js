@@ -21,6 +21,7 @@ export const questionListItemType = shape({
   question: string,
   answers: arrayOf(string),
   icon: string,
+  points: number,
 });
 
 export const questionListType = arrayOf(questionListItemType);
@@ -49,7 +50,6 @@ export const playerDetailsType = shape({
 });
 
 export const startGameType = {
-  id: string,
   master: masterType,
   start: true,
 };

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -14,32 +13,37 @@ public class GamesDb {
 
  private List<Game> gamesDb = new ArrayList<>();
 
- public boolean hasGame ( UUID uuid ) {
+ public boolean hasGame ( String id ) {
   return gamesDb.stream()
-                .anyMatch( game -> game.getGameUuid().equals( uuid ) );
+                .anyMatch( game -> game.getId().equals( id ) );
  }
 
- public Optional<Game> getGame ( UUID uuid ) {
+ public Optional<Game> getGame ( String id ) {
   return gamesDb.stream()
-                .filter( game -> game.getGameUuid().equals( uuid ) )
+                .filter( game -> game.getId().equals( id ) )
                 .findAny();
  }
 
- public Game addGame ( Game game ) {
-  gamesDb.add( game );
-  return game;
+ public Game addGame ( Game gameToAdd ) {
+  gamesDb.add( gameToAdd );
+  return gameToAdd;
  }
 
- public void updateGame ( Game updatedGame ) {
+ public Game updateGame ( Game gameToUpdate ) {
   this.gamesDb = this.gamesDb.stream()
-                             .map( game -> game.getGameUuid().equals( updatedGame.getGameUuid() )
-                                     ? updatedGame : game )
+                             .map( game -> game.getId().equals( gameToUpdate.getId() )
+                                     ? gameToUpdate : game )
+                             .collect( Collectors.toList() );
+  return gameToUpdate;
+ }
+
+ public void deleteGame ( String id ) {
+  this.gamesDb = this.gamesDb.stream()
+                             .filter( game -> !game.getId().equals( id ) )
                              .collect( Collectors.toList() );
  }
 
- public void deleteGame ( UUID uuid ) {
-  this.gamesDb = this.gamesDb.stream()
-                             .filter( game -> !game.getGameUuid().equals( uuid ) )
-                             .collect( Collectors.toList() );
+ public List<Game> listGames () {
+  return gamesDb;
  }
 }

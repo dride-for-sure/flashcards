@@ -1,20 +1,18 @@
-package com.dennisjauernig.flashcards.model;
+package com.dennisjauernig.flashcards.controller.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Answer {
+public class PlayerDto {
 
- private UUID uuid;
- private AnswerChosen answerChosen;
- private int points;
+ private String id;
+ private String name;
+ private int score;
 
 }
