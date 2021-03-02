@@ -1,5 +1,6 @@
 package com.dennisjauernig.flashcards.service;
 
+import com.dennisjauernig.flashcards.config.GameConfig;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
 import com.dennisjauernig.flashcards.controller.model.PlayerJoinsGameDto;
 import com.dennisjauernig.flashcards.controller.model.PrepareGameDto;
@@ -23,12 +24,16 @@ public class PrepareGameService {
  public final QuestionDb questionDb;
  private final GamesDb gamesDb;
  private final PlayerDb playerDb;
+ private final GameConfig gameConfig;
 
  @Autowired
- public PrepareGameService ( PlayerDb playerDb, GamesDb gamesDb, QuestionDb questionDb ) {
+ public PrepareGameService (
+         PlayerDb playerDb, GamesDb gamesDb, QuestionDb questionDb,
+         GameConfig gameConfig ) {
   this.playerDb = playerDb;
   this.gamesDb = gamesDb;
   this.questionDb = questionDb;
+  this.gameConfig = gameConfig;
  }
 
  public Optional<PrepareGameDto> prepareGame (
@@ -105,6 +110,19 @@ public class PrepareGameService {
  }
 
  private List<Question> generateQuestionList ( Difficulty difficulty ) {
+  return chooseQuestions( filterQuestionsByDifficulty( difficulty ) );
+ }
+
+ private List<Question> chooseQuestions ( List<Question> questionsList ) {
+  List<Question> chosenQuestions = new ArrayList<>();
+  while ( chosenQuestions.size() <= gameConfig.getMaxQuestions() ) {
+   chosenQuestions.add( questionsList.get( ( int ) ( Math.random() * chosenQuestions.size() ) ) );
+  }
+  return chosenQuestions;
+ }
+
+
+ private List<Question> filterQuestionsByDifficulty ( Difficulty difficulty ) {
   return this.questionDb.findAll().stream().filter( question -> {
    if ( difficulty.equals( Difficulty.EASY ) ) {
     return question.getDifficulty().equals( Difficulty.EASY );
