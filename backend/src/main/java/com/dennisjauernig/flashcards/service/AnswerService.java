@@ -56,7 +56,7 @@ public class AnswerService {
                                                                     .equals( QuestionStatus.SOLVED ) ) )
                                    .filter( aBoolean -> aBoolean )
                                    .findFirst();
-  return finished.isPresent() ? game.toBuilder().status( GameStatus.FINISH ).build() : game;
+  return finished.isPresent() ? game.finish() : game;
  }
 
  private Player updatePlayerAnswers ( Player player, AnswerDto answerDto ) {
