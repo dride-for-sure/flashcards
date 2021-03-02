@@ -1,18 +1,17 @@
 package com.dennisjauernig.flashcards.controller.model;
 
+import com.dennisjauernig.flashcards.model.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class PlayerJoinsGameDto {
+public class AnswerDto {
 
  private String id;
- private String name;
- private Boolean start;
-
+ private Solution selectedSolution;
 }

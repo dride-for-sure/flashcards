@@ -1,7 +1,7 @@
 package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.config.GameConfig;
-import com.dennisjauernig.flashcards.controller.model.PlayerJoinsGameDto;
+import com.dennisjauernig.flashcards.controller.model.PlayerDto;
 import com.dennisjauernig.flashcards.model.*;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,28 +27,27 @@ public class BuilderService {
  public Game gameBuilder (
          String gameId,
          Difficulty difficulty,
-         PlayerJoinsGameDto playerJoinsGameDto ) {
+         PlayerDto playerDto ) {
   List<Question> questionsList = generateQuestionList( difficulty );
-  Player player = playerBuilder( playerJoinsGameDto, questionsList );
+  Player player = playerBuilder( playerDto, questionsList );
   return Game.builder()
              .id( gameId )
              .difficulty( difficulty )
              .status( GameStatus.PREPARE )
              .master( GameMaster.builder()
-                                .id( playerJoinsGameDto.getId() )
-                                .name( playerJoinsGameDto.getName() )
+                                .id( playerDto.getId() )
+                                .name( playerDto.getName() )
                                 .build() )
              .playerList( new ArrayList<>( Collections.singletonList( player ) ) )
-             .questionList( questionsList )
              .build();
  }
 
  public Player playerBuilder (
-         PlayerJoinsGameDto playerJoinsGameDto,
+         PlayerDto playerDto,
          List<Question> questionsList ) {
   return Player.builder()
-               .id( playerJoinsGameDto.getId() )
-               .name( playerJoinsGameDto.getName() )
+               .id( playerDto.getId() )
+               .name( playerDto.getName() )
                .questionList(
                        questionsList.stream()
                                     .map( question -> question.convertToInitDto() )

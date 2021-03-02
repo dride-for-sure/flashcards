@@ -1,6 +1,8 @@
 package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.model.Game;
+import com.dennisjauernig.flashcards.model.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,16 @@ public class MessagingService {
   this.simpMessagingTemplate = simpMessagingTemplate;
  }
 
- public void broadcastOpenGames ( List<GameDto> gameDtoList ) {
-  simpMessagingTemplate.convertAndSend( "/api/topic/games", gameDtoList );
+ public void broadcastOpenGames ( List<GameDto> openGames ) {
+  simpMessagingTemplate.convertAndSend( "/api/topic/games", openGames );
+ }
+
+ public void broadcastGameUpdatesToPlayer ( Game game ) {
+
+  for ( Player player : game.getPlayerList() ) {
+   simpMessagingTemplate.convertAndSend( "/api/topic/games/"
+                   + game.getDifficulty() + "/" + game.getId() + "/" + player.getId(),
+           game.convertToPlayerDto( player.getId() ) );
+  }
  }
 }

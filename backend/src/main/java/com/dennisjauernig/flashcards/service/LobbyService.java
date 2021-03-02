@@ -12,11 +12,9 @@ import java.util.stream.Collectors;
 public class LobbyService {
 
  private final GamesDb gamesDb;
- private final MessagingService messagingService;
 
- public LobbyService ( GamesDb gamesDb, MessagingService messagingService ) {
+ public LobbyService ( GamesDb gamesDb ) {
   this.gamesDb = gamesDb;
-  this.messagingService = messagingService;
  }
 
  public List<GameDto> listOpenGames () {
@@ -24,9 +22,5 @@ public class LobbyService {
                 .filter( game -> game.getStatus().equals( GameStatus.PREPARE ) )
                 .map( openGame -> openGame.convertToDto() )
                 .collect( Collectors.toList() );
- }
-
- public void broadcastOpenGames () {
-  messagingService.broadcastOpenGames( listOpenGames() );
  }
 }
