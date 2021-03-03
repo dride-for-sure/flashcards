@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import SockJsClient from 'react-stomp';
 import { validate as uuidValidate } from 'uuid';
 import ScoreBar from '../../components/Charts/ScoreBar/ScoreBar';
 import Charts from '../../components/Charts/styles';
@@ -14,73 +15,46 @@ import { usePlayerDetails } from '../../contexts/playerDetails';
 export default function Game() {
   const [game, setGame] = useState();
   const [playerDetails] = usePlayerDetails();
-  const [webSocket, setWebSocket] = useState();
+  const [socks, setSocks] = useState();
   const { difficulty, gameId } = useParams();
   const history = useHistory();
-
-  const handleGameUpdates = () => {
-    const socket = new window.WebSocket(`ws://localhost:8080/api/games/${difficulty}/${gameId}/${playerDetails.id}`) || {};
-    let timeout = 250;
-    let reconnectInterval;
-    socket.onopen = () => {
-      console.log('Socket Open');
-      setWebSocket(socket);
-      clearTimeout(reconnectInterval);
-      timeout = 250;
-    };
-
-    socket.onclose = (event) => {
-      if (event.wasClean) {
-        console.log('Socket closed expected: ', event.code, event.reason);
-      } else {
-        console.log('Socket closed unexpected: ', event.code, event.reason);
-        timeout += timeout;
-        if (!socket || socket.readyState === WebSocket.CLOSED) {
-          console.log('Socket reconnect');
-          reconnectInterval = setTimeout(handleGameUpdates(), Math.min(5000, timeout));
-        }
-      }
-    };
-
-    socket.onmessage = (event) => {
-      console.log('Socket Message: ', event);
-      setGame(JSON.parse(event.data));
-    };
-
-    socket.onerror = (event) => {
-      console.log('Socket Error: ', event);
-    };
-  };
-
-  const handleSendAnswer = (id, selected) => {
-    console.log('Socket send answer:', selected);
-    webSocket.send(JSON.stringify({ id, selected }));
-  };
-
-  const handleCloseWebsocket = () => {
-    console.log('Player leaves the game -> socket close');
-    webSocket.close(1001, 'Player leaves the game');
-  };
-
-  const handleGameStart = () => {
-    const socket = new window.WebSocket(`ws://localhost:8080/api/games/${difficulty}/${gameId}`) || {};
-    socket.onopen = () => {
-      console.log('Socket send game start');
-      socket.send(JSON.stringify({ master: playerDetails.id, start: true }));
-      socket.close(1000, 'Game has been started');
-    };
-  };
 
   const handleGameRestart = () => {
     history.push('/');
   };
 
-  useEffect(() => {
-    handleGameUpdates();
-    return () => {
-      if (webSocket) { handleCloseWebsocket(); }
-    };
-  }, []);
+  const handleSendAnswer = (id, selected) => {
+    try {
+      const answer = JSON.stringify({
+        id,
+        selectedSolution: selected,
+      });
+      socks.sendMessage(`/api/games/${difficulty}/${gameId}/${playerDetails.id}`, answer);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGameStart = () => {
+    try {
+      socks.sendMessage(`/api/games/${difficulty}/${gameId}/${playerDetails.id}/start`, '');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleJoinGame = () => {
+    try {
+      const data = JSON.stringify({
+        id: playerDetails.id,
+        name: playerDetails.name,
+        score: 0,
+      });
+      socks.sendMessage(`/api/games/${difficulty}/${gameId}`, data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
     history.push('/');
@@ -89,25 +63,34 @@ export default function Game() {
 
   if (!game) {
     return (
-      <Loading />
-    );
-  }
-
-  if (game.status === 'WAITING') {
-    return (
       <>
-        <Logo />
-        {game.master.id === playerDetails.id
-        && <GameMaster onGameStart={handleGameStart} />}
-        {game.master.id !== playerDetails.id
-        && <Waiting gameMasterName={game.master.name} />}
+        <SockJsClient
+          url="/ws"
+          topics={[`/topic/games/${difficulty}/${gameId}`]}
+          onConnect={() => handleJoinGame()}
+          ref={(client) => setSocks(client)}
+          onMessage={(data) => {
+            console.log('SetGame: ', data);
+            setGame(data);
+          }}
+          debug />
+        <Loading />
       </>
     );
   }
 
   return (
     <>
-      {game.status === 'finish'
+      <SockJsClient
+        url="/ws"
+        topics={[`/topic/games/${difficulty}/${gameId}/${playerDetails.id}`]}
+        ref={(client) => setSocks(client)}
+        onMessage={(data) => {
+          console.log('SetGame: ', data);
+          setGame(data);
+        }}
+        debug />
+      {game.status === 'FINISH'
       && (
       <Results
         playerList={game.playerList}
@@ -115,12 +98,19 @@ export default function Game() {
         onGameRestart={handleGameRestart} />
       )}
       <Logo />
-      {game.questionList.map((question) => (
+      {game.master.id === playerDetails.id
+        && game.status === 'PREPARE'
+        && <GameMaster onGameStart={handleGameStart} />}
+      {game.master.id !== playerDetails.id
+        && game.status === 'PREPARE'
+        && <Waiting gameMasterName={game.master.name} />}
+      {game.status === 'PLAY' && game.questionList.map((question) => (
         <Question
           key={question.id}
           question={question}
           onSendAnswer={handleSendAnswer} />
       ))}
+      {game.status === 'PLAY' && (
       <Charts>
         {game.playerList.map((player) => (
           <ScoreBar
@@ -130,6 +120,7 @@ export default function Game() {
             playerDetails={playerDetails} />
         ))}
       </Charts>
+      )}
     </>
   );
 }

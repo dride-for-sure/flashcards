@@ -16,7 +16,7 @@ public class GamesDb {
  public Optional<Game> getGame ( String id ) {
   return gamesDb.stream()
                 .filter( game -> game.getId().equals( id ) )
-                .findAny();
+                .findFirst();
  }
 
  public Game addGame ( Game gameToAdd ) {

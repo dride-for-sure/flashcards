@@ -19,6 +19,7 @@ public class StartGameService {
   Game gameToStart = gamesDb.getGame( gameId )
                             .orElseThrow( () ->
                                     new IllegalArgumentException( "GameId: " + gameId + " doesnt exists" ) );
+  System.out.println( gameToStart );
   if ( gameToStart.getMaster().getId().equals( playerId ) ) {
    Game startedGame = gamesDb.updateGame( gameToStart.start() );
    messagingService.broadcastGameUpdatesToPlayer( startedGame );

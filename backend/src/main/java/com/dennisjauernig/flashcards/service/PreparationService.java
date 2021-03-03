@@ -40,17 +40,18 @@ public class PreparationService {
          String gameId,
          Difficulty difficulty ) {
   Optional<Game> game = gamesDb.getGame( gameId );
-  Game newGame;
+  GameDto newGame;
   if ( game.isEmpty() ) {
    newGame = gamesDb.addGame( builderService.gameBuilder( gameId, difficulty,
-           playerDto ) );
+           playerDto ) ).convertToDto();
   } else {
    Player playerToAdd = builderService.playerBuilder( playerDto,
            game.get().getQuestionList() );
-   newGame = gamesDb.updateGame( game.get().addPlayer( playerToAdd ) );
+   newGame = gamesDb.updateGame( game.get().addPlayer( playerToAdd ) )
+                    .convertToPlayerDto( playerToAdd.getId() );
   }
   messagingService.broadcastOpenGames( getOpenGames() );
-  return newGame.convertToDto();
+  return newGame;
  }
 
  private List<GameDto> getOpenGames () {

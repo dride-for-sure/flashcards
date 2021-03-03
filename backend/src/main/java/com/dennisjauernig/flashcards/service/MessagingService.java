@@ -20,15 +20,28 @@ public class MessagingService {
  }
 
  public void broadcastOpenGames ( List<GameDto> openGames ) {
-  simpMessagingTemplate.convertAndSend( "/api/topic/games", openGames );
+  simpMessagingTemplate.convertAndSend( "/api/games", openGames );
  }
 
  public void broadcastGameUpdatesToPlayer ( Game game ) {
 
   for ( Player player : game.getPlayerList() ) {
-   simpMessagingTemplate.convertAndSend( "/api/topic/games/"
-                   + game.getDifficulty() + "/" + game.getId() + "/" + player.getId(),
+   String url = "/topic/games/" + game.getDifficulty()
+                                      .toString() + "/" + game.getId() + "/" + player.getId();
+   simpMessagingTemplate.convertAndSend( url,
            game.convertToPlayerDto( player.getId() ) );
+   System.out.println( "Send updates to player" );
+  }
+ }
+
+ public void broadcastPreparedGameToPlayer ( Game game ) {
+  for ( Player player : game.getPlayerList() ) {
+   String url = "/topic/games/" + game.getDifficulty()
+                                      .toString()
+                                      .toLowerCase() + "/" + game.getId();
+   simpMessagingTemplate.convertAndSend( url,
+           game.convertToPlayerDto( player.getId() ) );
+   System.out.println( "Send updates to player" );
   }
  }
 }

@@ -2,6 +2,7 @@ package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.config.GameConfig;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
+import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.*;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +40,20 @@ public class BuilderService {
                                 .name( playerDto.getName() )
                                 .build() )
              .playerList( new ArrayList<>( Collections.singletonList( player ) ) )
+             .questionList( questionsList )
              .build();
  }
 
  public Player playerBuilder (
          PlayerDto playerDto,
          List<Question> questionsList ) {
+  List<QuestionDto> questionDtoList = questionsList.stream()
+                                                   .map( question -> question.convertToInitDto() )
+                                                   .collect( Collectors.toList() );
   return Player.builder()
                .id( playerDto.getId() )
                .name( playerDto.getName() )
-               .questionList(
-                       questionsList.stream()
-                                    .map( question -> question.convertToInitDto() )
-                                    .collect( Collectors.toList() ) )
+               .questionDtoList( questionDtoList )
                .build();
  }
 
@@ -61,9 +63,13 @@ public class BuilderService {
 
  private List<Question> chooseQuestions ( List<Question> questionsList ) {
   List<Question> chosenQuestions = new ArrayList<>();
-  while ( chosenQuestions.size() <= gameConfig.getMaxQuestions() ) {
-   chosenQuestions.add( questionsList.get( ( int ) ( Math.random() * chosenQuestions.size() ) ) );
-  }
+  do {
+   Question possibleQuestion = questionsList.get( ( int ) ( Math.random() * questionsList.size() ) );
+   if ( !chosenQuestions.contains( possibleQuestion ) ) {
+    chosenQuestions.add( possibleQuestion );
+   }
+  } while ( chosenQuestions.size() < questionsList.size()
+          && chosenQuestions.size() < gameConfig.getMaxQuestions() );
   return chosenQuestions;
  }
 
