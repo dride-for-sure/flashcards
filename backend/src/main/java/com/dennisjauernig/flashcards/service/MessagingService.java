@@ -20,7 +20,8 @@ public class MessagingService {
  }
 
  public void broadcastOpenGames ( List<GameDto> openGames ) {
-  simpMessagingTemplate.convertAndSend( "/api/games", openGames );
+  System.out.println( "Broadcast open games" );
+  simpMessagingTemplate.convertAndSend( "/topic/games", openGames );
  }
 
  public void broadcastGameUpdatesToPlayer ( Game game ) {
@@ -28,17 +29,6 @@ public class MessagingService {
   for ( Player player : game.getPlayerList() ) {
    String url = "/topic/games/" + game.getDifficulty()
                                       .toString() + "/" + game.getId() + "/" + player.getId();
-   simpMessagingTemplate.convertAndSend( url,
-           game.convertToPlayerDto( player.getId() ) );
-   System.out.println( "Send updates to player" );
-  }
- }
-
- public void broadcastPreparedGameToPlayer ( Game game ) {
-  for ( Player player : game.getPlayerList() ) {
-   String url = "/topic/games/" + game.getDifficulty()
-                                      .toString()
-                                      .toLowerCase() + "/" + game.getId();
    simpMessagingTemplate.convertAndSend( url,
            game.convertToPlayerDto( player.getId() ) );
    System.out.println( "Send updates to player" );

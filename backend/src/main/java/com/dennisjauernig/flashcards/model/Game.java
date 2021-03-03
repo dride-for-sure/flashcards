@@ -41,7 +41,7 @@ public class Game {
                                     .stream()
                                     .map( player -> player.convertToDto() )
                                     .collect( Collectors.toList() ) )
-                .questionDtoList( questionDtoList )
+                .questionDtoList( selectNextQuestion( questionDtoList ) )
                 .build();
  }
 
@@ -69,6 +69,33 @@ public class Game {
   return this.toBuilder()
              .playerList( updatedPlayerList )
              .build();
+ }
+
+ private List<QuestionDto> selectNextQuestion ( List<QuestionDto> questionDtoList ) {
+  List<QuestionDto> questionListStatusNONE =
+          questionDtoList.stream()
+                         .filter( questionDto -> questionDto.getStatus()
+                                                            .equals( QuestionStatus.NONE ) )
+                         .collect( Collectors.toList() );
+  List<QuestionDto> questionListStatusSELECTED =
+          questionDtoList.stream()
+                         .filter( questionDto -> questionDto.getStatus()
+                                                            .equals( QuestionStatus.SELECTED ) )
+                         .collect( Collectors.toList() );
+  if ( questionListStatusNONE.size() > 0 && questionListStatusSELECTED.size() == 0 ) {
+   QuestionDto nextQuestion =
+           questionListStatusNONE.get( ( int ) ( Math.random() * questionListStatusNONE.size() ) )
+                                 .toBuilder()
+                                 .status( QuestionStatus.SELECTED )
+                                 .build();
+   return questionDtoList.stream()
+                         .map( questionDto ->
+                                 questionDto.getId().equals( nextQuestion.getId() )
+                                         ? nextQuestion
+                                         : questionDto )
+                         .collect( Collectors.toList() );
+  }
+  return questionDtoList;
  }
 
  public Game start () {

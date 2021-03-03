@@ -10,6 +10,7 @@ import com.dennisjauernig.flashcards.service.PreparationService;
 import com.dennisjauernig.flashcards.service.StartGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
@@ -45,9 +46,11 @@ public class SocketController {
  @MessageMapping ( "/games/{difficulty}/{gameId}" )
  @SendTo ( "/topic/games/{difficulty}/{gameId}" )
  public GameDto prepareGame (
+         @Header ( "simpSessionId" ) String sessionId,
          @DestinationVariable String difficulty,
          @DestinationVariable String gameId, PlayerDto playerDto ) {
   System.out.println( "Prepare Game" );
+  System.out.println( sessionId );
   return preparationService.prepareGame( playerDto, gameId,
           Difficulty.valueOf( difficulty.toUpperCase() ) );
  }

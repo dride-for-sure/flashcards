@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import SockJsClient from 'react-stomp';
 import { validate as uuidValidate } from 'uuid';
@@ -56,6 +56,13 @@ export default function Game() {
     }
   };
 
+  useEffect(() => {
+    console.log('Hello');
+    return function cleanup() {
+      console.log('Bye bye');
+    };
+  }, []);
+
   if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
     history.push('/');
     return null;
@@ -72,8 +79,7 @@ export default function Game() {
           onMessage={(data) => {
             console.log('SetGame: ', data);
             setGame(data);
-          }}
-          debug />
+          }} />
         <Loading />
       </>
     );
@@ -88,8 +94,7 @@ export default function Game() {
         onMessage={(data) => {
           console.log('SetGame: ', data);
           setGame(data);
-        }}
-        debug />
+        }} />
       {game.status === 'FINISH'
       && (
       <Results

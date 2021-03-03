@@ -27,7 +27,7 @@ export default function Lobby() {
     <>
       <SockJsClient
         url="/ws"
-        topics={['/api/games']}
+        topics={['/api/games', '/topic/games']}
         onMessage={(data) => setGames(data)}
         debug />
       <Logo />
