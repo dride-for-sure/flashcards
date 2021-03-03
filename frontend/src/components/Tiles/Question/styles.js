@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
-  ${(props) => props.level === '3' && css`
+  ${(props) => props.difficulty === 'HARD' && css`
       background-color: lightcoral;
       color: white;
 
@@ -11,7 +11,7 @@ export const Container = styled.div`
       } 
     `}
 
-  ${(props) => props.level === '2' && css`
+  ${(props) => props.difficulty === 'MODERATE' && css`
     background-color: sandybrown;
     color: white;
 
@@ -21,7 +21,7 @@ export const Container = styled.div`
     } 
   `}
 
-  ${(props) => props.level === '1' && css`
+  ${(props) => props.difficulty === 'EASY' && css`
     background-color: mediumseagreen;
     color: white;
 

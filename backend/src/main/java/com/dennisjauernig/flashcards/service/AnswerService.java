@@ -49,7 +49,7 @@ public class AnswerService {
   Optional<Boolean> finished = game.getPlayerList()
                                    .stream()
                                    .map( player ->
-                                           player.getQuestionList()
+                                           player.getQuestionDtoList()
                                                  .stream()
                                                  .allMatch( questionDto ->
                                                          questionDto.getStatus()
@@ -60,8 +60,8 @@ public class AnswerService {
  }
 
  private Player updatePlayerAnswers ( Player player, AnswerDto answerDto ) {
-  return player.toBuilder().questionList(
-          player.getQuestionList()
+  return player.toBuilder().questionDtoList(
+          player.getQuestionDtoList()
                 .stream()
                 .map( questionDto -> questionDto.getId().equals( answerDto.getId() )
                         ? questionDto.toBuilder()

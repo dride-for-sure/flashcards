@@ -30,7 +30,7 @@ public class Game {
               .filter( targetPlayer -> targetPlayer.getId().equals( playerId ) )
               .findFirst()
               .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId + " does not exists" ) )
-              .getQuestionList();
+              .getQuestionDtoList();
 
   return GameDto.builder()
                 .id( this.getId() )
@@ -59,17 +59,16 @@ public class Game {
  }
 
  public Game addPlayer ( Player playerToAdd ) {
+  if ( this.getPlayerList()
+           .stream()
+           .anyMatch( player -> player.getId().equals( playerToAdd.getId() ) ) ) {
+   return this;
+  }
+  this.getPlayerList().add( playerToAdd );
+  List<Player> updatedPlayerList = this.getPlayerList().stream().collect( Collectors.toList() );
+  updatedPlayerList.add( playerToAdd );
   return this.toBuilder()
-             .playerList( this.getPlayerList()
-                              .stream()
-                              .map( player -> {
-                               if ( player.getId()
-                                          .equals( playerToAdd.getId() ) ) {
-                                return playerToAdd;
-                               }
-                               return player;
-                              } )
-                              .collect( Collectors.toList() ) )
+             .playerList( updatedPlayerList )
              .build();
  }
 

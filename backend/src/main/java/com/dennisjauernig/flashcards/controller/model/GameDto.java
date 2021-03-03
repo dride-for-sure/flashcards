@@ -3,6 +3,7 @@ package com.dennisjauernig.flashcards.controller.model;
 import com.dennisjauernig.flashcards.model.Difficulty;
 import com.dennisjauernig.flashcards.model.GameMaster;
 import com.dennisjauernig.flashcards.model.GameStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,10 @@ public class GameDto {
  private Difficulty difficulty;
  private GameStatus status;
  private GameMaster master;
+
+ @JsonProperty ( "playerList" )
  private List<PlayerDto> playerDtoList;
+
+ @JsonProperty ( "questionList" )
  private List<QuestionDto> questionDtoList;
 }

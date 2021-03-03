@@ -37,23 +37,26 @@ public class SocketController {
   this.startGameService = startGameService;
  }
 
- @SubscribeMapping ( "/api/topic/games" )
+ @SubscribeMapping ( "/games" )
  public List<GameDto> sendOpenGames () {
   return lobbyService.listOpenGames();
  }
 
  @MessageMapping ( "/games/{difficulty}/{gameId}" )
- @SendTo ( "/api/games/{difficulty}/{gameId}" )
+ @SendTo ( "/topic/games/{difficulty}/{gameId}" )
  public GameDto prepareGame (
-         @DestinationVariable Difficulty difficulty,
+         @DestinationVariable String difficulty,
          @DestinationVariable String gameId, PlayerDto playerDto ) {
-  return preparationService.prepareGame( playerDto, gameId, difficulty );
+  System.out.println( "Prepare Game" );
+  return preparationService.prepareGame( playerDto, gameId,
+          Difficulty.valueOf( difficulty.toUpperCase() ) );
  }
 
  @MessageMapping ( "/games/{difficulty}/{gameId}/{playerId}/start" )
  public void startGame (
          @DestinationVariable String gameId,
          @DestinationVariable String playerId ) {
+  System.out.println( "Start Game" );
   startGameService.startGame( gameId, playerId );
  }
 
@@ -62,6 +65,7 @@ public class SocketController {
          @DestinationVariable String gameId,
          @DestinationVariable String playerId,
          AnswerDto answerDto ) {
+  System.out.println( "Update Game" );
   answerService.updateGame( gameId, playerId, answerDto );
  }
 }

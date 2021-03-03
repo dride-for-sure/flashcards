@@ -7,7 +7,7 @@ export default function Question({ question, onSendAnswer }) {
   return (
     <Container
       status={question.status}
-      level={question.difficulty}
+      difficulty={question.difficulty}
       key={question.id}>
       <span>{question.icon}</span>
       <h1>{question.category}</h1>

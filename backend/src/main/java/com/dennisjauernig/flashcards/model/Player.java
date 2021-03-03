@@ -17,7 +17,7 @@ public class Player {
 
  private String id;
  private String name;
- private List<QuestionDto> questionList;
+ private List<QuestionDto> questionDtoList;
 
  public PlayerDto convertToDto () {
   return PlayerDto.builder()
@@ -28,8 +28,8 @@ public class Player {
  }
 
  private int getScore () {
-  return this.questionList.stream()
-                          .map( questionDto -> questionDto.getPoints() )
-                          .reduce( 0, Integer::sum );
+  return this.questionDtoList.stream()
+                             .map( questionDto -> questionDto.getPoints() )
+                             .reduce( 0, Integer::sum );
  }
 }
