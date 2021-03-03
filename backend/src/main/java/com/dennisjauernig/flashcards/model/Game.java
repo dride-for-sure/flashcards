@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,6 @@ public class Game {
               .findFirst()
               .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId + " does not exists" ) )
               .getQuestionDtoList();
-
   return GameDto.builder()
                 .id( this.getId() )
                 .difficulty( this.getDifficulty() )
@@ -64,7 +64,7 @@ public class Game {
            .anyMatch( player -> player.getId().equals( playerToAdd.getId() ) ) ) {
    return this.toBuilder().build();
   }
-  List<Player> updatedPlayerList = this.getPlayerList().stream().collect( Collectors.toList() );
+  List<Player> updatedPlayerList = new ArrayList<>( this.getPlayerList() );
   updatedPlayerList.add( playerToAdd );
   return this.toBuilder()
              .playerList( updatedPlayerList )

@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder ( toBuilder = true )
 @Document ( collection = "questions" )
 public class Question {
 
