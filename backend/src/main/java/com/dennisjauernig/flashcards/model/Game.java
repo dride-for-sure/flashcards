@@ -62,9 +62,8 @@ public class Game {
   if ( this.getPlayerList()
            .stream()
            .anyMatch( player -> player.getId().equals( playerToAdd.getId() ) ) ) {
-   return this;
+   return this.toBuilder().build();
   }
-  this.getPlayerList().add( playerToAdd );
   List<Player> updatedPlayerList = this.getPlayerList().stream().collect( Collectors.toList() );
   updatedPlayerList.add( playerToAdd );
   return this.toBuilder()

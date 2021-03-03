@@ -45,20 +45,6 @@ public class AnswerService {
   }
  }
 
- private Game hasPlayerFinished ( Game game ) {
-  Optional<Boolean> finished = game.getPlayerList()
-                                   .stream()
-                                   .map( player ->
-                                           player.getQuestionDtoList()
-                                                 .stream()
-                                                 .allMatch( questionDto ->
-                                                         questionDto.getStatus()
-                                                                    .equals( QuestionStatus.SOLVED ) ) )
-                                   .filter( aBoolean -> aBoolean )
-                                   .findFirst();
-  return finished.isPresent() ? game.finish() : game;
- }
-
  private Player updatePlayerAnswers ( Player player, AnswerDto answerDto ) {
   return player.toBuilder().questionDtoList(
           player.getQuestionDtoList()
@@ -74,9 +60,10 @@ public class AnswerService {
  }
 
  private int calcQuestionPoints ( QuestionDto questionDto, AnswerDto answerDto ) {
-  Solution solution = questionDb.findById( answerDto.getId() )
-                                .orElseThrow( () -> new IllegalArgumentException( "Question: " + answerDto
-                                        .getId() + " does not exist" ) ).getSolution();
+  Solution solution =
+          questionDb.findById( answerDto.getId() )
+                    .orElseThrow( () -> new IllegalArgumentException( "Question: " + answerDto
+                            .getId() + " does not exist" ) ).getSolution();
   if ( answerDto.getSelectedSolution().equals( solution ) ) {
    if ( questionDto.getDifficulty().equals( Difficulty.EASY ) ) {
     return 1;
@@ -88,5 +75,20 @@ public class AnswerService {
   } else {
    return 0;
   }
+ }
+
+ private Game hasPlayerFinished ( Game game ) {
+  Optional<Boolean> finished =
+          game.getPlayerList()
+              .stream()
+              .map( player ->
+                      player.getQuestionDtoList()
+                            .stream()
+                            .allMatch( questionDto ->
+                                    questionDto.getStatus()
+                                               .equals( QuestionStatus.SOLVED ) ) )
+              .filter( aBoolean -> aBoolean )
+              .findFirst();
+  return finished.isPresent() ? game.finish() : game;
  }
 }

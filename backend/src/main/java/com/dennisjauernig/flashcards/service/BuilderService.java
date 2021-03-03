@@ -63,9 +63,13 @@ public class BuilderService {
 
  private List<Question> chooseQuestions ( List<Question> questionsList ) {
   List<Question> chosenQuestions = new ArrayList<>();
-  while ( chosenQuestions.size() <= gameConfig.getMaxQuestions() ) {
-   chosenQuestions.add( questionsList.get( ( int ) ( Math.random() * questionsList.size() ) ) );
-  }
+  do {
+   Question possibleQuestion = questionsList.get( ( int ) ( Math.random() * questionsList.size() ) );
+   if ( !chosenQuestions.contains( possibleQuestion ) ) {
+    chosenQuestions.add( possibleQuestion );
+   }
+  } while ( chosenQuestions.size() < questionsList.size()
+          && chosenQuestions.size() < gameConfig.getMaxQuestions() );
   return chosenQuestions;
  }
 

@@ -7,17 +7,17 @@ export default function NewGame({ onGameOpen }) {
       <h1>Your own arena?</h1>
       <span>
         <Difficulty
-          onClick={() => onGameOpen('easy')}
+          onClick={() => onGameOpen('EASY')}
           title="Easy peasy">
           🥱
         </Difficulty>
         <Difficulty
-          onClick={() => onGameOpen('moderat')}
+          onClick={() => onGameOpen('MODERATE')}
           title="For everyday">
           💪
         </Difficulty>
         <Difficulty
-          onClick={() => onGameOpen('hard')}
+          onClick={() => onGameOpen('HARD')}
           title="100% pain">
           🤯
         </Difficulty>
