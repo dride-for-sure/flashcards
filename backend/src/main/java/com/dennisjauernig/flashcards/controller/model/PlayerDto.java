@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PlayerDto {
 
- private String id;
  private String name;
  private int score;
 

@@ -2,16 +2,22 @@ package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.controller.model.GameDetailsDto;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
-import com.dennisjauernig.flashcards.controller.model.PlayerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
-import com.dennisjauernig.flashcards.model.*;
+import com.dennisjauernig.flashcards.model.Game;
+import com.dennisjauernig.flashcards.model.GameMaster;
+import com.dennisjauernig.flashcards.model.Player;
+import com.dennisjauernig.flashcards.model.Question;
+import com.dennisjauernig.flashcards.model.enums.Difficulty;
+import com.dennisjauernig.flashcards.model.enums.GameStatus;
 import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,31 +43,32 @@ public class GamesService {
  }
 
  public Game generateNewGame (
-         String gameId,
-         Difficulty difficulty,
-         PlayerDto playerDto ) {
+         Principal principal,
+         String playerName,
+         Difficulty difficulty ) {
   List<Question> questionsList = questionsService.generateQuestionList( difficulty );
-  Player player = playerService.generateNewPlayer( playerDto, questionsList );
+  Player player = playerService.generateNewPlayer( principal, playerName, questionsList );
   return Game.builder()
-             .id( gameId )
+             .id( UUID.randomUUID().toString() )
              .difficulty( difficulty )
              .status( GameStatus.PREPARE )
              .master( GameMaster.builder()
-                                .id( playerDto.getId() )
-                                .name( playerDto.getName() )
+                                .id( principal )
+                                .name( playerName )
                                 .build() )
              .playerList( new ArrayList<>( Collections.singletonList( player ) ) )
              .questionList( questionsList )
              .build();
  }
 
- public GameDetailsDto convertGameToDetailsDto ( Game game, String playerId ) {
+ public GameDetailsDto convertGameToDetailsDto ( Game game, Principal principal ) {
   List<QuestionDto> questionDtoList =
           game.getPlayerList()
               .stream()
-              .filter( targetPlayer -> targetPlayer.getId().equals( playerId ) )
+              .filter( targetPlayer -> targetPlayer.getId().equals( principal ) )
               .findFirst()
-              .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId + " does not exists" ) )
+              .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + principal + " does not " +
+                      "exists" ) )
               .getQuestionDtoList();
   return GameDetailsDto.builder()
                        .id( game.getId() )
@@ -70,7 +77,7 @@ public class GamesService {
                        .master( game.getMaster() )
                        .playerDtoList( game.getPlayerList()
                                            .stream()
-                                           .map( player -> player.convertToDto() )
+                                           .map( player -> playerService.convertToDto( player ) )
                                            .collect( Collectors.toList() ) )
                        .questionDtoList( questionsService.selectNextQuestion( questionDtoList ) )
                        .build();
@@ -84,7 +91,7 @@ public class GamesService {
                 .master( game.getMaster() )
                 .playerDtoList( game.getPlayerList()
                                     .stream()
-                                    .map( player -> player.convertToDto() )
+                                    .map( player -> playerService.convertToDto( player ) )
                                     .collect( Collectors.toList() ) )
                 .build();
  }
@@ -101,6 +108,12 @@ public class GamesService {
   updatedPlayerList.add( playerToAdd );
   return game.toBuilder()
              .playerList( updatedPlayerList )
+             .build();
+ }
+
+ public Game setStatusToFinish ( Game game ) {
+  return game.toBuilder()
+             .status( GameStatus.FINISH )
              .build();
  }
 }

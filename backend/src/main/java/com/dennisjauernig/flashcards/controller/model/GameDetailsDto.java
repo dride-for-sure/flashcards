@@ -1,8 +1,8 @@
 package com.dennisjauernig.flashcards.controller.model;
 
-import com.dennisjauernig.flashcards.model.Difficulty;
 import com.dennisjauernig.flashcards.model.GameMaster;
-import com.dennisjauernig.flashcards.model.GameStatus;
+import com.dennisjauernig.flashcards.model.enums.Difficulty;
+import com.dennisjauernig.flashcards.model.enums.GameStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

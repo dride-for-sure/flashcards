@@ -1,53 +1,42 @@
-package com.dennisjauernig.flashcards.controller.service;
+package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.controller.model.AnswerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
-import com.dennisjauernig.flashcards.model.*;
-import com.dennisjauernig.flashcards.repository.GamesDb;
+import com.dennisjauernig.flashcards.model.Game;
+import com.dennisjauernig.flashcards.model.Player;
+import com.dennisjauernig.flashcards.model.enums.QuestionStatus;
+import com.dennisjauernig.flashcards.model.enums.Solution;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
-import com.dennisjauernig.flashcards.service.GamesStatusService;
-import com.dennisjauernig.flashcards.service.MessagingService;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class AnswerService {
 
- private final GamesDb gamesDb;
  private final QuestionDb questionDb;
- private final GamesStatusService gamesStatusService;
- private final MessagingService messagingService;
+ private final GamesService gamesService;
 
  public AnswerService (
-         GamesDb gamesDb,
          QuestionDb questionDb,
-         GamesStatusService gamesStatusService,
-         MessagingService messagingService ) {
-  this.gamesDb = gamesDb;
+         GamesService gamesService ) {
   this.questionDb = questionDb;
-  this.gamesStatusService = gamesStatusService;
-  this.messagingService = messagingService;
+  this.gamesService = gamesService;
  }
 
- public void updateGame ( String gameId, String playerId, AnswerDto answerDto ) {
-  Optional<Game> gameToUpdate = gamesDb.findById( gameId );
-  if ( gameToUpdate.isPresent() ) {
-   Game updatedGame =
-           gameToUpdate.get()
-                       .toBuilder()
-                       .playerList(
-                               gameToUpdate.get()
-                                           .getPlayerList()
-                                           .stream()
-                                           .map( player -> player.getId().equals( playerId )
-                                                   ? updatePlayerAnswers( player, answerDto )
-                                                   : player )
-                                           .collect( Collectors.toList() ) )
-                       .build();
-   messagingService.broadcastGameUpdatesToPlayer( gamesDb.save( hasPlayerFinished( updatedGame ) ) );
-  }
+ public Game updateGame ( Principal principal, Game game, AnswerDto answerDto ) {
+  Game updatedGame = game.toBuilder()
+                         .playerList(
+                                 game.getPlayerList()
+                                     .stream()
+                                     .map( player -> player.getId().equals( principal )
+                                             ? updatePlayerAnswers( player, answerDto )
+                                             : player )
+                                     .collect( Collectors.toList() ) )
+                         .build();
+  return hasPlayerFinished( updatedGame );
  }
 
  private Player updatePlayerAnswers ( Player player, AnswerDto answerDto ) {
@@ -70,17 +59,15 @@ public class AnswerService {
                     .orElseThrow( () -> new IllegalArgumentException( "Question: " + answerDto
                             .getId() + " does not exist" ) ).getSolution();
   if ( answerDto.getSelectedSolution().equals( solution ) ) {
-   if ( questionDto.getDifficulty().equals( Difficulty.EASY ) ) {
-    return 1;
-   } else if ( questionDto.getDifficulty().equals( Difficulty.MODERATE ) ) {
-    return 2;
-   } else {
-    return 3;
-   }
-  } else {
-   return 0;
+   return switch ( questionDto.getDifficulty() ) {
+    case EASY -> 1;
+    case MODERATE -> 2;
+    case HARD -> 3;
+   };
   }
+  return 0;
  }
+
 
  private Game hasPlayerFinished ( Game game ) {
   Optional<Boolean> finished =
@@ -94,6 +81,6 @@ public class AnswerService {
                                                .equals( QuestionStatus.SOLVED ) ) )
               .filter( aBoolean -> aBoolean )
               .findFirst();
-  return finished.isPresent() ? gamesStatusService.finish( game ) : game;
+  return finished.isPresent() ? gamesService.setStatusToFinish( game ) : game;
  }
 }

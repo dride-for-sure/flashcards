@@ -1,5 +1,7 @@
 package com.dennisjauernig.flashcards.model;
 
+import com.dennisjauernig.flashcards.model.enums.Difficulty;
+import com.dennisjauernig.flashcards.model.enums.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

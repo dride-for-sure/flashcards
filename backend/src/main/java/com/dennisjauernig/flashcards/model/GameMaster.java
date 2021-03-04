@@ -5,12 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.security.Principal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class GameMaster {
 
- private String id;
+ private Principal id;
  private String name;
 }
