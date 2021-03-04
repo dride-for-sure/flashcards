@@ -116,4 +116,9 @@ public class GamesService {
              .status( GameStatus.FINISH )
              .build();
  }
+
+ public boolean isPlayerExists ( Principal principal, Game game ) {
+  return game.getPlayerList().stream()
+             .anyMatch( player -> player.getId().equals( principal ) );
+ }
 }

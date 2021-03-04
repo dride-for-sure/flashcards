@@ -18,9 +18,7 @@ public class MessagingService {
   this.simpMessagingTemplate = simpMessagingTemplate;
  }
 
- // Send updates to specific player
  public void sendToPlayer ( Principal principal, GameDetailsDto gameDetailsDto ) {
   simpMessagingTemplate.convertAndSendToUser( principal.getName(), "/topic/updates", gameDetailsDto );
  }
-
 }

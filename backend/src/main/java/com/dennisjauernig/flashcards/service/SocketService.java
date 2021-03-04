@@ -51,7 +51,7 @@ public class SocketService {
  public Optional<GameDto> joinGame ( Principal principal, String playerName, String gameId ) {
   Optional<Game> game = gamesDb.findById( gameId );
   if ( game.isPresent() ) {
-   boolean playerExists = isPlayerExists( principal, game.get() );
+   boolean playerExists = gamesService.isPlayerExists( principal, game.get() );
 
    if ( playerExists && !game.get().getStatus().equals( GameStatus.PREPARE ) ) {
     GameDetailsDto gameDetailsDto = gamesService.convertGameToDetailsDto( game.get(), principal );
@@ -76,16 +76,11 @@ public class SocketService {
          AnswerDto answerDto ) {
   Optional<Game> game = gamesDb.findById( gameId );
 
-  if ( game.isPresent() && isPlayerExists( principal, game.get() ) ) {
+  if ( game.isPresent() && gamesService.isPlayerExists( principal, game.get() ) ) {
    Game updatedGame = answerService.updateGame( principal, game.get(), answerDto );
    gamesDb.save( updatedGame );
    sendToAllPlayers( updatedGame );
   }
- }
-
- private boolean isPlayerExists ( Principal principal, Game game ) {
-  return game.getPlayerList().stream()
-             .anyMatch( player -> player.getId().equals( principal ) );
  }
 
  private void sendToAllPlayers ( Game game ) {
