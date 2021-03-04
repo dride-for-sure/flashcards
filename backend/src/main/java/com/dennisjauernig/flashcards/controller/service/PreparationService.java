@@ -1,4 +1,4 @@
-package com.dennisjauernig.flashcards.service;
+package com.dennisjauernig.flashcards.controller.service;
 
 import com.dennisjauernig.flashcards.controller.model.GameDto;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
@@ -8,6 +8,8 @@ import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.GameStatus;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
+import com.dennisjauernig.flashcards.service.BuilderService;
+import com.dennisjauernig.flashcards.service.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

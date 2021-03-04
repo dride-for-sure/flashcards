@@ -1,4 +1,4 @@
-package com.dennisjauernig.flashcards.service;
+package com.dennisjauernig.flashcards.controller.service;
 
 import com.dennisjauernig.flashcards.controller.model.GameDto;
 import com.dennisjauernig.flashcards.db.GamesDb;

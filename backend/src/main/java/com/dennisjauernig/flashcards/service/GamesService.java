@@ -3,7 +3,6 @@ package com.dennisjauernig.flashcards.service;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.Game;
-import com.dennisjauernig.flashcards.model.GameStatus;
 import com.dennisjauernig.flashcards.model.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,17 +69,4 @@ public class GamesService {
              .playerList( updatedPlayerList )
              .build();
  }
-
- public Game start ( Game game ) {
-  return game.toBuilder()
-             .status( GameStatus.PLAY )
-             .build();
- }
-
- public Game finish ( Game game ) {
-  return game.toBuilder()
-             .status( GameStatus.FINISH )
-             .build();
- }
-
 }

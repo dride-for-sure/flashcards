@@ -1,7 +1,8 @@
-package com.dennisjauernig.flashcards.service;
+package com.dennisjauernig.flashcards.controller.service;
 
 import com.dennisjauernig.flashcards.db.GamesDb;
 import com.dennisjauernig.flashcards.model.Game;
+import com.dennisjauernig.flashcards.service.MessagingService;
 import org.springframework.stereotype.Service;
 
 @Service
