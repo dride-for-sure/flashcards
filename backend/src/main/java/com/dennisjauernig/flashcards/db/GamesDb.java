@@ -25,14 +25,21 @@ public class GamesDb {
  }
 
  public Game updateGame ( Game gameToUpdate ) {
-  this.gamesDb = this.gamesDb.stream()
-                             .map( game -> game.getId().equals( gameToUpdate.getId() )
-                                     ? gameToUpdate : game )
-                             .collect( Collectors.toList() );
+  gamesDb = gamesDb.stream()
+                   .map( game -> game.getId().equals( gameToUpdate.getId() )
+                           ? gameToUpdate : game )
+                   .collect( Collectors.toList() );
   return gameToUpdate;
  }
 
  public List<Game> listGames () {
+  return gamesDb;
+ }
+
+ public List<Game> deleteGame ( String gameId ) {
+  gamesDb = gamesDb.stream()
+                   .filter( game -> !game.getId().equals( gameId ) )
+                   .collect( Collectors.toList() );
   return gamesDb;
  }
 }
