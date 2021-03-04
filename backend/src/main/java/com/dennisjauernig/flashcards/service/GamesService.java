@@ -1,5 +1,6 @@
 package com.dennisjauernig.flashcards.service;
 
+import com.dennisjauernig.flashcards.controller.model.GameDetailsDto;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
@@ -54,7 +55,7 @@ public class GamesService {
              .build();
  }
 
- public GameDto getPlayerDto ( Game game, String playerId ) {
+ public GameDetailsDto convertGameToDetailsDto ( Game game, String playerId ) {
   List<QuestionDto> questionDtoList =
           game.getPlayerList()
               .stream()
@@ -62,17 +63,17 @@ public class GamesService {
               .findFirst()
               .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId + " does not exists" ) )
               .getQuestionDtoList();
-  return GameDto.builder()
-                .id( game.getId() )
-                .difficulty( game.getDifficulty() )
-                .status( game.getStatus() )
-                .master( game.getMaster() )
-                .playerDtoList( game.getPlayerList()
-                                    .stream()
-                                    .map( player -> player.convertToDto() )
-                                    .collect( Collectors.toList() ) )
-                .questionDtoList( questionsService.selectNextQuestion( questionDtoList ) )
-                .build();
+  return GameDetailsDto.builder()
+                       .id( game.getId() )
+                       .difficulty( game.getDifficulty() )
+                       .status( game.getStatus() )
+                       .master( game.getMaster() )
+                       .playerDtoList( game.getPlayerList()
+                                           .stream()
+                                           .map( player -> player.convertToDto() )
+                                           .collect( Collectors.toList() ) )
+                       .questionDtoList( questionsService.selectNextQuestion( questionDtoList ) )
+                       .build();
  }
 
  public GameDto convertGameToDto ( Game game ) {

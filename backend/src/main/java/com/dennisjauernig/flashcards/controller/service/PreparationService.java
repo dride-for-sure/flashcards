@@ -47,6 +47,7 @@ public class PreparationService {
   Game newGame;
   if ( game.isEmpty() ) {
    newGame = gamesDb.save( gamesService.generateNewGame( gameId, difficulty, playerDto ) );
+
   } else {
    Player playerToAdd = playerService.generateNewPlayer( playerDto, game.get().getQuestionList() );
    newGame = gamesDb.save( gamesService.addPlayerToGame( game.get(), playerToAdd ) );
@@ -58,7 +59,7 @@ public class PreparationService {
  private GameDto handleGameConversion ( PlayerDto playerDto, Game game ) {
   return game.getStatus().equals( GameStatus.PREPARE )
           ? gamesService.convertGameToDto( game )
-          : gamesService.getPlayerDto( game, playerDto.getId() );
+          : gamesService.convertGameToDetailsDto( game, playerDto.getId() );
  }
 }
 

@@ -33,7 +33,7 @@ public class MessagingService {
   for ( Player player : game.getPlayerList() ) {
    String url = "/topic/games/"
            + game.getDifficulty().toString() + "/" + game.getId() + "/" + player.getId();
-   simpMessagingTemplate.convertAndSend( url, gamesService.getPlayerDto( game, player.getId() ) );
+   simpMessagingTemplate.convertAndSend( url, gamesService.convertGameToDetailsDto( game, player.getId() ) );
    System.out.println( "Send updates to player" );
   }
  }
