@@ -1,8 +1,8 @@
 package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.controller.model.AnswerDto;
-import com.dennisjauernig.flashcards.controller.model.GameDetailsDto;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
@@ -44,18 +44,22 @@ public class SocketService {
  // Player opens new game
  public GameDto openGame ( Principal principal, String playerName, Difficulty difficulty ) {
   Game game = gamesService.generateNewGame( principal, playerName, difficulty );
-  return gamesService.convertGameToDto( gamesDb.save( game ) );
+  return gamesService.getGameAsDto( gamesDb.save( game ) );
  }
 
  // Player enters existing game
  public Optional<GameDto> joinGame ( Principal principal, String playerName, String gameId ) {
   Optional<Game> game = gamesDb.findById( gameId );
   if ( game.isPresent() ) {
-   boolean playerExists = gamesService.isPlayerExists( principal, game.get() );
+   boolean playerExists = gamesService.isPlayerWithinGame( principal, game.get() );
 
    if ( playerExists && !game.get().getStatus().equals( GameStatus.PREPARE ) ) {
-    GameDetailsDto gameDetailsDto = gamesService.convertGameToDetailsDto( game.get(), principal );
-    messagingService.sendToPlayer( principal, gameDetailsDto );
+    List<QuestionDto> questionListDto = gamesService.getQuestionListDto( game.get(), principal );
+    messagingService.sendToPlayer( principal, questionListDto );
+    return Optional.of( gamesService.getGameAsDto( game.get() ) );
+
+   } else if ( playerExists && game.get().getStatus().equals( GameStatus.PREPARE ) ) {
+    return Optional.of( gamesService.getGameAsDto( game.get() ) );
 
    } else {
     Player player = playerService.generateNewPlayer( principal, playerName,
@@ -63,7 +67,7 @@ public class SocketService {
     Game updatedGame = gamesService.addPlayerToGame( game.get(), player );
     gamesDb.save( updatedGame );
     sendToAllPlayers( updatedGame );
-    return Optional.of( gamesService.convertGameToDto( updatedGame ) );
+    return Optional.of( gamesService.getGameAsDto( updatedGame ) );
    }
   }
   return Optional.empty();
@@ -76,7 +80,7 @@ public class SocketService {
          AnswerDto answerDto ) {
   Optional<Game> game = gamesDb.findById( gameId );
 
-  if ( game.isPresent() && gamesService.isPlayerExists( principal, game.get() ) ) {
+  if ( game.isPresent() && gamesService.isPlayerWithinGame( principal, game.get() ) ) {
    Game updatedGame = answerService.updateGame( principal, game.get(), answerDto );
    gamesDb.save( updatedGame );
    sendToAllPlayers( updatedGame );
@@ -85,8 +89,8 @@ public class SocketService {
 
  private void sendToAllPlayers ( Game game ) {
   for ( Player player : game.getPlayerList() ) {
-   GameDetailsDto gameDetailsDto = gamesService.convertGameToDetailsDto( game, player.getId() );
-   messagingService.sendToPlayer( player.getId(), gameDetailsDto );
+   List<QuestionDto> questionDtoList = gamesService.getQuestionListDto( game, player.getId() );
+   messagingService.sendToPlayer( player.getId(), questionDtoList );
   }
  }
 }

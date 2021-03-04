@@ -1,6 +1,5 @@
 package com.dennisjauernig.flashcards.service;
 
-import com.dennisjauernig.flashcards.controller.model.GameDetailsDto;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.Game;
@@ -38,7 +37,7 @@ public class GamesService {
 
  public List<GameDto> listOpenGames () {
   return gamesDb.findAllByStatusIs( GameStatus.PREPARE ).stream()
-                .map( game -> convertGameToDto( game ) )
+                .map( game -> getGameAsDto( game ) )
                 .collect( Collectors.toList() );
  }
 
@@ -61,7 +60,7 @@ public class GamesService {
              .build();
  }
 
- public GameDetailsDto convertGameToDetailsDto ( Game game, Principal principal ) {
+ public List<QuestionDto> getQuestionListDto ( Game game, Principal principal ) {
   List<QuestionDto> questionDtoList =
           game.getPlayerList()
               .stream()
@@ -70,20 +69,10 @@ public class GamesService {
               .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + principal + " does not " +
                       "exists" ) )
               .getQuestionDtoList();
-  return GameDetailsDto.builder()
-                       .id( game.getId() )
-                       .difficulty( game.getDifficulty() )
-                       .status( game.getStatus() )
-                       .master( game.getMaster() )
-                       .playerDtoList( game.getPlayerList()
-                                           .stream()
-                                           .map( player -> playerService.convertToDto( player ) )
-                                           .collect( Collectors.toList() ) )
-                       .questionDtoList( questionsService.selectNextQuestion( questionDtoList ) )
-                       .build();
+  return questionsService.selectNextQuestion( questionDtoList );
  }
 
- public GameDto convertGameToDto ( Game game ) {
+ public GameDto getGameAsDto ( Game game ) {
   return GameDto.builder()
                 .id( game.getId() )
                 .difficulty( game.getDifficulty() )
@@ -111,13 +100,13 @@ public class GamesService {
              .build();
  }
 
- public Game setStatusToFinish ( Game game ) {
+ public Game setGameStatusToFinish ( Game game ) {
   return game.toBuilder()
              .status( GameStatus.FINISH )
              .build();
  }
 
- public boolean isPlayerExists ( Principal principal, Game game ) {
+ public boolean isPlayerWithinGame ( Principal principal, Game game ) {
   return game.getPlayerList().stream()
              .anyMatch( player -> player.getId().equals( principal ) );
  }

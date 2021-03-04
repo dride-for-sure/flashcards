@@ -81,6 +81,6 @@ public class AnswerService {
                                                .equals( QuestionStatus.SOLVED ) ) )
               .filter( aBoolean -> aBoolean )
               .findFirst();
-  return finished.isPresent() ? gamesService.setStatusToFinish( game ) : game;
+  return finished.isPresent() ? gamesService.setGameStatusToFinish( game ) : game;
  }
 }
