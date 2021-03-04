@@ -2,69 +2,63 @@ package com.dennisjauernig.flashcards.controller.service;
 
 import com.dennisjauernig.flashcards.controller.model.GameDto;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
-import com.dennisjauernig.flashcards.db.GamesDb;
 import com.dennisjauernig.flashcards.model.Difficulty;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.GameStatus;
 import com.dennisjauernig.flashcards.model.Player;
+import com.dennisjauernig.flashcards.repository.GamesDb;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
-import com.dennisjauernig.flashcards.service.BuilderService;
+import com.dennisjauernig.flashcards.service.GamesService;
 import com.dennisjauernig.flashcards.service.MessagingService;
+import com.dennisjauernig.flashcards.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PreparationService {
 
  public final QuestionDb questionDb;
  private final GamesDb gamesDb;
+ private final GamesService gamesService;
+ private final PlayerService playerService;
  private final MessagingService messagingService;
- private final BuilderService builderService;
 
  @Autowired
  public PreparationService (
          GamesDb gamesDb,
          QuestionDb questionDb,
-         MessagingService messagingService,
-         BuilderService builderService ) {
+         GamesService gamesService,
+         PlayerService playerService,
+         MessagingService messagingService ) {
   this.gamesDb = gamesDb;
   this.questionDb = questionDb;
+  this.gamesService = gamesService;
+  this.playerService = playerService;
   this.messagingService = messagingService;
-  this.builderService = builderService;
  }
 
  public GameDto prepareGame (
          PlayerDto playerDto,
          String gameId,
          Difficulty difficulty ) {
-  Optional<Game> game = gamesDb.getGame( gameId );
+  Optional<Game> game = gamesDb.findById( gameId );
   Game newGame;
   if ( game.isEmpty() ) {
-   newGame = gamesDb.addGame( builderService.gameBuilder( gameId, difficulty, playerDto ) );
+   newGame = gamesDb.save( gamesService.generateNewGame( gameId, difficulty, playerDto ) );
   } else {
-   Player playerToAdd = builderService.playerBuilder( playerDto, game.get().getQuestionList() );
-   newGame = gamesDb.updateGame( game.get().addPlayer( playerToAdd ) );
+   Player playerToAdd = playerService.generateNewPlayer( playerDto, game.get().getQuestionList() );
+   newGame = gamesDb.save( gamesService.addPlayerToGame( game.get(), playerToAdd ) );
   }
-  messagingService.broadcastOpenGames( getOpenGames() );
+  messagingService.broadcastOpenGames( gamesService.listOpenGames() );
   return handleGameConversion( playerDto, newGame );
  }
 
- private GameDto handleGameConversion ( PlayerDto playerDto, Game newGame ) {
-  return newGame.getStatus().equals( GameStatus.PREPARE )
-          ? newGame.convertToDto()
-          : newGame.convertToPlayerDto( playerDto.getId() );
- }
-
- private List<GameDto> getOpenGames () {
-  return gamesDb.listGames()
-                .stream()
-                .filter( game -> game.getStatus().equals( GameStatus.PREPARE ) )
-                .map( openGame -> openGame.convertToDto() )
-                .collect( Collectors.toList() );
+ private GameDto handleGameConversion ( PlayerDto playerDto, Game game ) {
+  return game.getStatus().equals( GameStatus.PREPARE )
+          ? gamesService.convertGameToDto( game )
+          : gamesService.getPlayerDto( game, playerDto.getId() );
  }
 }
 

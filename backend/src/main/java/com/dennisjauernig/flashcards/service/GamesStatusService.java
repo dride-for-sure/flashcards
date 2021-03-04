@@ -2,8 +2,10 @@ package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.GameStatus;
+import org.springframework.stereotype.Service;
 
-public class GameStatusService {
+@Service
+public class GamesStatusService {
 
  public Game start ( Game game ) {
   return game.toBuilder()

@@ -1,13 +1,15 @@
 package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.controller.model.PlayerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
-import com.dennisjauernig.flashcards.model.Game;
-import com.dennisjauernig.flashcards.model.Player;
+import com.dennisjauernig.flashcards.model.*;
+import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,10 +17,41 @@ import java.util.stream.Collectors;
 public class GamesService {
 
  private final QuestionsService questionsService;
+ private final PlayerService playerService;
+ private final GamesDb gamesDb;
 
  @Autowired
- public GamesService ( QuestionsService questionsService ) {
+ public GamesService (
+         QuestionsService questionsService, PlayerService playerService,
+         GamesDb gamesDb ) {
   this.questionsService = questionsService;
+  this.playerService = playerService;
+  this.gamesDb = gamesDb;
+ }
+
+ public List<GameDto> listOpenGames () {
+  return gamesDb.findAllByStatusIs( GameStatus.PREPARE ).stream()
+                .map( game -> convertGameToDto( game ) )
+                .collect( Collectors.toList() );
+ }
+
+ public Game generateNewGame (
+         String gameId,
+         Difficulty difficulty,
+         PlayerDto playerDto ) {
+  List<Question> questionsList = questionsService.generateQuestionList( difficulty );
+  Player player = playerService.generateNewPlayer( playerDto, questionsList );
+  return Game.builder()
+             .id( gameId )
+             .difficulty( difficulty )
+             .status( GameStatus.PREPARE )
+             .master( GameMaster.builder()
+                                .id( playerDto.getId() )
+                                .name( playerDto.getName() )
+                                .build() )
+             .playerList( new ArrayList<>( Collections.singletonList( player ) ) )
+             .questionList( questionsList )
+             .build();
  }
 
  public GameDto getPlayerDto ( Game game, String playerId ) {

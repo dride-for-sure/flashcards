@@ -2,9 +2,10 @@ package com.dennisjauernig.flashcards.controller.service;
 
 import com.dennisjauernig.flashcards.controller.model.AnswerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
-import com.dennisjauernig.flashcards.db.GamesDb;
 import com.dennisjauernig.flashcards.model.*;
+import com.dennisjauernig.flashcards.repository.GamesDb;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
+import com.dennisjauernig.flashcards.service.GamesStatusService;
 import com.dennisjauernig.flashcards.service.MessagingService;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +17,22 @@ public class AnswerService {
 
  private final GamesDb gamesDb;
  private final QuestionDb questionDb;
+ private final GamesStatusService gamesStatusService;
  private final MessagingService messagingService;
 
  public AnswerService (
          GamesDb gamesDb,
          QuestionDb questionDb,
+         GamesStatusService gamesStatusService,
          MessagingService messagingService ) {
   this.gamesDb = gamesDb;
   this.questionDb = questionDb;
+  this.gamesStatusService = gamesStatusService;
   this.messagingService = messagingService;
  }
 
  public void updateGame ( String gameId, String playerId, AnswerDto answerDto ) {
-  Optional<Game> gameToUpdate = gamesDb.getGame( gameId );
+  Optional<Game> gameToUpdate = gamesDb.findById( gameId );
   if ( gameToUpdate.isPresent() ) {
    Game updatedGame =
            gameToUpdate.get()
@@ -42,7 +46,7 @@ public class AnswerService {
                                                    : player )
                                            .collect( Collectors.toList() ) )
                        .build();
-   messagingService.broadcastGameUpdatesToPlayer( gamesDb.updateGame( hasPlayerFinished( updatedGame ) ) );
+   messagingService.broadcastGameUpdatesToPlayer( gamesDb.save( hasPlayerFinished( updatedGame ) ) );
   }
  }
 
@@ -90,6 +94,6 @@ public class AnswerService {
                                                .equals( QuestionStatus.SOLVED ) ) )
               .filter( aBoolean -> aBoolean )
               .findFirst();
-  return finished.isPresent() ? game.finish() : game;
+  return finished.isPresent() ? gamesStatusService.finish( game ) : game;
  }
 }

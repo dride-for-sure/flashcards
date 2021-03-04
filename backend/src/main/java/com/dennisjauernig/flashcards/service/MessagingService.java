@@ -13,10 +13,14 @@ import java.util.List;
 public class MessagingService {
 
  private final SimpMessagingTemplate simpMessagingTemplate;
+ private final GamesService gamesService;
 
  @Autowired
- public MessagingService ( SimpMessagingTemplate simpMessagingTemplate ) {
+ public MessagingService (
+         SimpMessagingTemplate simpMessagingTemplate,
+         GamesService gamesService ) {
   this.simpMessagingTemplate = simpMessagingTemplate;
+  this.gamesService = gamesService;
  }
 
  public void broadcastOpenGames ( List<GameDto> openGames ) {
@@ -27,10 +31,9 @@ public class MessagingService {
  public void broadcastGameUpdatesToPlayer ( Game game ) {
 
   for ( Player player : game.getPlayerList() ) {
-   String url = "/topic/games/" + game.getDifficulty()
-                                      .toString() + "/" + game.getId() + "/" + player.getId();
-   simpMessagingTemplate.convertAndSend( url,
-           game.convertToPlayerDto( player.getId() ) );
+   String url = "/topic/games/"
+           + game.getDifficulty().toString() + "/" + game.getId() + "/" + player.getId();
+   simpMessagingTemplate.convertAndSend( url, gamesService.getPlayerDto( game, player.getId() ) );
    System.out.println( "Send updates to player" );
   }
  }

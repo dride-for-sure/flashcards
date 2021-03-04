@@ -49,8 +49,6 @@ public class SocketController {
          @Header ( "simpSessionId" ) String sessionId,
          @DestinationVariable String difficulty,
          @DestinationVariable String gameId, PlayerDto playerDto ) {
-  System.out.println( "Prepare Game" );
-  System.out.println( sessionId );
   return preparationService.prepareGame( playerDto, gameId,
           Difficulty.valueOf( difficulty.toUpperCase() ) );
  }
