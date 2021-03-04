@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GameDto {
+public class GameDetailsDto {
 
  private String id;
  private Difficulty difficulty;
@@ -24,4 +24,7 @@ public class GameDto {
 
  @JsonProperty ( "playerList" )
  private List<PlayerDto> playerDtoList;
+
+ @JsonProperty ( "questionList" )
+ private List<QuestionDto> questionDtoList;
 }
