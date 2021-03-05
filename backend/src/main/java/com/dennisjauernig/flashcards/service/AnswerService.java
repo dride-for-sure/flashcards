@@ -46,6 +46,7 @@ public class AnswerService {
           player.getQuestionDtoList()
                 .stream()
                 .map( questionDto -> questionDto.getId().equals( answerDto.getId() )
+                        && !questionDto.getStatus().equals( QuestionStatus.SOLVED )
                         ? questionDto.toBuilder()
                                      .status( QuestionStatus.SOLVED )
                                      .points( calcQuestionPoints( questionDto, answerDto ) )

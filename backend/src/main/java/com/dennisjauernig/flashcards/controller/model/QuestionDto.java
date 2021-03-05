@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.util.List;
 @Builder ( toBuilder = true )
 public class QuestionDto {
 
- private String id;
+ private UUID id;
  private QuestionStatus status;
  private Difficulty difficulty;
  private String category;
