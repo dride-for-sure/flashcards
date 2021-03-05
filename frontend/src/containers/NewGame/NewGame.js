@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import SockJsClient from 'react-stomp';
 import { validate as uuidValidate } from 'uuid';
 import ScoreBar from '../../components/Charts/ScoreBar/ScoreBar';
 import Charts from '../../components/Charts/styles';
 import GameMaster from '../../components/Tiles/GameMaster/GameMaster';
 import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
+import { useGameSocket } from '../../contexts/gameSocket';
 import { usePlayerDetails } from '../../contexts/playerDetails';
 import { newGame, startGame } from '../../services/APIService';
 
 export default function NewGame() {
-  const [game, setGame] = useState();
   const [playerDetails] = usePlayerDetails();
+  const [game, setGame] = useGameSocket();
   const { difficulty } = useParams();
   const history = useHistory();
 
@@ -53,11 +53,6 @@ export default function NewGame() {
 
   return (
     <>
-      <SockJsClient
-        url="/ws"
-        topics={[`/topic/game/${game.id}`]}
-        onMessage={setGame}
-        debug />
       <Logo />
       <GameMaster onGameStart={handleGameStart} />
       <Charts>

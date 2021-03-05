@@ -14,10 +14,6 @@ export default function Lobby() {
   const [playerDetails] = usePlayerDetails();
   const history = useHistory();
 
-  const handleOpenNewGame = (difficulty) => {
-    history.push(`/game/${difficulty}`);
-  };
-
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
       history.push('/');
@@ -26,6 +22,10 @@ export default function Lobby() {
       .then(setGames)
       .catch((error) => console.error(error));
   }, []);
+
+  const handleOpenNewGame = (difficulty) => {
+    history.push(`/game/${difficulty}`);
+  };
 
   return (
     <>
