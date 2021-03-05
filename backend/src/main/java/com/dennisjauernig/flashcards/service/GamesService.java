@@ -88,7 +88,7 @@ public class GamesService {
                 .master( game.getMaster() )
                 .playerDtoList( game.getPlayerList()
                                     .stream()
-                                    .map( player -> playerService.convertToDto( player ) )
+                                    .map( player -> playerService.convertPlayerToDto( player ) )
                                     .collect( Collectors.toList() ) )
                 .build();
  }
