@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder ( toBuilder = true )
 public class Player {
 
- private Principal id;
+ private UUID id;
  private String name;
  private List<QuestionDto> questionDtoList;
 }

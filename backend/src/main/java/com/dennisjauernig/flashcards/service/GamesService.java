@@ -1,6 +1,8 @@
 package com.dennisjauernig.flashcards.service;
 
+import com.dennisjauernig.flashcards.config.GameConfig;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.controller.model.PlayerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.GameMaster;
@@ -12,7 +14,6 @@ import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,54 +26,61 @@ public class GamesService {
  private final QuestionsService questionsService;
  private final PlayerService playerService;
  private final GamesDb gamesDb;
+ private final GameConfig gameConfig;
+ private final GamesService gamesService;
 
  @Autowired
  public GamesService (
          QuestionsService questionsService, PlayerService playerService,
-         GamesDb gamesDb ) {
+         GamesDb gamesDb, GameConfig gameConfig, GamesService gamesService ) {
   this.questionsService = questionsService;
   this.playerService = playerService;
   this.gamesDb = gamesDb;
+  this.gameConfig = gameConfig;
+  this.gamesService = gamesService;
  }
 
- public List<GameDto> listOpenGames () {
+ // √ List all games with status PREPARE
+ public List<GameDto> listAvailableGames () {
   return gamesDb.findAllByStatusIs( GameStatus.PREPARE ).stream()
-                .map( game -> getGameAsDto( game ) )
+                .map( game -> convertGameToDto( game ) )
                 .collect( Collectors.toList() );
  }
 
+ // √ Generate a new game with a specific gameMaster
  public Game generateNewGame (
-         Principal principal,
-         String playerName,
+         PlayerDto playerDto,
          Difficulty difficulty ) {
   List<Question> questionsList = questionsService.generateQuestionList( difficulty );
-  Player player = playerService.generateNewPlayer( principal, playerName, questionsList );
+  Player player = playerService.generateNewPlayer( playerDto, questionsList );
   return Game.builder()
-             .id( UUID.randomUUID().toString() )
+             .id( playerDto.getId() )
              .difficulty( difficulty )
              .status( GameStatus.PREPARE )
              .master( GameMaster.builder()
-                                .id( principal )
-                                .name( playerName )
+                                .id( playerDto.getId() )
+                                .name( playerDto.getName() )
                                 .build() )
              .playerList( new ArrayList<>( Collections.singletonList( player ) ) )
              .questionList( questionsList )
              .build();
  }
 
- public List<QuestionDto> getQuestionListDto ( Game game, Principal principal ) {
+ // √ Get the QuestionList as Dto from existing game
+ public List<QuestionDto> getQuestionListDto ( Game game, UUID playerId ) {
   List<QuestionDto> questionDtoList =
           game.getPlayerList()
               .stream()
-              .filter( targetPlayer -> targetPlayer.getId().equals( principal ) )
+              .filter( targetPlayer -> targetPlayer.getId().equals( playerId ) )
               .findFirst()
-              .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + principal + " does not " +
-                      "exists" ) )
+              .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId +
+                      " does not exists" ) )
               .getQuestionDtoList();
-  return questionsService.selectNextQuestion( questionDtoList );
+  return questionsService.selectNextQuestionFromList( questionDtoList );
  }
 
- public GameDto getGameAsDto ( Game game ) {
+ // √ Convert the game to a game dto
+ public GameDto convertGameToDto ( Game game ) {
   return GameDto.builder()
                 .id( game.getId() )
                 .difficulty( game.getDifficulty() )
@@ -85,29 +93,47 @@ public class GamesService {
                 .build();
  }
 
- public Game addPlayerToGame ( Game game, Player playerToAdd ) {
-  boolean playerExists = game.getPlayerList()
-                             .stream()
-                             .anyMatch( player -> player.getId().equals( playerToAdd.getId() ) );
+ // √ Add a player to an existing game
+ public Game addPlayerToGame ( Game game, Player player ) {
+  boolean playerExists = gamesService.isPlayerWithinExistingGame( player.getId(), game );
   if ( playerExists ) {
    return game.toBuilder().build();
   }
 
   List<Player> updatedPlayerList = new ArrayList<>( game.getPlayerList() );
-  updatedPlayerList.add( playerToAdd );
+  updatedPlayerList.add( player );
   return game.toBuilder()
              .playerList( updatedPlayerList )
              .build();
  }
 
+ // √ Set game status to FINISH
  public Game setGameStatusToFinish ( Game game ) {
   return game.toBuilder()
              .status( GameStatus.FINISH )
              .build();
  }
 
- public boolean isPlayerWithinGame ( Principal principal, Game game ) {
+ // √ Set game status to PLAY
+ public Game setGameStatusToPlay ( Game game ) {
+  return game.toBuilder()
+             .status( GameStatus.PLAY )
+             .build();
+ }
+
+ // √ Find player within an existing game
+ public boolean isPlayerWithinExistingGame ( UUID playerId, Game game ) {
   return game.getPlayerList().stream()
-             .anyMatch( player -> player.getId().equals( principal ) );
+             .anyMatch( player -> player.getId().equals( playerId ) );
+ }
+
+ // √ Check if another open game is allowed
+ public boolean isMaxOpenGames () {
+  return gamesDb.findAll().size() <= gameConfig.getMaxOpenGames();
+ }
+
+ // √ Check if a specific player is gameMaster for a given game
+ public boolean isGameMaster ( Game game, UUID playerId ) {
+  return game.getMaster().getId().equals( playerId );
  }
 }

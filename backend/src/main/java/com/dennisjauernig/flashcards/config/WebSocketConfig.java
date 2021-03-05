@@ -1,6 +1,5 @@
 package com.dennisjauernig.flashcards.config;
 
-import com.dennisjauernig.flashcards.handler.HandshakeHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -14,17 +13,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
  @Override
  public void configureMessageBroker ( MessageBrokerRegistry registry ) {
   registry.enableSimpleBroker( "/topic" );
-  registry.setApplicationDestinationPrefixes( "/app" );
-  registry.setUserDestinationPrefix( "/user" );
+  registry.setApplicationDestinationPrefixes( "/topic" );
  }
 
  @Override
  public void registerStompEndpoints ( StompEndpointRegistry registry ) {
-  registry.addEndpoint( "/ws" )
-          .setHandshakeHandler( new HandshakeHandler() );
+  registry.addEndpoint( "/ws" );
 
-  registry.addEndpoint( "/ws" )
-          .setHandshakeHandler( new HandshakeHandler() )
-          .withSockJS();
+  registry.addEndpoint( "/ws" ).withSockJS();
  }
 }

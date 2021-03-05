@@ -6,7 +6,6 @@ import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.Question;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,17 +18,15 @@ public class PlayerService {
   this.questionsService = questionsService;
  }
 
- public Player generateNewPlayer (
-         Principal principal,
-         String playerName,
-         List<Question> questionsList ) {
+ // √ Generate a new player with his own questionList
+ public Player generateNewPlayer ( PlayerDto playerDto, List<Question> questionsList ) {
   List<QuestionDto> questionDtoList =
           questionsList.stream()
-                       .map( question -> questionsService.getInitialQuestionDto( question ) )
+                       .map( question -> questionsService.convertQuestionToDto( question ) )
                        .collect( Collectors.toList() );
   return Player.builder()
-               .id( principal )
-               .name( playerName )
+               .id( playerDto.getId() )
+               .name( playerDto.getName() )
                .questionDtoList( questionDtoList )
                .build();
  }
@@ -46,5 +43,4 @@ public class PlayerService {
                         .map( questionDto -> questionDto.getPoints() )
                         .reduce( 0, Integer::sum );
  }
-
 }

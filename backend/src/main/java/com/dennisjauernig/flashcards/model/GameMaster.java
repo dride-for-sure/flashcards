@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.security.Principal;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +13,6 @@ import java.security.Principal;
 @Builder
 public class GameMaster {
 
- private Principal id;
+ private UUID id;
  private String name;
 }

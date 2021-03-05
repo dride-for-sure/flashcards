@@ -9,8 +9,8 @@ import com.dennisjauernig.flashcards.model.enums.Solution;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,12 +26,13 @@ public class AnswerService {
   this.gamesService = gamesService;
  }
 
- public Game updateGame ( Principal principal, Game game, AnswerDto answerDto ) {
+ // √ Update game with an received answer
+ public Game updateGameWithReceivedAnswer ( UUID playerId, Game game, AnswerDto answerDto ) {
   Game updatedGame = game.toBuilder()
                          .playerList(
                                  game.getPlayerList()
                                      .stream()
-                                     .map( player -> player.getId().equals( principal )
+                                     .map( player -> player.getId().equals( playerId )
                                              ? updatePlayerAnswers( player, answerDto )
                                              : player )
                                      .collect( Collectors.toList() ) )
@@ -39,6 +40,7 @@ public class AnswerService {
   return hasPlayerFinished( updatedGame );
  }
 
+ // √ Update the specific players questionList
  private Player updatePlayerAnswers ( Player player, AnswerDto answerDto ) {
   return player.toBuilder().questionDtoList(
           player.getQuestionDtoList()
@@ -53,6 +55,7 @@ public class AnswerService {
                .build();
  }
 
+ // √ Calculate points for a given answer
  private int calcQuestionPoints ( QuestionDto questionDto, AnswerDto answerDto ) {
   Solution solution =
           questionDb.findById( answerDto.getId() )
@@ -68,7 +71,7 @@ public class AnswerService {
   return 0;
  }
 
-
+ // √ Check if player has answered all questions
  private Game hasPlayerFinished ( Game game ) {
   Optional<Boolean> finished =
           game.getPlayerList()

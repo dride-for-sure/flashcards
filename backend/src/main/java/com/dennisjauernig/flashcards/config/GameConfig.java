@@ -8,5 +8,6 @@ import org.springframework.context.annotation.Configuration;
 public class GameConfig {
 
  private final int maxQuestions = 25;
+ private final int maxOpenGames = 20;
 
 }

@@ -23,7 +23,8 @@ public class QuestionsService {
   this.questionDb = questionDb;
  }
 
- public QuestionDto getInitialQuestionDto ( Question question ) {
+ // √
+ public QuestionDto convertQuestionToDto ( Question question ) {
   return QuestionDto.builder()
                     .id( question.getId() )
                     .status( QuestionStatus.NONE )
@@ -34,7 +35,7 @@ public class QuestionsService {
                     .build();
  }
 
- public List<QuestionDto> selectNextQuestion ( List<QuestionDto> questionDtoList ) {
+ public List<QuestionDto> selectNextQuestionFromList ( List<QuestionDto> questionDtoList ) {
   List<QuestionDto> questionListStatusNONE = questionDtoList
           .stream()
           .filter( questionDto -> questionDto.getStatus().equals( QuestionStatus.NONE ) )
@@ -60,11 +61,13 @@ public class QuestionsService {
   return questionDtoList;
  }
 
+ // √
  public List<Question> generateQuestionList ( Difficulty difficulty ) {
-  return chooseQuestions( filterQuestionsByDifficulty( difficulty ) );
+  return selectRandomQuestionsFromList( filterQuestionsByDifficulty( difficulty ) );
  }
 
- private List<Question> chooseQuestions ( List<Question> questionsList ) {
+ // √
+ private List<Question> selectRandomQuestionsFromList ( List<Question> questionsList ) {
   List<Question> chosenQuestions = new ArrayList<>();
   do {
    Question possibleQuestion = questionsList.get( ( int ) ( Math.random() * questionsList.size() ) );
@@ -76,7 +79,7 @@ public class QuestionsService {
   return chosenQuestions;
  }
 
-
+ // √
  private List<Question> filterQuestionsByDifficulty ( Difficulty difficulty ) {
   return questionDb.findAll().stream().filter( question -> {
    if ( difficulty.equals( Difficulty.EASY ) ) {
