@@ -7,7 +7,7 @@ export default function OpenGame({ game }) {
     <Container background={game.difficulty}>
       <span>{game.icon}</span>
       <h1>{game.master.name}</h1>
-      <Link to={`/games/${game.difficulty}/${game.id}`}>⚔️</Link>
+      <Link to={`/game/${game.difficulty}/${game.id}`}>⚔️</Link>
     </Container>
   );
 }
