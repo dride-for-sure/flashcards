@@ -3,11 +3,14 @@ package com.dennisjauernig.flashcards.controller;
 import com.dennisjauernig.flashcards.controller.model.AnswerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.service.HandleService;
+import com.dennisjauernig.flashcards.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,11 +21,23 @@ import java.util.UUID;
 public class SocketController {
 
  private final HandleService handleService;
+ private final SessionService sessionService;
 
  @Autowired
  public SocketController (
-         HandleService handleService ) {
+         HandleService handleService,
+         SessionService sessionService ) {
   this.handleService = handleService;
+  this.sessionService = sessionService;
+ }
+
+ // √ Watch player connection status
+ @SubscribeMapping ( "/user/{gameId}" )
+ public void registerNewPlayer (
+         @Header ( "simpSessionId" ) String sessionId,
+         @DestinationVariable UUID gameId ) {
+  System.out.println( "(SubscribeMapping) connect: " + sessionId );
+  sessionService.registerNewPLayer( sessionId, gameId );
  }
 
  // √ Receive answers

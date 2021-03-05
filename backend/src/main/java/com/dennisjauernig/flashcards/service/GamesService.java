@@ -14,6 +14,7 @@ import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,6 +54,7 @@ public class GamesService {
   Player player = playerService.generateNewPlayer( playerDto, questionsList );
   return Game.builder()
              .id( UUID.randomUUID() )
+             .timestamp( Instant.now().getEpochSecond() )
              .difficulty( difficulty )
              .status( GameStatus.PREPARE )
              .master( GameMaster.builder()

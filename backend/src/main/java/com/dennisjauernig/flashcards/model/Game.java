@@ -21,6 +21,7 @@ public class Game {
 
  @Id
  private UUID id;
+ private long timestamp;
  private Difficulty difficulty;
  private GameStatus status;
  private GameMaster master;
