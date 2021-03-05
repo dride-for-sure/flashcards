@@ -20,16 +20,24 @@ public class MessagingService {
   this.simpMessagingTemplate = simpMessagingTemplate;
  }
 
+ // √ Broadcast all open games to the lobby
+ public void broadcastGameDtoToLobby ( List<GameDto> gameDtoList ) {
+  System.out.println( "Broadcast gameDto to lobby" );
+  simpMessagingTemplate.convertAndSend( "/topic/games", gameDtoList );
+ }
+
  // √ Broadcast the gameDto to all player within this game
- public void broadcastGameDto ( GameDto gameDto ) {
+ public void broadcastGameDtoToPlayer ( GameDto gameDto ) {
+  System.out.println( "Broadcast gameDto to player" );
   simpMessagingTemplate.convertAndSend( "/topic/game/" + gameDto.getId(), gameDto );
  }
 
  // √ Broadcast the questionDtoList to a specific player
- public void broadcastQuestionDtoList (
+ public void broadcastQuestionDtoListToPlayer (
          UUID playerId,
          UUID gameId,
          List<QuestionDto> questionDtoList ) {
+  System.out.println( "Broadcast QuestionDtoList to player" );
   simpMessagingTemplate.convertAndSend( "/topic/user/" + gameId + "/" + playerId, questionDtoList );
  }
 }

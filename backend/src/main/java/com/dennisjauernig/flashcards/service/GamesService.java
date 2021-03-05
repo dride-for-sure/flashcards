@@ -27,17 +27,15 @@ public class GamesService {
  private final PlayerService playerService;
  private final GamesDb gamesDb;
  private final GameConfig gameConfig;
- private final GamesService gamesService;
 
  @Autowired
  public GamesService (
          QuestionsService questionsService, PlayerService playerService,
-         GamesDb gamesDb, GameConfig gameConfig, GamesService gamesService ) {
+         GamesDb gamesDb, GameConfig gameConfig ) {
   this.questionsService = questionsService;
   this.playerService = playerService;
   this.gamesDb = gamesDb;
   this.gameConfig = gameConfig;
-  this.gamesService = gamesService;
  }
 
  // √ List all games with status PREPARE
@@ -54,7 +52,7 @@ public class GamesService {
   List<Question> questionsList = questionsService.generateQuestionList( difficulty );
   Player player = playerService.generateNewPlayer( playerDto, questionsList );
   return Game.builder()
-             .id( playerDto.getId() )
+             .id( UUID.randomUUID() )
              .difficulty( difficulty )
              .status( GameStatus.PREPARE )
              .master( GameMaster.builder()
@@ -95,7 +93,7 @@ public class GamesService {
 
  // √ Add a player to an existing game
  public Game addPlayerToGame ( Game game, Player player ) {
-  boolean playerExists = gamesService.isPlayerWithinExistingGame( player.getId(), game );
+  boolean playerExists = isPlayerWithinExistingGame( player.getId(), game );
   if ( playerExists ) {
    return game.toBuilder().build();
   }
@@ -129,7 +127,7 @@ public class GamesService {
 
  // √ Check if another open game is allowed
  public boolean isMaxOpenGames () {
-  return gamesDb.findAll().size() <= gameConfig.getMaxOpenGames();
+  return gamesDb.findAll().size() > gameConfig.getMaxOpenGames();
  }
 
  // √ Check if a specific player is gameMaster for a given game

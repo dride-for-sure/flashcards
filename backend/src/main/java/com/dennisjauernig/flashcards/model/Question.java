@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ import java.util.List;
 public class Question {
 
  @Id
- private String id;
+ private UUID id;
  private Difficulty difficulty;
  private String category;
  private String question;

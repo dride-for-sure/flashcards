@@ -34,6 +34,7 @@ public class PlayerService {
  // √ Convert a given player to its dto
  public PlayerDto convertPlayerToDto ( Player player ) {
   return PlayerDto.builder()
+                  .id( player.getId() )
                   .name( player.getName() )
                   .score( getScoreFromQuestionList( player.getQuestionDtoList() ) )
                   .build();

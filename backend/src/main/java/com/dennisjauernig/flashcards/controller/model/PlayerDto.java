@@ -14,7 +14,6 @@ import java.util.UUID;
 public class PlayerDto {
 
  private UUID id;
- private UUID publicId;
  private String name;
  private int score;
 

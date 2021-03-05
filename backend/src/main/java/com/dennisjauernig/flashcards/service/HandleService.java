@@ -7,6 +7,7 @@ import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
+import com.dennisjauernig.flashcards.model.enums.GameStatus;
 import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +45,15 @@ public class HandleService {
  // √ Player opens new game
  public Optional<GameDto> newGame ( PlayerDto playerDto, Difficulty difficulty ) {
   if ( gamesService.isMaxOpenGames() ) {
+   System.out.println( "Max open games reached" );
    return Optional.empty();
   }
   Game game = gamesService.generateNewGame( playerDto, difficulty );
-  return Optional.of( gamesService.convertGameToDto( gamesDb.save( game ) ) );
+  gamesDb.save( game );
+  GameDto gameDto = gamesService.convertGameToDto( game );
+  messagingService.broadcastGameDtoToLobby( listAvailableGames() );
+  System.out.println( gameDto.getId() );
+  return Optional.of( gameDto );
  }
 
  // √ Player enters existing game
@@ -64,7 +70,7 @@ public class HandleService {
     Game updatedGame = gamesService.addPlayerToGame( game.get(), player );
     gamesDb.save( updatedGame );
     GameDto gameDto = gamesService.convertGameToDto( updatedGame );
-    messagingService.broadcastGameDto( gameDto );
+    messagingService.broadcastGameDtoToPlayer( gameDto );
     return Optional.of( gameDto );
    }
   }
@@ -78,7 +84,8 @@ public class HandleService {
    Game startedGame = gamesService.setGameStatusToPlay( game.get() );
    gamesDb.save( startedGame );
    GameDto gameDto = gamesService.convertGameToDto( startedGame );
-   messagingService.broadcastGameDto( gameDto );
+   messagingService.broadcastGameDtoToLobby( listAvailableGames() );
+   messagingService.broadcastGameDtoToPlayer( gameDto );
    broadcastQuestionDtoList( game.get() );
    return Optional.of( gameDto );
   }
@@ -88,24 +95,28 @@ public class HandleService {
  // √ Get the questionDtoList for a specific player and game
  public Optional<List<QuestionDto>> listGameQuestionDto ( UUID gameId, UUID playerId ) {
   Optional<Game> game = gamesDb.findById( gameId );
-  if ( game.isPresent() && gamesService.isPlayerWithinExistingGame( playerId, game.get() ) ) {
+  if ( game.isPresent()
+          && gamesService.isPlayerWithinExistingGame( playerId, game.get() )
+          && !game.get().getStatus().equals( GameStatus.PREPARE ) ) {
    return Optional.of( gamesService.getQuestionListDto( game.get(), playerId ) );
   }
   return Optional.empty();
  }
 
  // √ Answer received
- public Optional<GameDto> receiveAnswer (
+ public Optional<List<QuestionDto>> receiveAnswer (
          UUID gameId,
          UUID playerId,
          AnswerDto answerDto ) {
   Optional<Game> game = gamesDb.findById( gameId );
-  if ( game.isPresent() && gamesService.isPlayerWithinExistingGame( playerId, game.get() ) ) {
+  if ( game.isPresent()
+          && gamesService.isPlayerWithinExistingGame( playerId, game.get() ) ) {
    Game updatedGame = answerService.updateGameWithReceivedAnswer( playerId, game.get(), answerDto );
    gamesDb.save( updatedGame );
-   broadcastQuestionDtoList( updatedGame );
    GameDto gameDto = gamesService.convertGameToDto( updatedGame );
-   return Optional.of( gameDto );
+   messagingService.broadcastGameDtoToPlayer( gameDto );
+   List<QuestionDto> questionDtoList = gamesService.getQuestionListDto( updatedGame, playerId );
+   return Optional.of( questionDtoList );
   }
   return Optional.empty();
  }
@@ -114,7 +125,7 @@ public class HandleService {
  private void broadcastQuestionDtoList ( Game game ) {
   for ( Player player : game.getPlayerList() ) {
    List<QuestionDto> questionDtoList = gamesService.getQuestionListDto( game, player.getId() );
-   messagingService.broadcastQuestionDtoList( player.getId(), game.getId(), questionDtoList );
+   messagingService.broadcastQuestionDtoListToPlayer( player.getId(), game.getId(), questionDtoList );
   }
  }
 
