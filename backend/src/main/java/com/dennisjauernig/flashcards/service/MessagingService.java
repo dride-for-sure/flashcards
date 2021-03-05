@@ -1,13 +1,13 @@
 package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.controller.model.GameDto;
-import com.dennisjauernig.flashcards.model.Game;
-import com.dennisjauernig.flashcards.model.Player;
+import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MessagingService {
@@ -15,33 +15,21 @@ public class MessagingService {
  private final SimpMessagingTemplate simpMessagingTemplate;
 
  @Autowired
- public MessagingService ( SimpMessagingTemplate simpMessagingTemplate ) {
+ public MessagingService (
+         SimpMessagingTemplate simpMessagingTemplate ) {
   this.simpMessagingTemplate = simpMessagingTemplate;
  }
 
- public void broadcastOpenGames ( List<GameDto> openGames ) {
-  simpMessagingTemplate.convertAndSend( "/api/games", openGames );
+ // √ Broadcast the gameDto to all player within this game
+ public void broadcastGameDto ( GameDto gameDto ) {
+  simpMessagingTemplate.convertAndSend( "/topic/game/" + gameDto.getId(), gameDto );
  }
 
- public void broadcastGameUpdatesToPlayer ( Game game ) {
-
-  for ( Player player : game.getPlayerList() ) {
-   String url = "/topic/games/" + game.getDifficulty()
-                                      .toString() + "/" + game.getId() + "/" + player.getId();
-   simpMessagingTemplate.convertAndSend( url,
-           game.convertToPlayerDto( player.getId() ) );
-   System.out.println( "Send updates to player" );
-  }
- }
-
- public void broadcastPreparedGameToPlayer ( Game game ) {
-  for ( Player player : game.getPlayerList() ) {
-   String url = "/topic/games/" + game.getDifficulty()
-                                      .toString()
-                                      .toLowerCase() + "/" + game.getId();
-   simpMessagingTemplate.convertAndSend( url,
-           game.convertToPlayerDto( player.getId() ) );
-   System.out.println( "Send updates to player" );
-  }
+ // √ Broadcast the questionDtoList to a specific player
+ public void broadcastQuestionDtoList (
+         UUID playerId,
+         UUID gameId,
+         List<QuestionDto> questionDtoList ) {
+  simpMessagingTemplate.convertAndSend( "/topic/user/" + gameId + "/" + playerId, questionDtoList );
  }
 }

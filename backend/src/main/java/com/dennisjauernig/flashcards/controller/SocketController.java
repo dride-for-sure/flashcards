@@ -2,70 +2,52 @@ package com.dennisjauernig.flashcards.controller;
 
 import com.dennisjauernig.flashcards.controller.model.AnswerDto;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
-import com.dennisjauernig.flashcards.controller.model.PlayerDto;
-import com.dennisjauernig.flashcards.model.Difficulty;
-import com.dennisjauernig.flashcards.service.AnswerService;
-import com.dennisjauernig.flashcards.service.LobbyService;
-import com.dennisjauernig.flashcards.service.PreparationService;
-import com.dennisjauernig.flashcards.service.StartGameService;
+import com.dennisjauernig.flashcards.controller.model.QuestionDto;
+import com.dennisjauernig.flashcards.service.HandleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class SocketController {
 
- private final AnswerService answerService;
- private final PreparationService preparationService;
- private final LobbyService lobbyService;
- private final StartGameService startGameService;
+ private final HandleService handleService;
 
  @Autowired
  public SocketController (
-         AnswerService answerService,
-         LobbyService lobbyService,
-         PreparationService preparationService,
-         StartGameService startGameService ) {
-  this.answerService = answerService;
-  this.preparationService = preparationService;
-  this.lobbyService = lobbyService;
-  this.startGameService = startGameService;
+         HandleService handleService ) {
+  this.handleService = handleService;
  }
 
- @SubscribeMapping ( "/games" )
- public List<GameDto> sendOpenGames () {
-  return lobbyService.listOpenGames();
+ // √ Get questionDtoList for a subscribing player
+ @SubscribeMapping ( "/user/{gameId}/{playerId}" )
+ public List<QuestionDto> listGameQuestionDto (
+         @PathVariable UUID gameId,
+         @PathVariable UUID playerId
+ ) {
+  return handleService.listGameQuestionDto( gameId, playerId )
+                      .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
+                              "This game: " + gameId + " does not exist" ) );
  }
 
- @MessageMapping ( "/games/{difficulty}/{gameId}" )
- @SendTo ( "/topic/games/{difficulty}/{gameId}" )
- public GameDto prepareGame (
-         @DestinationVariable String difficulty,
-         @DestinationVariable String gameId, PlayerDto playerDto ) {
-  System.out.println( "Prepare Game" );
-  return preparationService.prepareGame( playerDto, gameId,
-          Difficulty.valueOf( difficulty.toUpperCase() ) );
- }
-
- @MessageMapping ( "/games/{difficulty}/{gameId}/{playerId}/start" )
- public void startGame (
-         @DestinationVariable String gameId,
-         @DestinationVariable String playerId ) {
-  System.out.println( "Start Game" );
-  startGameService.startGame( gameId, playerId );
- }
-
- @MessageMapping ( "/games/{difficulty}/{gameId}/{playerId}" )
- public void updateGame (
-         @DestinationVariable String gameId,
-         @DestinationVariable String playerId,
+ // √ Receive answers
+ @MessageMapping ( "/game/{gameId}/{playerId}" )
+ @SendTo ( "/topic/game/{gameId}" )
+ public GameDto receiveAnswer (
+         @DestinationVariable UUID gameId,
+         @PathVariable UUID playerId,
          AnswerDto answerDto ) {
-  System.out.println( "Update Game" );
-  answerService.updateGame( gameId, playerId, answerDto );
+  return handleService.receiveAnswer( gameId, playerId, answerDto )
+                      .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
+                              "The Answer could not be processed" ) );
  }
 }

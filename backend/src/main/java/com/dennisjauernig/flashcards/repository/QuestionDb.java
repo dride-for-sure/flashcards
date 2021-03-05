@@ -8,7 +8,6 @@ import java.util.List;
 public interface QuestionDb extends PagingAndSortingRepository<Question, String> {
 
  @Override
- public List<Question> findAll ();
+ List<Question> findAll ();
 
- public List<Question> findAllById ( String id );
 }

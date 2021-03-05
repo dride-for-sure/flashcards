@@ -1,8 +1,8 @@
 package com.dennisjauernig.flashcards.controller.model;
 
-import com.dennisjauernig.flashcards.model.Difficulty;
 import com.dennisjauernig.flashcards.model.GameMaster;
-import com.dennisjauernig.flashcards.model.GameStatus;
+import com.dennisjauernig.flashcards.model.enums.Difficulty;
+import com.dennisjauernig.flashcards.model.enums.GameStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -17,14 +18,11 @@ import java.util.List;
 @Builder
 public class GameDto {
 
- private String id;
+ private UUID id;
  private Difficulty difficulty;
  private GameStatus status;
  private GameMaster master;
 
  @JsonProperty ( "playerList" )
  private List<PlayerDto> playerDtoList;
-
- @JsonProperty ( "questionList" )
- private List<QuestionDto> questionDtoList;
 }

@@ -8,8 +8,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties
 public class FlashCardsApplication {
 
- public static void main (String[] args) {
-	SpringApplication.run( FlashCardsApplication.class, args );
+ public static void main ( String[] args ) {
+  SpringApplication.run( FlashCardsApplication.class, args );
  }
 
 }
