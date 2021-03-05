@@ -31,13 +31,15 @@ public class PlayerService {
                .build();
  }
 
- public PlayerDto convertToDto ( Player player ) {
+ // √ Convert a given player to its dto
+ public PlayerDto convertPlayerToDto ( Player player ) {
   return PlayerDto.builder()
                   .name( player.getName() )
                   .score( getScoreFromQuestionList( player.getQuestionDtoList() ) )
                   .build();
  }
 
+ // √ Sum the points in a given questionDtoList
  private int getScoreFromQuestionList ( List<QuestionDto> questionDtoList ) {
   return questionDtoList.stream()
                         .map( questionDto -> questionDto.getPoints() )
