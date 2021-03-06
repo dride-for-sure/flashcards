@@ -14,9 +14,7 @@ import { useSocket } from '../../contexts/socket';
 import { joinExistingGame, listInitialQuestionDtos } from '../../services/APIService';
 
 export default function Play() {
-  // const [game, setGame, socks] = useGameSocket();
-  // const [questionList, setQuestionList] = useQuestionSocket();
-  const [game, setGame, socks, questionList, setQuestionList] = useSocket();
+  const { game, setGame, socks, questionList, setQuestionList, socksConnected } = useSocket();
   const [playerDetails] = usePlayerDetails();
   const [addNotification] = useNotifications();
   const { gameId } = useParams();
@@ -44,16 +42,13 @@ export default function Play() {
   };
 
   const handleAnswer = (id, selectedSolution) => {
-    if (socks) {
+    if (socksConnected) {
       socks.sendMessage(`/api/user/${gameId}/${playerDetails.id}`,
         JSON.stringify({ id, selectedSolution }));
+    } else {
+      addNotification('Stay calm little ninja. the internet in germany is not that fast. try again in a few seconds! (Database Error)');
     }
   };
-
-  if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
-    history.push('/');
-    return null;
-  }
 
   if (!game || !socks) {
     return (

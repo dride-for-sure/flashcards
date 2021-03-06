@@ -13,7 +13,7 @@ import { newGame, startGame } from '../../services/APIService';
 
 export default function NewGame() {
   const [playerDetails] = usePlayerDetails();
-  const [game, setGame] = useSocket();
+  const { game, setGame } = useSocket();
   const [addNotification] = useNotifications();
   const { difficulty } = useParams();
   const history = useHistory();
@@ -38,11 +38,6 @@ export default function NewGame() {
       .then(setGame)
       .catch(() => addNotification('Your ninja is need of sleep! Sorry. (Network Error)'));
   };
-
-  if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
-    history.push('/');
-    return null;
-  }
 
   if (!game) {
     return (

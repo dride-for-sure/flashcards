@@ -10,7 +10,6 @@ import com.dennisjauernig.flashcards.repository.QuestionDb;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,12 +58,9 @@ public class QuestionsService {
                          .map( questionDto -> questionDto.getId().equals( nextQuestion.getId() )
                                  ? nextQuestion
                                  : questionDto )
-                         .sorted( Comparator.comparing( QuestionDto::getId ) )
                          .collect( Collectors.toList() );
   }
-  return questionDtoList.stream()
-                        .sorted( Comparator.comparing( QuestionDto::getId ) )
-                        .collect( Collectors.toList() );
+  return questionDtoList;
  }
 
  // √ Generate a fresh questionList
