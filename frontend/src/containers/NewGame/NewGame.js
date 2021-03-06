@@ -39,11 +39,6 @@ export default function NewGame() {
       .catch(() => addNotification('Your ninja is need of sleep! Sorry. (Network Error)'));
   };
 
-  if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
-    history.push('/');
-    return null;
-  }
-
   if (!game) {
     return (
       <>

@@ -50,11 +50,6 @@ export default function Play() {
     }
   };
 
-  if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
-    history.push('/');
-    return null;
-  }
-
   if (!game || !socks) {
     return (
       <>
