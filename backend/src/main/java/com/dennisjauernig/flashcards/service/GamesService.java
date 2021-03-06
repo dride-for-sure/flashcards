@@ -76,6 +76,21 @@ public class GamesService {
               .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId +
                       " does not exists" ) )
               .getQuestionDtoList();
+  List<QuestionDto> updatedQuestionDtoList = questionsService.selectNextQuestionFromList( questionDtoList );
+  Game updatedGame = game.toBuilder()
+                         .status( game.getStatus().equals( GameStatus.FINISH )
+                                 ? GameStatus.FINISH
+                                 : GameStatus.PLAY )
+                         .playerList( game.getPlayerList()
+                                          .stream()
+                                          .map( player -> player.getId().equals( playerId )
+                                                  ? player.toBuilder()
+                                                          .questionDtoList( updatedQuestionDtoList )
+                                                          .build()
+                                                  : player )
+                                          .collect( Collectors.toList() )
+                         ).build();
+  gamesDb.save( updatedGame );
   return questionsService.selectNextQuestionFromList( questionDtoList );
  }
 
