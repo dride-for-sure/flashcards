@@ -9,6 +9,7 @@ import Logo from '../../components/Tiles/Logo/Logo';
 import Question from '../../components/Tiles/Question/Question';
 import Waiting from '../../components/Tiles/Waiting/Waiting';
 import { useGameSocket } from '../../contexts/gameSocket';
+import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
 import { useQuestionSocket } from '../../contexts/questionSocket';
 import { joinExistingGame, listInitialQuestionDtos } from '../../services/APIService';
@@ -17,6 +18,7 @@ export default function Play() {
   const [game, setGame, socks] = useGameSocket();
   const [questionList, setQuestionList] = useQuestionSocket();
   const [playerDetails] = usePlayerDetails();
+  const [addNotification] = useNotifications();
   const { gameId } = useParams();
   const history = useHistory();
 
@@ -26,14 +28,14 @@ export default function Play() {
     }
     joinExistingGame(gameId, { id: playerDetails.id, name: playerDetails.name })
       .then(setGame)
-      .catch((error) => console.error(error));
+      .catch(() => addNotification('You love forbidden things, dont you? (Game not available)'));
   }, []);
 
   useEffect(() => {
     if (game && game.status === 'PLAY') {
       listInitialQuestionDtos(gameId, playerDetails.id)
         .then((data) => setQuestionList(data))
-        .catch((error) => console.error(error));
+        .catch(() => addNotification('MongoDb is taking a nap! Again! (Database Error)'));
     }
   }, [game]);
 

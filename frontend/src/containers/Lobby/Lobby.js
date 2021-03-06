@@ -6,12 +6,14 @@ import Logo from '../../components/Tiles/Logo/Logo';
 import NewGame from '../../components/Tiles/NewGame/NewGame';
 import OpenGame from '../../components/Tiles/OpenGame/OpenGame';
 import Title from '../../components/Tiles/Title/Title';
+import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
 import { listAvailableGames } from '../../services/APIService';
 
 export default function Lobby() {
   const [games, setGames] = useState([]);
   const [playerDetails] = usePlayerDetails();
+  const [addNotification] = useNotifications();
   const history = useHistory();
 
   useEffect(() => {
@@ -20,7 +22,7 @@ export default function Lobby() {
     }
     listAvailableGames()
       .then(setGames)
-      .catch((error) => console.error(error));
+      .catch(() => addNotification('You are too good for this arena. Please move on...(Network Error)'));
   }, []);
 
   const handleOpenNewGame = (difficulty) => {

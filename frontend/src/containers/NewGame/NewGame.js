@@ -7,12 +7,14 @@ import GameMaster from '../../components/Tiles/GameMaster/GameMaster';
 import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
 import { useGameSocket } from '../../contexts/gameSocket';
+import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
 import { newGame, startGame } from '../../services/APIService';
 
 export default function NewGame() {
   const [playerDetails] = usePlayerDetails();
   const [game, setGame] = useGameSocket();
+  const [addNotification] = useNotifications();
   const { difficulty } = useParams();
   const history = useHistory();
 
@@ -22,7 +24,7 @@ export default function NewGame() {
     }
     newGame(difficulty, { id: playerDetails.id, name: playerDetails.name })
       .then(setGame)
-      .catch((error) => console.error(error));
+      .catch(() => addNotification('Pow! Bang! Slapstick Action! But...not today!(Network Error)'));
   }, []);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function NewGame() {
   const handleGameStart = () => {
     startGame(game.id, { id: playerDetails.id, name: playerDetails.name })
       .then(setGame)
-      .catch((error) => console.error(error));
+      .catch(() => addNotification('Your ninja is need of sleep! Sorry. (Network Error)'));
   };
 
   if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {

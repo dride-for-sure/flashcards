@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import Container from './styles';
 
 export default function Logo() {
   return (
     <Container>
-      <span>⛩️</span>
+      <Link to="/">⛩️</Link>
     </Container>
   );
 }
