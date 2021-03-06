@@ -1,8 +1,8 @@
 import { node } from 'prop-types';
-import React, { useContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 
-const PlayerDetailsContext = React.createContext();
+const PlayerDetailsContext = createContext();
 
 const PlayerDetailsProvider = ({ children }) => {
   const [playerDetails, setPlayerDetails] = useLocalStorage('flashCardGame', { id: '', name: '' });
