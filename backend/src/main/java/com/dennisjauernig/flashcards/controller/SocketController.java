@@ -1,7 +1,7 @@
 package com.dennisjauernig.flashcards.controller;
 
 import com.dennisjauernig.flashcards.controller.model.AnswerDto;
-import com.dennisjauernig.flashcards.controller.model.QuestionDto;
+import com.dennisjauernig.flashcards.controller.model.QuestionDtoList;
 import com.dennisjauernig.flashcards.service.HandleService;
 import com.dennisjauernig.flashcards.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -43,7 +42,7 @@ public class SocketController {
  // √ Receive answers
  @MessageMapping ( "/user/{gameId}/{playerId}" )
  @SendTo ( "/topic/user/{gameId}/{playerId}" )
- public List<QuestionDto> receiveAnswer (
+ public QuestionDtoList receiveAnswer (
          @DestinationVariable UUID gameId,
          @DestinationVariable UUID playerId,
          AnswerDto answerDto ) {

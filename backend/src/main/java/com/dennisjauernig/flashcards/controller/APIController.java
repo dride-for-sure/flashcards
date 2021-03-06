@@ -1,15 +1,15 @@
 package com.dennisjauernig.flashcards.controller;
 
 import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.controller.model.GameDtoList;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
-import com.dennisjauernig.flashcards.controller.model.QuestionDto;
+import com.dennisjauernig.flashcards.controller.model.QuestionDtoList;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.service.HandleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,7 +24,7 @@ public class APIController {
 
  // √ Get initial lobby
  @GetMapping ( "/lobby" )
- public List<GameDto> listAvailableGames () {
+ public GameDtoList listAvailableGames () {
   return handleService.listAvailableGames();
  }
 
@@ -60,7 +60,7 @@ public class APIController {
 
  // √ Get inital questionDtoList
  @GetMapping ( "/game/{gameId}/{playerId}" )
- public List<QuestionDto> listInitialQuestionDtos (
+ public QuestionDtoList listInitialQuestionDtos (
          @PathVariable UUID gameId,
          @PathVariable UUID playerId ) {
   return handleService.listGameQuestionDto( gameId, playerId )
