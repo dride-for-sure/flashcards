@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const listAvailableGames = () =>
   axios.get('/api/lobby')
-    .then((response) => response.data);
+    .then((response) => response.data.gameDtoList);
 
 export const newGame = (difficulty, playerDto) =>
   axios.post(`/api/game/${difficulty}`, playerDto)
@@ -18,4 +18,4 @@ export const joinExistingGame = (gameId, playerDto) =>
 
 export const listInitialQuestionDtos = (gameId, playerId) =>
   axios.get(`/api/game/${gameId}/${playerId}`)
-    .then((response) => response.data);
+    .then((response) => response.data.questionDtoList);

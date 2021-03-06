@@ -16,13 +16,17 @@ export default function Lobby() {
   const [addNotification] = useNotifications();
   const history = useHistory();
 
+  const listGames = () => {
+    listAvailableGames()
+      .then(setGames)
+      .catch(() => addNotification('You are too good for this arena. Please move on...(Network Error)'));
+  };
+
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
       history.push('/');
     }
-    listAvailableGames()
-      .then(setGames)
-      .catch(() => addNotification('You are too good for this arena. Please move on...(Network Error)'));
+    listGames();
   }, []);
 
   const handleOpenNewGame = (difficulty) => {
@@ -34,7 +38,8 @@ export default function Lobby() {
       <SockJsClient
         url="/ws"
         topics={['/topic/games']}
-        onMessage={(data) => setGames(data)}
+        onConnect={() => listGames()}
+        onMessage={(data) => setGames(data.gameDtoList)}
         debug />
       <Logo />
       <Title />

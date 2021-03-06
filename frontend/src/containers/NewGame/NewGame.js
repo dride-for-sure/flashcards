@@ -6,14 +6,14 @@ import Charts from '../../components/Charts/styles';
 import GameMaster from '../../components/Tiles/GameMaster/GameMaster';
 import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
-import { useGameSocket } from '../../contexts/gameSocket';
 import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
+import { useSocket } from '../../contexts/socket';
 import { newGame, startGame } from '../../services/APIService';
 
 export default function NewGame() {
   const [playerDetails] = usePlayerDetails();
-  const [game, setGame] = useGameSocket();
+  const [game, setGame] = useSocket();
   const [addNotification] = useNotifications();
   const { difficulty } = useParams();
   const history = useHistory();

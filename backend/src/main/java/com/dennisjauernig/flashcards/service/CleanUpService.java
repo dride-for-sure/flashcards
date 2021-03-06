@@ -1,5 +1,7 @@
 package com.dennisjauernig.flashcards.service;
 
+import com.dennisjauernig.flashcards.config.GameConfig;
+import com.dennisjauernig.flashcards.controller.model.GameDtoList;
 import com.dennisjauernig.flashcards.db.SessionDb;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.repository.GamesDb;
@@ -15,10 +17,21 @@ public class CleanUpService {
 
  private final SessionDb sessionDb;
  private final GamesDb gamesDb;
+ private final MessagingService messagingService;
+ private final GamesService gamesService;
+ private final GameConfig gameConfig;
 
- public CleanUpService ( SessionDb sessionDb, GamesDb gamesDb ) {
+ public CleanUpService (
+         SessionDb sessionDb,
+         GamesDb gamesDb,
+         MessagingService messagingService,
+         GamesService gamesService,
+         GameConfig gameConfig ) {
   this.sessionDb = sessionDb;
   this.gamesDb = gamesDb;
+  this.messagingService = messagingService;
+  this.gamesService = gamesService;
+  this.gameConfig = gameConfig;
  }
 
  // √ Remove all games, that have no playerIds within the sessionDb
@@ -29,6 +42,11 @@ public class CleanUpService {
    if ( !sessionMap.containsValue( game.getId() )
            && isGameOldEnough( game ) ) {
     gamesDb.deleteById( game.getId() );
+    GameDtoList gameDtoList =
+            GameDtoList.builder()
+                       .gameDtoList( gamesService.listAvailableGames() )
+                       .build();
+    messagingService.broadcastGameDtoToLobby( gameDtoList );
     System.out.println( "Game deleted: " + game.getId() );
    }
   }
@@ -38,6 +56,6 @@ public class CleanUpService {
  private boolean isGameOldEnough ( Game game ) {
   long currentTimeStamp = Instant.now().getEpochSecond();
   long gameTimeStamp = game.getTimestamp();
-  return gameTimeStamp + 30 < currentTimeStamp;
+  return gameTimeStamp + gameConfig.getOpenGamesDeleteDelay < currentTimeStamp;
  }
 }

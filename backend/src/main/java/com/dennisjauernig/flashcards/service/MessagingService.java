@@ -1,12 +1,12 @@
 package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.controller.model.GameDto;
-import com.dennisjauernig.flashcards.controller.model.QuestionDto;
+import com.dennisjauernig.flashcards.controller.model.GameDtoList;
+import com.dennisjauernig.flashcards.controller.model.QuestionDtoList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,7 +21,7 @@ public class MessagingService {
  }
 
  // √ Broadcast all open games to the lobby
- public void broadcastGameDtoToLobby ( List<GameDto> gameDtoList ) {
+ public void broadcastGameDtoToLobby ( GameDtoList gameDtoList ) {
   System.out.println( "Broadcast gameDto to lobby" );
   simpMessagingTemplate.convertAndSend( "/topic/games", gameDtoList );
  }
@@ -36,7 +36,7 @@ public class MessagingService {
  public void broadcastQuestionDtoListToPlayer (
          UUID playerId,
          UUID gameId,
-         List<QuestionDto> questionDtoList ) {
+         QuestionDtoList questionDtoList ) {
   System.out.println( "Broadcast QuestionDtoList to player" );
   simpMessagingTemplate.convertAndSend( "/topic/user/" + gameId + "/" + playerId, questionDtoList );
  }

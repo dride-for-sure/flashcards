@@ -8,15 +8,15 @@ import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
 import Question from '../../components/Tiles/Question/Question';
 import Waiting from '../../components/Tiles/Waiting/Waiting';
-import { useGameSocket } from '../../contexts/gameSocket';
 import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
-import { useQuestionSocket } from '../../contexts/questionSocket';
+import { useSocket } from '../../contexts/socket';
 import { joinExistingGame, listInitialQuestionDtos } from '../../services/APIService';
 
 export default function Play() {
-  const [game, setGame, socks] = useGameSocket();
-  const [questionList, setQuestionList] = useQuestionSocket();
+  // const [game, setGame, socks] = useGameSocket();
+  // const [questionList, setQuestionList] = useQuestionSocket();
+  const [game, setGame, socks, questionList, setQuestionList] = useSocket();
   const [playerDetails] = usePlayerDetails();
   const [addNotification] = useNotifications();
   const { gameId } = useParams();

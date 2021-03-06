@@ -1,9 +1,6 @@
 package com.dennisjauernig.flashcards.service;
 
-import com.dennisjauernig.flashcards.controller.model.AnswerDto;
-import com.dennisjauernig.flashcards.controller.model.GameDto;
-import com.dennisjauernig.flashcards.controller.model.PlayerDto;
-import com.dennisjauernig.flashcards.controller.model.QuestionDto;
+import com.dennisjauernig.flashcards.controller.model.*;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
@@ -38,8 +35,8 @@ public class HandleService {
  }
 
  // √ Player joins lobby
- public List<GameDto> listAvailableGames () {
-  return gamesService.listAvailableGames();
+ public GameDtoList listAvailableGames () {
+  return GameDtoList.builder().gameDtoList( gamesService.listAvailableGames() ).build();
  }
 
  // √ Player opens new game
@@ -93,18 +90,19 @@ public class HandleService {
  }
 
  // √ Get the questionDtoList for a specific player and game
- public Optional<List<QuestionDto>> listGameQuestionDto ( UUID gameId, UUID playerId ) {
+ public Optional<QuestionDtoList> listGameQuestionDto ( UUID gameId, UUID playerId ) {
   Optional<Game> game = gamesDb.findById( gameId );
   if ( game.isPresent()
           && gamesService.isPlayerWithinExistingGame( playerId, game.get() )
           && !game.get().getStatus().equals( GameStatus.PREPARE ) ) {
-   return Optional.of( gamesService.getQuestionListDto( game.get(), playerId ) );
+   List<QuestionDto> questionDtoList = gamesService.getQuestionListDto( game.get(), playerId );
+   return Optional.of( QuestionDtoList.builder().questionDtoList( questionDtoList ).build() );
   }
   return Optional.empty();
  }
 
  // √ Answer received
- public Optional<List<QuestionDto>> receiveAnswer (
+ public Optional<QuestionDtoList> receiveAnswer (
          UUID gameId,
          UUID playerId,
          AnswerDto answerDto ) {
@@ -116,7 +114,7 @@ public class HandleService {
    GameDto gameDto = gamesService.convertGameToDto( updatedGame );
    messagingService.broadcastGameDtoToPlayer( gameDto );
    List<QuestionDto> questionDtoList = gamesService.getQuestionListDto( updatedGame, playerId );
-   return Optional.of( questionDtoList );
+   return Optional.of( QuestionDtoList.builder().questionDtoList( questionDtoList ).build() );
   }
   return Optional.empty();
  }
@@ -125,7 +123,9 @@ public class HandleService {
  private void broadcastQuestionDtoList ( Game game ) {
   for ( Player player : game.getPlayerList() ) {
    List<QuestionDto> questionDtoList = gamesService.getQuestionListDto( game, player.getId() );
-   messagingService.broadcastQuestionDtoListToPlayer( player.getId(), game.getId(), questionDtoList );
+   messagingService.broadcastQuestionDtoListToPlayer(
+           player.getId(), game.getId(),
+           QuestionDtoList.builder().questionDtoList( questionDtoList ).build() );
   }
  }
 
