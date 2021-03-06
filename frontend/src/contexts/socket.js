@@ -10,6 +10,7 @@ const SocketProvider = ({ children }) => {
   const [game, setGame] = useState();
   const [questionList, setQuestionList] = useState();
   const [socks, setSocks] = useState();
+  const [socksConnected, setSocksConnected] = useState(false);
   const [playerDetails] = usePlayerDetails();
 
   const getInitialDataOnConnect = () => {
@@ -28,7 +29,8 @@ const SocketProvider = ({ children }) => {
   };
 
   return (
-    <SocketContext.Provider value={[game, setGame, socks, questionList, setQuestionList]}>
+    <SocketContext.Provider
+      value={[game, setGame, socks, questionList, setQuestionList, socksConnected]}>
       {game && (
       <SockJsClient
         url="/ws"
@@ -36,8 +38,12 @@ const SocketProvider = ({ children }) => {
           `/topic/game/${game.id}`,
           `/api/user/${game.id}`,
           `/topic/user/${game.id}/${playerDetails.id}`]}
-        onConnect={() => getInitialDataOnConnect()}
+        onConnect={() => {
+          getInitialDataOnConnect();
+          setSocksConnected(true);
+        }}
         onMessage={(data) => handleMessages(data)}
+        onDisconnect={() => setSocksConnected(false)}
         ref={setSocks}
         debug />
       )}
