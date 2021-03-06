@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-  background-color: darkseagreen;
-
   > h1 {
       font-weight: 600;
       font-size: 2rem;

@@ -39,7 +39,7 @@ export default function Lobby() {
       <Logo />
       <Title />
       <NewGame onGameOpen={handleOpenNewGame} />
-      {games.map((game) => <OpenGame key={game.id} game={game} />)}
+      {games && games.map((game) => <OpenGame key={game.id} game={game} />)}
     </>
   );
 }

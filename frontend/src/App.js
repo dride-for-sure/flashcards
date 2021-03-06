@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Main from './components/Main/styles';
+import Grid from './components/Grid/Grid';
 import Lobby from './containers/Lobby/Lobby';
 import NewGame from './containers/NewGame/NewGame';
 import Play from './containers/Play/Play';
@@ -14,12 +14,12 @@ import GlobalStyle from './GlobalStyles';
 export default function App() {
   return (
     <Router>
-      <GlobalStyle />
-      <Main>
-        <PlayerNameProvider>
-          <GameSocketProvider>
-            <QuestionSocketProvider>
-              <NotificationProvider>
+      <PlayerNameProvider>
+        <GameSocketProvider>
+          <QuestionSocketProvider>
+            <NotificationProvider>
+              <GlobalStyle />
+              <Grid>
                 <Switch>
                   <Route exact path="/game/:difficulty/:gameId">
                     <Play />
@@ -34,11 +34,11 @@ export default function App() {
                     <Welcome />
                   </Route>
                 </Switch>
-              </NotificationProvider>
-            </QuestionSocketProvider>
-          </GameSocketProvider>
-        </PlayerNameProvider>
-      </Main>
+              </Grid>
+            </NotificationProvider>
+          </QuestionSocketProvider>
+        </GameSocketProvider>
+      </PlayerNameProvider>
     </Router>
   );
 }
