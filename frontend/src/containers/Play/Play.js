@@ -87,7 +87,8 @@ export default function Play() {
           <ScoreBar
             key={player.id}
             player={player}
-            playerDetails={playerDetails} />
+            playerDetails={playerDetails}
+            maxPoints={game.maxPoints} />
         ))}
       </Charts>
     </>

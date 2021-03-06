@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
-import Container from './styles';
+import Icon from '../../Icon/Icon';
+import Tiles from '../Tiles';
 
 export default function Logo() {
   return (
-    <Container>
-      <Link to="/">⛩️</Link>
-    </Container>
+    <Tiles bg="tan" justify="center">
+      <Icon>
+        <Link to="/">⛩️</Link>
+      </Icon>
+    </Tiles>
   );
 }

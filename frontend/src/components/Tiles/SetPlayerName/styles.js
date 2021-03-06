@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
-  background-color: mediumseagreen;
   > form {
     position:relative;
     display: flex;

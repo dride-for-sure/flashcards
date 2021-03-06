@@ -1,9 +1,10 @@
-import Container from './styled';
+import Icon from '../../Icon/Icon';
+import Tiles from '../Tiles';
 
 export default function Loading() {
   return (
-    <Container>
-      <span>🤺</span>
-    </Container>
+    <Tiles bg="tan" justify="center">
+      <Icon pulse>🤺</Icon>
+    </Tiles>
   );
 }

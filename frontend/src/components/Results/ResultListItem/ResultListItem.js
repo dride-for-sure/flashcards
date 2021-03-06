@@ -1,16 +1,9 @@
-import { number } from 'prop-types';
 import { playerDetailsType, playerType } from '../../../types/types';
-import { Container } from '../styles';
+import Container from './styled';
 
-export default function ResultListItem({ position, player, playerDetails }) {
-  const itsMe = playerDetails.id === player.id ? 'true' : 'false';
-
+export default function ResultListItem({ player, playerDetails }) {
   return (
-    <Container>
-      <span itsMe={itsMe}>
-        {position}
-        .
-      </span>
+    <Container itsMe={playerDetails.id === player.id}>
       <span>{player.name}</span>
       <span>{player.score}</span>
     </Container>
@@ -18,7 +11,6 @@ export default function ResultListItem({ position, player, playerDetails }) {
 }
 
 ResultListItem.propTypes = {
-  position: number.isRequired,
   player: playerType.isRequired,
   playerDetails: playerDetailsType.isRequired,
 };

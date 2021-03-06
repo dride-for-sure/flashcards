@@ -1,30 +1,36 @@
 import { func } from 'prop-types';
 import React from 'react';
+import getColorByDifficulty from '../../../common/handleDifficultyColor';
 import { questionListItemType } from '../../../types/types';
-import { Button, Container } from './styles';
+import Button from '../../Buttons/Button';
+import Tiles from '../Tiles';
+import Container from './styled';
 
 export default function Question({ question, onSendAnswer }) {
   return (
-    <Container
+    <Tiles
+      bg={getColorByDifficulty(question.difficulty)}
       status={question.status}
-      difficulty={question.difficulty}
-      key={question.id}>
-      <span>{question.icon}</span>
-      <h1>{question.category}</h1>
-      <span>{question.question}</span>
-      <span>
+      checked={question.points > 0}>
+      <Container
+        disabled={question.status !== 'SELECTED'}>
+        <span>{question.icon}</span>
+        <h1>{question.category}</h1>
+        <span>{question.question}</span>
         <Button
+          disabled={question.status !== 'SELECTED'}
           onClick={() => onSendAnswer(question.id, 'A')}>
           👉
           {question.answers[0]}
         </Button>
         <Button
+          disabled={question.status !== 'SELECTED'}
           onClick={() => onSendAnswer(question.id, 'B')}>
           👉
           {question.answers[1]}
         </Button>
-      </span>
-    </Container>
+      </Container>
+    </Tiles>
   );
 }
 

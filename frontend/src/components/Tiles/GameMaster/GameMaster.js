@@ -1,11 +1,15 @@
 import { func } from 'prop-types';
-import { Container, StartGame } from './styled';
+import Icon from '../../Icon/Icon';
+import Tiles from '../Tiles';
+import StartButton from './styled';
 
 export default function GameMaster({ onGameStart }) {
   return (
-    <Container>
-      <StartGame type="button" title="Lets fight!" onClick={() => onGameStart()}>⚔️</StartGame>
-    </Container>
+    <Tiles bg="silver" justify="center">
+      <Icon pulse>
+        <StartButton type="button" title="Lets fight!" onClick={() => onGameStart()}>⚔️</StartButton>
+      </Icon>
+    </Tiles>
   );
 }
 

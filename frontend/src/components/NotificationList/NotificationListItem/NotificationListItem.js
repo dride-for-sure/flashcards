@@ -3,10 +3,9 @@ import Container from './styled';
 
 export default function NotificationListItem({ notification, onDelete }) {
   return (
-    <Container>
-      <button type="button" onClick={() => onDelete(notification.id)}>✖️</button>
+    <Container type="button" onClick={() => onDelete(notification.id)}>
       <span>🔧</span>
-      <span>{notification.content}</span>
+      {notification.content}
     </Container>
   );
 }
