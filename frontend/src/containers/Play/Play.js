@@ -14,7 +14,7 @@ import { useSocket } from '../../contexts/socket';
 import { joinExistingGame, listInitialQuestionDtos } from '../../services/APIService';
 
 export default function Play() {
-  const [game, setGame, socks, questionList, setQuestionList, socksConnected] = useSocket();
+  const { game, setGame, socks, questionList, setQuestionList, socksConnected } = useSocket();
   const [playerDetails] = usePlayerDetails();
   const [addNotification] = useNotifications();
   const { gameId } = useParams();

@@ -12,7 +12,7 @@ export default function Results({ playerList, playerDetails, onGameRestart }) {
         <ResultList>
           {playerList
             .sort((playerA, playerB) => (
-              playerA.score - playerB.score))
+              playerB.score - playerA.score))
             .map((player) => (
               <ResultListItem
                 key={player.id}

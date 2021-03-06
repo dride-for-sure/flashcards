@@ -1,32 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import SockJsClient from 'react-stomp';
 import { validate as uuidValidate } from 'uuid';
 import Logo from '../../components/Tiles/Logo/Logo';
 import NewGame from '../../components/Tiles/NewGame/NewGame';
 import OpenGame from '../../components/Tiles/OpenGame/OpenGame';
 import Title from '../../components/Tiles/Title/Title';
-import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
+import { useSocket } from '../../contexts/socket';
 import { listAvailableGames } from '../../services/APIService';
 
 export default function Lobby() {
-  const [games, setGames] = useState([]);
   const [playerDetails] = usePlayerDetails();
-  const [addNotification] = useNotifications();
+  const { games, setGames } = useSocket();
   const history = useHistory();
-
-  const listGames = () => {
-    listAvailableGames()
-      .then(setGames)
-      .catch(() => addNotification('You are too good for this arena. Please move on...(Network Error)'));
-  };
 
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
       history.push('/');
     }
-    listGames();
+    listAvailableGames()
+      .then(setGames)
+      .catch(() => console.error('Ninja-like the server is somehow not. Try gain... (Network Error'));
   }, []);
 
   const handleOpenNewGame = (difficulty) => {
@@ -35,12 +29,6 @@ export default function Lobby() {
 
   return (
     <>
-      <SockJsClient
-        url="/ws"
-        topics={['/topic/games']}
-        onConnect={() => listGames()}
-        onMessage={(data) => setGames(data.gameDtoList)}
-        debug />
       <Logo />
       <Title />
       <NewGame onGameOpen={handleOpenNewGame} />

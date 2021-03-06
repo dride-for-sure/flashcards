@@ -1,22 +1,29 @@
 import { node } from 'prop-types';
 import React, { useContext, useState } from 'react';
 import SockJsClient from 'react-stomp';
-import { listInitialQuestionDtos } from '../services/APIService';
+import { listAvailableGames, listInitialQuestionDtos } from '../services/APIService';
 import { usePlayerDetails } from './playerDetails';
 
 const SocketContext = React.createContext();
 
 const SocketProvider = ({ children }) => {
   const [game, setGame] = useState();
+  const [games, setGames] = useState();
   const [questionList, setQuestionList] = useState();
   const [socks, setSocks] = useState();
   const [socksConnected, setSocksConnected] = useState(false);
   const [playerDetails] = usePlayerDetails();
 
-  const getInitialDataOnConnect = () => {
+  const getInitialQuestionList = () => {
     listInitialQuestionDtos(game.id, playerDetails.id)
-      .then((data) => setQuestionList(data))
-      .catch(() => console.error('No data found'));
+      .then(setQuestionList)
+      .catch(() => console.error('No initial questionList found'));
+  };
+
+  const getInitialAvailableGames = () => {
+    listAvailableGames()
+      .then(setGames)
+      .catch(() => console.error('No open games found'));
   };
 
   const handleMessages = (data) => {
@@ -26,11 +33,25 @@ const SocketProvider = ({ children }) => {
     if (data.dtoType === 'GAME') {
       setGame(data);
     }
+    if (data.dtoType === 'GAMELIST') {
+      setGames(data.gameDtoList);
+    }
   };
 
   return (
     <SocketContext.Provider
-      value={[game, setGame, socks, questionList, setQuestionList, socksConnected]}>
+      value={{
+        games, setGames, game, setGame, socks, questionList, setQuestionList, socksConnected }}>
+      {!game && (
+      <SockJsClient
+        url="/ws"
+        topics={['/topic/games']}
+        onConnect={() => {
+          getInitialAvailableGames();
+        }}
+        onMessage={(data) => handleMessages(data)}
+        debug />
+      )}
       {game && (
       <SockJsClient
         url="/ws"
@@ -39,7 +60,7 @@ const SocketProvider = ({ children }) => {
           `/api/user/${game.id}`,
           `/topic/user/${game.id}/${playerDetails.id}`]}
         onConnect={() => {
-          getInitialDataOnConnect();
+          getInitialQuestionList();
           setSocksConnected(true);
         }}
         onMessage={(data) => handleMessages(data)}

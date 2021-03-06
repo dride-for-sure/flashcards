@@ -13,7 +13,7 @@ import { newGame, startGame } from '../../services/APIService';
 
 export default function NewGame() {
   const [playerDetails] = usePlayerDetails();
-  const [game, setGame] = useSocket();
+  const { game, setGame } = useSocket();
   const [addNotification] = useNotifications();
   const { difficulty } = useParams();
   const history = useHistory();
