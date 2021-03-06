@@ -2,6 +2,7 @@ package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.config.GameConfig;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
+import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Question;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.QuestionStatus;
@@ -65,6 +66,18 @@ public class QuestionsService {
  // √ Generate a fresh questionList
  public List<Question> generateQuestionList ( Difficulty difficulty ) {
   return selectRandomQuestionsFromList( filterQuestionsByDifficulty( difficulty ) );
+ }
+
+ // √ Calculate maximal possible Points for a given game
+ public int calcMaxPoints ( Game game ) {
+  return game.getQuestionList()
+             .stream()
+             .map( question -> switch ( question.getDifficulty() ) {
+              case EASY -> 1;
+              case MODERATE -> 2;
+              case HARD -> 3;
+             } )
+             .reduce( 0, ( sum, points ) -> sum + points );
  }
 
  // √ Select random questions from a given questionList with respect to maxQuestions

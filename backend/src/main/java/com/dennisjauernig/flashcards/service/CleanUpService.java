@@ -38,6 +38,6 @@ public class CleanUpService {
  private boolean isGameOldEnough ( Game game ) {
   long currentTimeStamp = Instant.now().getEpochSecond();
   long gameTimeStamp = game.getTimestamp();
-  return gameTimeStamp + 60 < currentTimeStamp;
+  return gameTimeStamp + 30 < currentTimeStamp;
  }
 }
