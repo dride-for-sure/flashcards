@@ -86,6 +86,7 @@ public class GamesService {
                 .difficulty( game.getDifficulty() )
                 .status( game.getStatus() )
                 .master( game.getMaster() )
+                .maxPoints( questionsService.calcMaxPoints( game ) )
                 .playerDtoList( game.getPlayerList()
                                     .stream()
                                     .map( player -> playerService.convertPlayerToDto( player ) )

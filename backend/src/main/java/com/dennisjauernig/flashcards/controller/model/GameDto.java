@@ -22,6 +22,7 @@ public class GameDto {
  private Difficulty difficulty;
  private GameStatus status;
  private GameMaster master;
+ private int maxPoints;
 
  @JsonProperty ( "playerList" )
  private List<PlayerDto> playerDtoList;
