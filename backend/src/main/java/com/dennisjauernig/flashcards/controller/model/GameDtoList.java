@@ -13,6 +13,6 @@ import java.util.List;
 @Builder
 public class GameDtoList {
 
- private final DtoType dtoType = DtoType.GAMELIST;
+ private final DtoType type = DtoType.GAMELIST;
  private List<GameDto> gameDtoList;
 }

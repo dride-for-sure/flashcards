@@ -18,7 +18,7 @@ import java.util.UUID;
 @Builder
 public class GameDto {
 
- private final DtoType dtoType = DtoType.GAME;
+ private final DtoType type = DtoType.GAME;
  private UUID id;
  private Difficulty difficulty;
  private GameStatus status;

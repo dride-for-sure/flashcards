@@ -13,6 +13,6 @@ import java.util.List;
 @Builder
 public class QuestionDtoList {
 
- private final DtoType dtoType = DtoType.QUESTIONLIST;
+ private final DtoType type = DtoType.QUESTIONLIST;
  private List<QuestionDto> questionDtoList;
 }
