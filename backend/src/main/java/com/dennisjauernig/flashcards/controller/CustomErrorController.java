@@ -16,9 +16,9 @@ public class CustomErrorController implements ErrorController {
   Integer status = ( Integer ) request.getAttribute( "javax.servlet.error.status_code" );
   Exception exception = ( Exception ) request.getAttribute( "javax.servlet.error.exception" );
   return "<html><body><div style=\"display:flex; flex-direction:column; " +
-          "justify-content:center; height:90%\"><div style=\"align-self:center\"><h1 " +
-          "style=\"text-transform:uppercase; text-align:center\">Nice try...</h1><img " +
-          "src=\"/images/error.jpg\"/></div></div></body></html>";
+          "justify-content:center; height:100vh\"><div style=\"align-self:center\"><h1 " +
+          "style=\"text-transform:uppercase; text-align:center\">Nice try.." +
+          ".</h1><em>...lets move on!</em></div></div></body></html>";
  }
 
  @Override
