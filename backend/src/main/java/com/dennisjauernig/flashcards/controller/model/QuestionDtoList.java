@@ -1,5 +1,6 @@
 package com.dennisjauernig.flashcards.controller.model;
 
+import com.dennisjauernig.flashcards.controller.model.enums.DtoType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
