@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const listAvailableGames = () =>
-  axios.get('/api/games')
+  axios.get('/api/lobby')
     .then((response) => response.data.gameDtoList);
 
 export const newGame = (difficulty, playerDto) =>
