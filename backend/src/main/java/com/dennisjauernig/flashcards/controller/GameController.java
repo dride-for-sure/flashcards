@@ -23,7 +23,7 @@ public class GameController {
  }
 
  // √ Get initial lobby
- @GetMapping ( "/lobby" )
+ @GetMapping ( "/games" )
  public GameDtoList listAvailableGames () {
   return handleService.listAvailableGames();
  }
