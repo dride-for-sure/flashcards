@@ -1,4 +1,4 @@
-name: Deploy github bingo master
+name: Deploy Mortal Coding Combat
 
 on:
   push:
