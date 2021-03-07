@@ -14,11 +14,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping ( "/api" )
-public class APIController {
+public class GameController {
 
  private final HandleService handleService;
 
- public APIController ( HandleService handleService ) {
+ public GameController ( HandleService handleService ) {
   this.handleService = handleService;
  }
 
