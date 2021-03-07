@@ -14,11 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document ( collection = "gameUsers" )
+@Document ( collection = "gameusers" )
 public class GameUser {
 
  @Id
  private String name;
  private String password;
- private List<GameUserRoles> rolesList;
+ private List<GameUserRoles> roles;
 }

@@ -29,7 +29,7 @@ public class GameUserDetailsService implements UserDetailsService {
   return User.builder()
              .username( gameUser.getName() )
              .password( gameUser.getPassword() )
-             .authorities( gameUser.getRolesList()
+             .authorities( gameUser.getRoles()
                                    .stream()
                                    .map( gameUserRoles -> new SimpleGrantedAuthority( gameUserRoles.toString() ) )
                                    .collect( Collectors.toList() ) )

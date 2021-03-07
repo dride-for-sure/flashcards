@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      database: flashcards
+      database: mortal-coding-combat
 security:
   jwt:
     secret: top-secret
