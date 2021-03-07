@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      database: flashcards
+security:
+  jwt:
+    secret: top-secret
