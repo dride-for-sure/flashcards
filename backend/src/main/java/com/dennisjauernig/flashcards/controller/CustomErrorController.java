@@ -15,8 +15,10 @@ public class CustomErrorController implements ErrorController {
  public String handleError ( HttpServletRequest request ) {
   Integer status = ( Integer ) request.getAttribute( "javax.servlet.error.status_code" );
   Exception exception = ( Exception ) request.getAttribute( "javax.servlet.error.exception" );
-  return "<html><body><h2>Nice try...</h2><div><b>Status Code: " + status + "</div>" +
-          "<div><div><img src=\"https://media.giphy.com/media/xlLerrsdqYdWw/giphy.gif\"/></body></html>";
+  return "<html><body><div style=\"display:flex; flex-direction:column; " +
+          "justify-content:center; height:90%\"><div style=\"align-self:center\"><h1 " +
+          "style=\"text-transform:uppercase; text-align:center\">Nice try...</h1><img " +
+          "src=\"/images/error.jpg\"/></div></div></body></html>";
  }
 
  @Override
