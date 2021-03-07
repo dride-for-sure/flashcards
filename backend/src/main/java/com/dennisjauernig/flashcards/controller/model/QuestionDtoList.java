@@ -1,5 +1,6 @@
 package com.dennisjauernig.flashcards.controller.model;
 
+import com.dennisjauernig.flashcards.controller.model.enums.DtoType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,6 @@ import java.util.List;
 @Builder
 public class QuestionDtoList {
 
- private final DtoType dtoType = DtoType.QUESTIONLIST;
+ private final DtoType type = DtoType.QUESTIONLIST;
  private List<QuestionDto> questionDtoList;
 }

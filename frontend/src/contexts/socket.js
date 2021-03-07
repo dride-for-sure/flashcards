@@ -27,13 +27,13 @@ const SocketProvider = ({ children }) => {
   };
 
   const handleMessages = (data) => {
-    if (data.dtoType === 'QUESTIONLIST') {
+    if (data.type === 'QUESTIONLIST') {
       setQuestionList(data.questionDtoList);
     }
-    if (data.dtoType === 'GAME') {
+    if (data.type === 'GAME') {
       setGame(data);
     }
-    if (data.dtoType === 'GAMELIST') {
+    if (data.type === 'GAMELIST') {
       setGames(data.gameDtoList);
     }
   };
