@@ -1,0 +1,12 @@
+package com.dennisjauernig.flashcards.config;
+
+import lombok.Getter;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@Getter
+public class JwtConfig {
+
+ //@Value ( "${security.jwt.secret}" )
+ private final String jwtSecret = "top-secret";
+}
