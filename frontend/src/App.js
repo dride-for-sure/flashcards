@@ -2,7 +2,6 @@ import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Grid from './components/Grid/Grid';
 import Lobby from './containers/Lobby/Lobby';
-import NewGame from './containers/NewGame/NewGame';
 import Play from './containers/Play/Play';
 import Welcome from './containers/Welcome/Welcome';
 import NotificationProvider from './contexts/notifications';
@@ -17,11 +16,8 @@ export default function App() {
           <GlobalStyle />
           <Grid>
             <Switch>
-              <Route exact path="/game/:difficulty/:gameId">
+              <Route exact path="/game/:difficulty/?:gameId">
                 <Play />
-              </Route>
-              <Route exact path="/game/:difficulty">
-                <NewGame />
               </Route>
               <Route exact path="/games">
                 <Lobby />
