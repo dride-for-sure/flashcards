@@ -106,7 +106,6 @@ export default function Play() {
           `/api/user/${game.id}`,
           `/topic/user/${game.id}/${playerDetails.id}`]}
         onConnect={() => {
-          getInitialGame();
           getInitialQuestionList();
           setSocksConnected(true);
         }}
