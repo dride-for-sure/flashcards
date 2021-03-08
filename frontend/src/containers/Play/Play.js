@@ -92,7 +92,7 @@ export default function Play() {
     }
   }, [game]);
 
-  if (!game || !socks) {
+  if (!game) {
     return (
       <>
         <Logo />
