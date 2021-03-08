@@ -55,6 +55,7 @@ export default function Play() {
   const handleGameStart = () => {
     startGame(game.id, { id: playerDetails.id, name: playerDetails.name })
       .then(setGame)
+      .then(history.push(`/game/${difficulty}/${game.id}`))
       .catch(() => addNotification('Your ninja is need of sleep! Sorry. (Network Error)'));
   };
 
