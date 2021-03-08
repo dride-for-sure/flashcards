@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Grid from './components/Grid/Grid';
 import Lobby from './containers/Lobby/Lobby';
 import NewGame from './containers/NewGame/NewGame';
