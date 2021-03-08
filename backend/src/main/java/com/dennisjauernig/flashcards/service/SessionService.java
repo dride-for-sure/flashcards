@@ -34,6 +34,6 @@ public class SessionService {
  // √ Remove player from sessionDb
  public void deregisterPlayer ( String sessionId ) {
   sessionDb.deleteBySessionId( sessionId );
-  executorService.scheduleTask( () -> cleanUpService.cleanUpEmptyGames(), gameConfig.getGetOpenGamesDeleteDelay() );
+  executorService.scheduleTask( () -> cleanUpService.cleanUpEmptyGames(), gameConfig.getDeleteGamesDelay() );
  }
 }
