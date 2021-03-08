@@ -87,12 +87,6 @@ export default function Play() {
     });
   }, []);
 
-  useEffect(() => {
-    if (game && game.status === 'PLAY') {
-      getInitialQuestionList();
-    }
-  }, [game]);
-
   if (!game) {
     return (
       <>
@@ -112,7 +106,6 @@ export default function Play() {
           `/api/user/${game.id}`,
           `/topic/user/${game.id}/${playerDetails.id}`]}
         onConnect={() => {
-          getInitialGame();
           getInitialQuestionList();
           setSocksConnected(true);
         }}
