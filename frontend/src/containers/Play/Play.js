@@ -45,7 +45,7 @@ export default function Play() {
 
   const handleAnswer = (id, selectedSolution) => {
     if (socksConnected) {
-      socks.sendMessage(`/api/user/${gameId}/${playerDetails.id}`,
+      socks.sendMessage(`/api/user/${game.id}/${playerDetails.id}`,
         JSON.stringify({ id, selectedSolution }));
     } else {
       addNotification('Stay calm little ninja. the internet in germany is not that fast. try again in a few seconds! (Database Error)');
@@ -55,6 +55,7 @@ export default function Play() {
   const handleGameStart = () => {
     startGame(game.id, { id: playerDetails.id, name: playerDetails.name })
       .then(setGame)
+      .then(history.push(`/game/${difficulty}/${game.id}`))
       .catch(() => addNotification('Your ninja is need of sleep! Sorry. (Network Error)'));
   };
 
