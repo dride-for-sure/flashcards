@@ -87,12 +87,6 @@ export default function Play() {
     });
   }, []);
 
-  useEffect(() => {
-    if (game && game.status === 'PLAY') {
-      getInitialQuestionList();
-    }
-  }, [game]);
-
   if (!game) {
     return (
       <>
