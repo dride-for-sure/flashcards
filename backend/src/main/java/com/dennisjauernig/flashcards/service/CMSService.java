@@ -49,6 +49,8 @@ public class CMSService {
  }
 
  public Optional<Question> addQuestion ( Question question ) {
-  return Optional.of( questionDb.save( question ) );
+  return Optional.of( questionDb.save( question.toBuilder()
+                                               .id( UUID.randomUUID() )
+                                               .build() ) );
  }
 }
