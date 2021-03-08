@@ -4,7 +4,6 @@ import com.dennisjauernig.flashcards.controller.model.*;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
-import com.dennisjauernig.flashcards.model.enums.GameStatus;
 import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.stereotype.Service;
 
@@ -85,18 +84,6 @@ public class HandleService {
    messagingService.broadcastGameDtoToPlayer( gameDto );
    broadcastQuestionDtoList( game.get() );
    return Optional.of( gameDto );
-  }
-  return Optional.empty();
- }
-
- // √ Get the questionDtoList for a specific player and game
- public Optional<QuestionDtoList> listGameQuestionDto ( UUID gameId, UUID playerId ) {
-  Optional<Game> game = gamesDb.findById( gameId );
-  if ( game.isPresent()
-          && gamesService.isPlayerWithinExistingGame( playerId, game.get() )
-          && !game.get().getStatus().equals( GameStatus.PREPARE ) ) {
-   List<QuestionDto> questionDtoList = gamesService.getQuestionListDto( game.get(), playerId );
-   return Optional.of( QuestionDtoList.builder().questionDtoList( questionDtoList ).build() );
   }
   return Optional.empty();
  }
