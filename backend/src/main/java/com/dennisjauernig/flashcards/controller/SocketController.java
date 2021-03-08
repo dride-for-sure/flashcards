@@ -44,7 +44,7 @@ public class SocketController {
  @RequestMapping ( "/user/{gameId}" )
  public void deregisterPlayer (
          @Header ( "simpSessionId" ) String sessionId ) {
-  System.out.println( "(SubscribeMapping) connect: " + sessionId );
+  System.out.println( "(RequestMapping) disconnect: " + sessionId );
   sessionService.deregisterPlayer( sessionId );
  }
 
