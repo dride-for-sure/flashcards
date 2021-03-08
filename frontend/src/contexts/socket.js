@@ -1,14 +1,13 @@
 import { node } from 'prop-types';
 import React, { useContext, useState } from 'react';
 import SockJsClient from 'react-stomp';
-import { listAvailableGames, listInitialQuestionDtos } from '../services/APIService';
+import { listInitialQuestionDtos } from '../services/APIService';
 import { usePlayerDetails } from './playerDetails';
 
 const SocketContext = React.createContext();
 
 const SocketProvider = ({ children }) => {
   const [game, setGame] = useState();
-  const [games, setGames] = useState();
   const [questionList, setQuestionList] = useState();
   const [socks, setSocks] = useState();
   const [socksConnected, setSocksConnected] = useState(false);
@@ -20,12 +19,6 @@ const SocketProvider = ({ children }) => {
       .catch(() => console.error('No initial questionList found'));
   };
 
-  const getInitialAvailableGames = () => {
-    listAvailableGames()
-      .then(setGames)
-      .catch(() => console.error('No open games found'));
-  };
-
   const handleMessages = (data) => {
     if (data.type === 'QUESTIONLIST') {
       setQuestionList(data.questionDtoList);
@@ -33,25 +26,11 @@ const SocketProvider = ({ children }) => {
     if (data.type === 'GAME') {
       setGame(data);
     }
-    if (data.type === 'GAMELIST') {
-      setGames(data.gameDtoList);
-    }
   };
 
   return (
     <SocketContext.Provider
-      value={{
-        games, setGames, game, setGame, socks, questionList, setQuestionList, socksConnected }}>
-      {!game && (
-      <SockJsClient
-        url="/ws"
-        topics={['/topic/games']}
-        onConnect={() => {
-          getInitialAvailableGames();
-        }}
-        onMessage={(data) => handleMessages(data)}
-        debug />
-      )}
+      value={{ game, setGame, socks, questionList, setQuestionList, socksConnected }}>
       {game && (
       <SockJsClient
         url="/ws"

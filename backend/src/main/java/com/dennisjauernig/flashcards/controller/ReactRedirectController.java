@@ -12,9 +12,9 @@ public class ReactRedirectController {
          "/",
          "/{x:[\\w\\-]+}",
          "/^(?!ws).*$",
-         "/^(?!api).*$",
-         "/^(?!user).*$",
-         "/^(?!topic).*$"} )
+         "/{x:^(?!api?\\$).*$}/**/{y:[\\w\\-]+}",
+         "/{x:^(?!user?\\$).*$}/**/{y:[\\w\\-]+}",
+         "/{x:^(?!topic?\\$).*$}/**/{y:[\\w\\-]+}"} )
  public String getIndex ( HttpServletRequest request ) {
   return "/index.html";
  }
