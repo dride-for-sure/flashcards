@@ -2,7 +2,6 @@ name: build front- & backend
 on:
   push:
     branches:
-      - '**'
       - '!main'
 
 jobs:
