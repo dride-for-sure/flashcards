@@ -11,10 +11,9 @@ public class ReactRedirectController {
  @RequestMapping ( value = {
          "/",
          "/{x:[\\w\\-]+}",
-         "/{x:^(?!ws?\\$).*$}/**/{y:[\\w\\-]+}",
-         "/{x:^(?!api?\\$).*$}/**/{y:[\\w\\-]+}",
-         "/{x:^(?!user?\\$).*$}/**/{y:[\\w\\-]+}",
-         "/{x:^(?!topic?\\$).*$}/**/{y:[\\w\\-]+}"} )
+         "/{x:^(?!ws$).*$}/{y:(.*)}",
+         "/{x:^(?!topic$).*$}/**/{y:[\\w\\-]+}",
+         "/{x:^(?!api$).*$}/**/{y:[\\w\\-]+}"} )
  public String getIndex ( HttpServletRequest request ) {
   return "/index.html";
  }
