@@ -18,13 +18,17 @@ export default function NewGame() {
   const { difficulty } = useParams();
   const history = useHistory();
 
+  const getInitialGame = () => {
+    newGame(difficulty, { id: playerDetails.id, name: playerDetails.name })
+      .then(setGame)
+      .catch(() => addNotification('Pow! Bang! Slapstick Action! But...not today!(Network Error)'));
+  };
+
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
       history.push('/');
     }
-    newGame(difficulty, { id: playerDetails.id, name: playerDetails.name })
-      .then(setGame)
-      .catch(() => addNotification('Pow! Bang! Slapstick Action! But...not today!(Network Error)'));
+    getInitialGame();
   }, []);
 
   useEffect(() => {
