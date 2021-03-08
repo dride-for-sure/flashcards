@@ -7,6 +7,7 @@ import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,7 +39,8 @@ public class CleanUpService {
   Map<String, UUID> sessionMap = sessionDb.listSessionIds();
   List<Game> gameList = gamesDb.findAll();
   for ( Game game : gameList ) {
-   if ( !sessionMap.containsValue( game.getId() ) ) {
+   if ( !sessionMap.containsValue( game.getId() )
+           && isGameOldEnough( game ) ) {
     gamesDb.deleteById( game.getId() );
     GameDtoList gameDtoList =
             GameDtoList.builder()
@@ -48,5 +50,12 @@ public class CleanUpService {
     System.out.println( "Game deleted: " + game.getId() );
    }
   }
+ }
+
+ // √ Check if game is older then x seconds
+ private boolean isGameOldEnough ( Game game ) {
+  long currentTimeStamp = Instant.now().getEpochSecond();
+  long gameTimeStamp = game.getTimestamp();
+  return gameTimeStamp + gameConfig.getOpenGamesDeleteDelay < currentTimeStamp;
  }
 }
