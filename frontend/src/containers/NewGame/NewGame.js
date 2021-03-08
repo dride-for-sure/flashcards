@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import SockJsClient from 'react-stomp';
 import { validate as uuidValidate } from 'uuid';
 import ScoreBar from '../../components/Charts/ScoreBar/ScoreBar';
 import Charts from '../../components/Charts/styles';
@@ -8,12 +9,13 @@ import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
 import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
-import { useSocket } from '../../contexts/socket';
 import { newGame, startGame } from '../../services/APIService';
 
 export default function NewGame() {
   const [playerDetails] = usePlayerDetails();
-  const { game, setGame, socks, socksConnected } = useSocket();
+  const [game, setGame] = useState();
+  const [socksConnected, setSocksConnected] = useState();
+  const [socks, setSocks] = useState();
   const [addNotification] = useNotifications();
   const { difficulty } = useParams();
   const history = useHistory();
@@ -33,6 +35,12 @@ export default function NewGame() {
   const handleDisconnect = () => {
     if (socksConnected) {
       socks.sendMessage(`/api/user/${game.id}`);
+    }
+  };
+
+  const handleMessages = (data) => {
+    if (data.type === 'GAME') {
+      setGame(data);
     }
   };
 
@@ -63,6 +71,22 @@ export default function NewGame() {
 
   return (
     <>
+      {game && (
+      <SockJsClient
+        url="/ws"
+        topics={[
+          `/topic/game/${game.id}`,
+          `/api/user/${game.id}`,
+          `/topic/user/${game.id}/${playerDetails.id}`]}
+        onConnect={() => {
+          getInitialGame();
+          setSocksConnected(true);
+        }}
+        onMessage={handleMessages}
+        onDisconnect={() => setSocksConnected(false)}
+        ref={setSocks}
+        debug />
+      )}
       <Logo />
       <GameMaster onGameStart={handleGameStart} />
       <Charts>
