@@ -20,25 +20,14 @@ export default function Play() {
   const { gameId } = useParams();
   const history = useHistory();
 
-  useEffect(() => {
-    if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
-      history.push('/');
-    }
-    joinExistingGame(gameId, { id: playerDetails.id, name: playerDetails.name })
-      .then(setGame)
-      .catch(() => addNotification('You love forbidden things, dont you? (Game not available)'));
-  }, []);
-
-  useEffect(() => {
-    if (game && game.status === 'PLAY') {
-      listInitialQuestionDtos(gameId, playerDetails.id)
-        .then((data) => setQuestionList(data))
-        .catch(() => addNotification('MongoDb is taking a nap! Again! (Database Error)'));
-    }
-  }, [game]);
-
   const handleGameRestart = () => {
     history.push('/');
+  };
+
+  const handleDisconnect = () => {
+    if (socksConnected) {
+      socks.sendMessage(`/api/user/${game.id}`);
+    }
   };
 
   const handleAnswer = (id, selectedSolution) => {
@@ -49,6 +38,34 @@ export default function Play() {
       addNotification('Stay calm little ninja. the internet in germany is not that fast. try again in a few seconds! (Database Error)');
     }
   };
+
+  const getInitialGame = () => {
+    joinExistingGame(gameId, { id: playerDetails.id, name: playerDetails.name })
+      .then(setGame)
+      .catch(() => addNotification('You love forbidden things, dont you? (Game not available)'));
+  };
+
+  const getInitialQuestionList = () => {
+    listInitialQuestionDtos(gameId, playerDetails.id)
+      .then((data) => setQuestionList(data))
+      .catch(() => addNotification('MongoDb is taking a nap! Again! (Database Error)'));
+  };
+
+  useEffect(() => {
+    if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
+      history.push('/');
+    }
+    getInitialGame();
+    return (() => {
+      handleDisconnect();
+    });
+  }, []);
+
+  useEffect(() => {
+    if (game && game.status === 'PLAY') {
+      getInitialQuestionList();
+    }
+  }, [game]);
 
   if (!game || !socks) {
     return (
