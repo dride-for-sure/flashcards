@@ -3,7 +3,6 @@ package com.dennisjauernig.flashcards.controller;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
 import com.dennisjauernig.flashcards.controller.model.GameDtoList;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
-import com.dennisjauernig.flashcards.controller.model.QuestionDtoList;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.service.HandleService;
 import org.springframework.http.HttpStatus;
@@ -56,15 +55,5 @@ public class GameController {
   return handleService.joinGame( playerDto, gameId )
                       .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
                               "Could not join the game: " + gameId ) );
- }
-
- // √ Get inital questionDtoList
- @GetMapping ( "/game/{gameId}/{playerId}" )
- public QuestionDtoList listInitialQuestionDtos (
-         @PathVariable UUID gameId,
-         @PathVariable UUID playerId ) {
-  return handleService.listGameQuestionDto( gameId, playerId )
-                      .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
-                              "Player or game does not exists" ) );
  }
 }

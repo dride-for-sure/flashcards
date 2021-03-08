@@ -12,7 +12,7 @@ import Question from '../../components/Tiles/Question/Question';
 import Waiting from '../../components/Tiles/Waiting/Waiting';
 import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
-import { joinExistingGame, listInitialQuestionDtos, newGame, startGame } from '../../services/APIService';
+import { joinExistingGame, newGame, startGame } from '../../services/APIService';
 
 export default function Play() {
   const [game, setGame] = useState();
@@ -71,12 +71,6 @@ export default function Play() {
     }
   };
 
-  const getInitialQuestionList = () => {
-    listInitialQuestionDtos(game.id, playerDetails.id)
-      .then((data) => setQuestionList(data))
-      .catch(() => addNotification('MongoDb is taking a nap! Again! (Database Error)'));
-  };
-
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
       history.push('/');
@@ -106,7 +100,6 @@ export default function Play() {
           `/api/user/${game.id}`,
           `/topic/user/${game.id}/${playerDetails.id}`]}
         onConnect={() => {
-          getInitialQuestionList();
           setSocksConnected(true);
         }}
         onMessage={handleMessages}
