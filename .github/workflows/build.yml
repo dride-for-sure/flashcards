@@ -1,6 +1,9 @@
 name: build front- & backend
 on:
-  push
+  push:
+    branches:
+      - '**'
+      - '!main'
 
 jobs:
   build-frontend:
