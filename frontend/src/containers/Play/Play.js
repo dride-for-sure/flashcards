@@ -72,7 +72,7 @@ export default function Play() {
   };
 
   const getInitialQuestionList = () => {
-    listInitialQuestionDtos(gameId, playerDetails.id)
+    listInitialQuestionDtos(game.id, playerDetails.id)
       .then((data) => setQuestionList(data))
       .catch(() => addNotification('MongoDb is taking a nap! Again! (Database Error)'));
   };
