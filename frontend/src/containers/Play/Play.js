@@ -5,13 +5,14 @@ import { validate as uuidValidate } from 'uuid';
 import ScoreBar from '../../components/Charts/ScoreBar/ScoreBar';
 import Charts from '../../components/Charts/styles';
 import Results from '../../components/Results/Results';
+import GameMaster from '../../components/Tiles/GameMaster/GameMaster';
 import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
 import Question from '../../components/Tiles/Question/Question';
 import Waiting from '../../components/Tiles/Waiting/Waiting';
 import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
-import { joinExistingGame, listInitialQuestionDtos } from '../../services/APIService';
+import { joinExistingGame, listInitialQuestionDtos, newGame, startGame } from '../../services/APIService';
 
 export default function Play() {
   const [game, setGame] = useState();
@@ -20,7 +21,7 @@ export default function Play() {
   const [socksConnected, setSocksConnected] = useState();
   const [playerDetails] = usePlayerDetails();
   const [addNotification] = useNotifications();
-  const { gameId } = useParams();
+  const { gameId, difficulty } = useParams();
   const history = useHistory();
 
   const handleGameRestart = () => {
@@ -51,10 +52,22 @@ export default function Play() {
     }
   };
 
-  const getInitialGame = () => {
-    joinExistingGame(gameId, { id: playerDetails.id, name: playerDetails.name })
+  const handleGameStart = () => {
+    startGame(game.id, { id: playerDetails.id, name: playerDetails.name })
       .then(setGame)
-      .catch(() => addNotification('You love forbidden things, dont you? (Game not available)'));
+      .catch(() => addNotification('Your ninja is need of sleep! Sorry. (Network Error)'));
+  };
+
+  const getInitialGame = () => {
+    if (gameId) {
+      joinExistingGame(gameId, { id: playerDetails.id, name: playerDetails.name })
+        .then(setGame)
+        .catch(() => addNotification('You love forbidden things, dont you? (Game not available)'));
+    } else {
+      newGame(difficulty, { id: playerDetails.id, name: playerDetails.name })
+        .then(setGame)
+        .catch(() => addNotification('Pow! Bang! Slapstick Action! But...not today!(Network Error)'));
+    }
   };
 
   const getInitialQuestionList = () => {
@@ -98,6 +111,7 @@ export default function Play() {
           `/api/user/${game.id}`,
           `/topic/user/${game.id}/${playerDetails.id}`]}
         onConnect={() => {
+          getInitialGame();
           getInitialQuestionList();
           setSocksConnected(true);
         }}
@@ -114,8 +128,12 @@ export default function Play() {
         playerDetails={playerDetails}
         onGameRestart={handleGameRestart} />
       )}
-      {game.status === 'PREPARE'
+      {game && game.status === 'PREPARE'
+        && game.master.id !== playerDetails.id
         && <Waiting gameMasterName={game.master.name} />}
+      {game && game.status === 'PREPARE'
+        && game.master.id === playerDetails.id
+        && <GameMaster onGameStart={handleGameStart} />}
       {questionList && questionList.map((question) => (
         <Question
           key={question.id}
@@ -123,7 +141,7 @@ export default function Play() {
           onSendAnswer={handleAnswer} />
       ))}
       <Charts>
-        {game.playerList.map((player) => (
+        {game && game.playerList.map((player) => (
           <ScoreBar
             key={player.id}
             player={player}
