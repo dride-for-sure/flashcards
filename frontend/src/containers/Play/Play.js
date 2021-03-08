@@ -45,7 +45,7 @@ export default function Play() {
 
   const handleAnswer = (id, selectedSolution) => {
     if (socksConnected) {
-      socks.sendMessage(`/api/user/${gameId}/${playerDetails.id}`,
+      socks.sendMessage(`/api/user/${game.id}/${playerDetails.id}`,
         JSON.stringify({ id, selectedSolution }));
     } else {
       addNotification('Stay calm little ninja. the internet in germany is not that fast. try again in a few seconds! (Database Error)');
