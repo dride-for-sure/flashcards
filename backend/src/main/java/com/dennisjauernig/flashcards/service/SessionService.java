@@ -33,7 +33,7 @@ public class SessionService {
  }
 
  // √ Remove player from sessionDb
- public void removePlayer ( String sessionId ) {
+ public void deregisterPlayer ( String sessionId ) {
   sessionDb.deleteBySessionId( sessionId );
   executorService.scheduleTask( ( Callable<Void> ) () -> {
    cleanUpService.cleanUpEmptyGames();

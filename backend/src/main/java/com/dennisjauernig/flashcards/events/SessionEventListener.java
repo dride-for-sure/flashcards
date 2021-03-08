@@ -19,6 +19,6 @@ public class SessionEventListener {
  @EventListener
  public void handleSessionDisconnect ( SessionDisconnectEvent event ) {
   System.out.println( "(EventListener) disconnect: " + event.getSessionId() );
-  sessionService.removePlayer( event.getSessionId() );
+  sessionService.deregisterPlayer( event.getSessionId() );
  }
 }
