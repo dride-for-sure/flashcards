@@ -12,7 +12,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
@@ -41,7 +40,7 @@ public class SocketController {
  }
 
  // √ Watch player disconnected status
- @RequestMapping ( "/user/{gameId}" )
+ @MessageMapping ( "/user/{gameId}" )
  public void deregisterPlayer (
          @Header ( "simpSessionId" ) String sessionId ) {
   System.out.println( "(RequestMapping) disconnect: " + sessionId );
