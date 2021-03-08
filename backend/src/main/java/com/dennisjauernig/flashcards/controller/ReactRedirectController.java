@@ -11,6 +11,7 @@ public class ReactRedirectController {
  @RequestMapping ( value = {
          "/",
          "/{x:[\\w\\-]+}",
+         "/{x:^(?!ws?\\$).*$}/**/{y:[\\w\\-]+}",
          "/{x:^(?!api?\\$).*$}/**/{y:[\\w\\-]+}",
          "/{x:^(?!user?\\$).*$}/**/{y:[\\w\\-]+}",
          "/{x:^(?!topic?\\$).*$}/**/{y:[\\w\\-]+}"} )
