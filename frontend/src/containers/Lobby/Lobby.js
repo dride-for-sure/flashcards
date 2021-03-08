@@ -41,7 +41,7 @@ export default function Lobby() {
         onConnect={() => {
           getInitialAvailableGames();
         }}
-        onMessage={setGames}
+        onMessage={(data) => setGames(data.gameDtoList)}
         debug />
       <Logo />
       <Title />
