@@ -30,7 +30,7 @@ public class CleanUpService {
  }
 
  // √ Remove all games, that have no playerIds within the sessionDb
- public void cleanUpEmptyGames () {
+ public Object cleanUpEmptyGames () {
   Map<String, UUID> sessionMap = sessionDb.listSessionIds();
   List<Game> gameList = gamesDb.findAll();
   for ( Game game : gameList ) {
@@ -44,5 +44,6 @@ public class CleanUpService {
     System.out.println( "Game deleted: " + game.getId() );
    }
   }
+  return null;
  }
 }

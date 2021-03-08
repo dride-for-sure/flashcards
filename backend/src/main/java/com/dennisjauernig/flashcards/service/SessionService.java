@@ -5,7 +5,6 @@ import com.dennisjauernig.flashcards.db.SessionDb;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-import java.util.concurrent.Callable;
 
 @Service
 public class SessionService {
@@ -35,9 +34,6 @@ public class SessionService {
  // √ Remove player from sessionDb
  public void deregisterPlayer ( String sessionId ) {
   sessionDb.deleteBySessionId( sessionId );
-  executorService.scheduleTask( ( Callable<Void> ) () -> {
-   cleanUpService.cleanUpEmptyGames();
-   return null;
-  }, gameConfig.getGetOpenGamesDeleteDelay() );
+  executorService.scheduleTask( () -> cleanUpService.cleanUpEmptyGames(), gameConfig.getGetOpenGamesDeleteDelay() );
  }
 }
