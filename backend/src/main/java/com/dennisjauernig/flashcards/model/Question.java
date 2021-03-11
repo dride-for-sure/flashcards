@@ -26,4 +26,5 @@ public class Question {
  private String question;
  private List<String> answers;
  private Solution solution;
+ private Boolean firstQuestion;
 }
