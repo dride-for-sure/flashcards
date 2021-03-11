@@ -3,27 +3,28 @@ package com.dennisjauernig.flashcards.service;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.Player;
-import com.dennisjauernig.flashcards.model.Question;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
 
  private final QuestionsService questionsService;
+ private final SessionService sessionService;
 
- public PlayerService ( QuestionsService questionsService ) {
+ public PlayerService ( QuestionsService questionsService, SessionService sessionService ) {
   this.questionsService = questionsService;
+  this.sessionService = sessionService;
  }
 
- // √ Generate a new player with his own questionList
- public Player generateNewPlayer ( PlayerDto playerDto, List<Question> questionsList ) {
-  List<QuestionDto> questionDtoList =
-          questionsList.stream()
-                       .map( question -> questionsService.convertQuestionToDto( question ) )
-                       .collect( Collectors.toList() );
+ // √ Register new player
+ public void registerPlayer ( String sessionId, PlayerDto playerDto ) {
+  sessionService.registerNewPLayer( sessionId, playerDto.getId() );
+ }
+
+ // √ Regenerate an existing player
+ public Player generateNewPlayer ( PlayerDto playerDto, List<QuestionDto> questionDtoList ) {
   return Player.builder()
                .id( playerDto.getId() )
                .name( playerDto.getName() )
@@ -31,19 +32,13 @@ public class PlayerService {
                .build();
  }
 
+
  // √ Convert a given player to its dto
  public PlayerDto convertPlayerToDto ( Player player ) {
   return PlayerDto.builder()
                   .id( player.getId() )
                   .name( player.getName() )
-                  .score( getScoreFromQuestionList( player.getQuestionDtoList() ) )
+                  .score( questionsService.getScoreFromQuestionList( player.getQuestionDtoList() ) )
                   .build();
- }
-
- // √ Sum the points in a given questionDtoList
- private int getScoreFromQuestionList ( List<QuestionDto> questionDtoList ) {
-  return questionDtoList.stream()
-                        .map( questionDto -> questionDto.getPoints() )
-                        .reduce( 0, Integer::sum );
  }
 }

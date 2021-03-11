@@ -2,6 +2,7 @@ package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.config.GameConfig;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
+import com.dennisjauernig.flashcards.controller.model.QuestionDtoList;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Question;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,11 +26,29 @@ public class QuestionsService {
   this.questionDb = questionDb;
  }
 
+ // √ Get the QuestionList as Dto from existing game
+ public List<QuestionDto> getQuestionListDto ( Game game, UUID playerId ) {
+  return game.getPlayerList()
+             .stream()
+             .filter( targetPlayer -> targetPlayer.getId().equals( playerId ) )
+             .findFirst()
+             .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId +
+                     " does not exists" ) )
+             .getQuestionDtoList();
+ }
+
+ // √ Convert questionList to dto
+ public List<QuestionDto> convertQuestionListToDto ( List<Question> questionList ) {
+  return questionList.stream()
+                     .map( question -> convertQuestionToDto( question ) )
+                     .collect( Collectors.toList() );
+ }
+
  // √ Convert a question to its dto
  public QuestionDto convertQuestionToDto ( Question question ) {
   return QuestionDto.builder()
                     .id( question.getId() )
-                    .status( QuestionStatus.NONE )
+                    .status( question.getFirstQuestion() ? QuestionStatus.SELECTED : QuestionStatus.NONE )
                     .difficulty( question.getDifficulty() )
                     .category( question.getCategory() )
                     .question( question.getQuestion() )
@@ -47,8 +67,7 @@ public class QuestionsService {
           .filter( questionDto -> questionDto.getStatus().equals( QuestionStatus.SELECTED ) )
           .collect( Collectors.toList() );
 
-  if ( questionListStatusNONE.size() > 0
-          && questionListStatusSELECTED.size() == 0 ) {
+  if ( questionListStatusNONE.size() > 0 && questionListStatusSELECTED.size() == 0 ) {
    QuestionDto nextQuestion = questionListStatusNONE
            .get( ( int ) ( Math.random() * questionListStatusNONE.size() ) )
            .toBuilder()
@@ -63,9 +82,11 @@ public class QuestionsService {
   return questionDtoList;
  }
 
- // √ Generate a fresh questionList
- public List<Question> generateQuestionList ( Difficulty difficulty ) {
-  return selectRandomQuestionsFromList( filterQuestionsByDifficulty( difficulty ) );
+ // √ Sum the points in a given questionDtoList
+ public int getScoreFromQuestionList ( List<QuestionDto> questionDtoList ) {
+  return questionDtoList.stream()
+                        .map( questionDto -> questionDto.getPoints() )
+                        .reduce( 0, Integer::sum );
  }
 
  // √ Calculate maximal possible Points for a given game
@@ -78,6 +99,24 @@ public class QuestionsService {
               case HARD -> 3;
              } )
              .reduce( 0, ( sum, points ) -> sum + points );
+ }
+
+ // √ Generate a fresh questionList
+ public List<Question> generateQuestionList ( Difficulty difficulty ) {
+  return selectFirstQuestion( selectRandomQuestionsFromList( filterQuestionsByDifficulty( difficulty ) ) );
+ }
+
+ // √ Select a random first question
+ private List<Question> selectFirstQuestion ( List<Question> questionList ) {
+  int randomIndex = ( int ) ( Math.random() * questionList.size() );
+  List<Question> listToUpdate = new ArrayList<>( questionList );
+  listToUpdate.set( randomIndex, setAsFirstQuestion( listToUpdate.get( randomIndex ) ) );
+  return listToUpdate;
+ }
+
+ // √ Set first question status
+ private Question setAsFirstQuestion ( Question question ) {
+  return question.toBuilder().firstQuestion( true ).build();
  }
 
  // √ Select random questions from a given questionList with respect to maxQuestions
@@ -98,11 +137,16 @@ public class QuestionsService {
   return questionDb.findAll().stream().filter( question -> {
    if ( difficulty.equals( Difficulty.EASY ) ) {
     return question.getDifficulty().equals( Difficulty.EASY );
-   } else if ( difficulty.equals( Difficulty.MODERATE ) ) {
+   }
+   if ( difficulty.equals( Difficulty.MODERATE ) ) {
     return question.getDifficulty().equals( Difficulty.EASY )
             || question.getDifficulty().equals( Difficulty.MODERATE );
    }
    return true;
   } ).collect( Collectors.toList() );
+ }
+
+ public QuestionDtoList addTypeToQuestionDtoList ( List<QuestionDto> questionDtoList ) {
+  return QuestionDtoList.builder().questionDtoList( questionDtoList ).build();
  }
 }

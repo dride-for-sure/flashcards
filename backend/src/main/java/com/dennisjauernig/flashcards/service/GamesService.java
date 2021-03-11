@@ -2,6 +2,7 @@ package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.config.GameConfig;
 import com.dennisjauernig.flashcards.controller.model.GameDto;
+import com.dennisjauernig.flashcards.controller.model.GameDtoList;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.Game;
@@ -15,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,12 +44,13 @@ public class GamesService {
                 .collect( Collectors.toList() );
  }
 
- // √ Generate a new game with a specific gameMaster
+ // √ Generate a new game
  public Game generateNewGame (
          PlayerDto playerDto,
          Difficulty difficulty ) {
   List<Question> questionsList = questionsService.generateQuestionList( difficulty );
-  Player player = playerService.generateNewPlayer( playerDto, questionsList );
+  List<QuestionDto> questionDtoList = questionsService.convertQuestionListToDto( questionsList );
+  Player player = playerService.generateNewPlayer( playerDto, questionDtoList );
   return Game.builder()
              .id( UUID.randomUUID() )
              .timestamp( Instant.now().getEpochSecond() )
@@ -64,19 +63,6 @@ public class GamesService {
              .playerList( new ArrayList<>( Collections.singletonList( player ) ) )
              .questionList( questionsList )
              .build();
- }
-
- // √ Get the QuestionList as Dto from existing game
- public List<QuestionDto> getQuestionListDto ( Game game, UUID playerId ) {
-  List<QuestionDto> questionDtoList =
-          game.getPlayerList()
-              .stream()
-              .filter( targetPlayer -> targetPlayer.getId().equals( playerId ) )
-              .findFirst()
-              .orElseThrow( () -> new IllegalArgumentException( "PlayerId: " + playerId +
-                      " does not exists" ) )
-              .getQuestionDtoList();
-  return questionsService.selectNextQuestionFromList( questionDtoList );
  }
 
  // √ Convert the game to a game dto
@@ -96,11 +82,10 @@ public class GamesService {
 
  // √ Add a player to an existing game
  public Game addPlayerToGame ( Game game, Player player ) {
-  boolean playerExists = isPlayerWithinExistingGame( player.getId(), game );
+  boolean playerExists = hasPlayer( player.getId(), game );
   if ( playerExists ) {
    return game.toBuilder().build();
   }
-
   List<Player> updatedPlayerList = new ArrayList<>( game.getPlayerList() );
   updatedPlayerList.add( player );
   return game.toBuilder()
@@ -123,7 +108,7 @@ public class GamesService {
  }
 
  // √ Find player within an existing game
- public boolean isPlayerWithinExistingGame ( UUID playerId, Game game ) {
+ public boolean hasPlayer ( UUID playerId, Game game ) {
   return game.getPlayerList().stream()
              .anyMatch( player -> player.getId().equals( playerId ) );
  }
@@ -136,5 +121,35 @@ public class GamesService {
  // √ Check if a specific player is gameMaster for a given game
  public boolean isGameMaster ( Game game, UUID playerId ) {
   return game.getMaster().getId().equals( playerId );
+ }
+
+ // √ Convert the List<GameDto> to GameDtoList
+ public GameDtoList addTypeToGameDtoList ( List<GameDto> gameDtoList ) {
+  return GameDtoList.builder().gameDtoList( gameDtoList ).build();
+ }
+
+ // √ Get game by Id
+ public Optional<Game> getById ( UUID gameId ) {
+  return gamesDb.findById( gameId );
+ }
+
+ // √ Check if game has status
+ public boolean hasStatus ( GameStatus gameStatus, Game game ) {
+  return game.getStatus().equals( gameStatus );
+ }
+
+ // √ Save game
+ public void saveGame ( Game game ) {
+  gamesDb.save( game );
+ }
+
+ // √ List all games
+ public List<Game> listGames () {
+  return gamesDb.findAll();
+ }
+
+ // √ Delete game by id
+ public void deleteGameById ( UUID gameId ) {
+  gamesDb.deleteById( gameId );
  }
 }

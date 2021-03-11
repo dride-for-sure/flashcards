@@ -17,12 +17,15 @@ import java.util.stream.Collectors;
 public class AnswerService {
 
  private final QuestionDb questionDb;
+ private final QuestionsService questionsService;
  private final GamesService gamesService;
 
  public AnswerService (
          QuestionDb questionDb,
+         QuestionsService questionsService,
          GamesService gamesService ) {
   this.questionDb = questionDb;
+  this.questionsService = questionsService;
   this.gamesService = gamesService;
  }
 
@@ -43,16 +46,19 @@ public class AnswerService {
  // √ Update the specific players questionList
  private Player updatePlayerAnswers ( Player player, AnswerDto answerDto ) {
   return player.toBuilder().questionDtoList(
-          player.getQuestionDtoList()
-                .stream()
-                .map( questionDto -> questionDto.getId().equals( answerDto.getId() )
-                        && !questionDto.getStatus().equals( QuestionStatus.SOLVED )
-                        ? questionDto.toBuilder()
-                                     .status( QuestionStatus.SOLVED )
-                                     .points( calcQuestionPoints( questionDto, answerDto ) )
-                                     .build()
-                        : questionDto )
-                .collect( Collectors.toList() ) )
+          questionsService.selectNextQuestionFromList(
+                  player.getQuestionDtoList()
+                        .stream()
+                        .map( questionDto -> questionDto.getId()
+                                                        .equals( answerDto.getId() )
+                                && !questionDto.getStatus()
+                                               .equals( QuestionStatus.SOLVED )
+                                ? questionDto.toBuilder()
+                                             .status( QuestionStatus.SOLVED )
+                                             .points( calcQuestionPoints( questionDto, answerDto ) )
+                                             .build()
+                                : questionDto )
+                        .collect( Collectors.toList() ) ) )
                .build();
  }
 
