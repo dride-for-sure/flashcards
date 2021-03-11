@@ -15,7 +15,3 @@ export const startGame = (gameId, playerDto) =>
 export const joinExistingGame = (gameId, playerDto) =>
   axios.put(`/api/game/${gameId}`, playerDto)
     .then((response) => response.data);
-
-export const listInitialQuestionDtos = (gameId, playerId) =>
-  axios.get(`/api/game/${gameId}/${playerId}`)
-    .then((response) => response.data.questionDtoList);

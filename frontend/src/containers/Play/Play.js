@@ -12,7 +12,7 @@ import Question from '../../components/Tiles/Question/Question';
 import Waiting from '../../components/Tiles/Waiting/Waiting';
 import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
-import { joinExistingGame, listInitialQuestionDtos, newGame, startGame } from '../../services/APIService';
+import { joinExistingGame, newGame, startGame } from '../../services/APIService';
 
 export default function Play() {
   const [game, setGame] = useState();
@@ -52,16 +52,9 @@ export default function Play() {
     }
   };
 
-  const getInitialQuestionDtos = (id) => {
-    listInitialQuestionDtos(id, playerDetails.id)
-      .then((data) => setQuestionList(data))
-      .catch(() => addNotification('MongoDb is taking a nap! Again! (Database Error)'));
-  };
-
   const handleGameStart = () => {
     startGame(game.id, { id: playerDetails.id, name: playerDetails.name })
       .then(setGame)
-      .then(getInitialQuestionDtos(game.id))
       .then(history.push(`/game/${difficulty}/${game.id}`))
       .catch(() => addNotification('Your ninja is need of sleep! Sorry. (Network Error)'));
   };
@@ -70,7 +63,6 @@ export default function Play() {
     if (gameId) {
       joinExistingGame(gameId, { id: playerDetails.id, name: playerDetails.name })
         .then(setGame)
-        .then(getInitialQuestionDtos(gameId))
         .catch(() => addNotification('You love forbidden things, dont you? (Game not available)'));
     } else {
       newGame(difficulty, { id: playerDetails.id, name: playerDetails.name })
@@ -112,11 +104,9 @@ export default function Play() {
         }}
         onMessage={handleMessages}
         onDisconnect={() => setSocksConnected(false)}
-        ref={setSocks}
-        debug />
+        ref={setSocks} />
       )}
       <Logo />
-      {game.status === 'PLAY' && !questionList && <Loading />}
       {game.status === 'FINISH'
       && (
       <Results

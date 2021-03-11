@@ -42,8 +42,7 @@ export default function Lobby() {
         onConnect={() => {
           getInitialAvailableGames();
         }}
-        onMessage={(data) => setGames(data.gameDtoList)}
-        debug />
+        onMessage={(data) => setGames(data.gameDtoList)} />
       <Logo />
       <FAQ playerName={playerDetails.name} />
 
