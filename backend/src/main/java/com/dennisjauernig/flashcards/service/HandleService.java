@@ -4,6 +4,7 @@ import com.dennisjauernig.flashcards.controller.model.*;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
+import com.dennisjauernig.flashcards.model.enums.GameStatus;
 import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class HandleService {
   gamesDb.save( game );
   GameDto gameDto = gamesService.convertGameToDto( game );
   messagingService.broadcastGameDtoToLobby( listAvailableGames() );
-  System.out.println( gameDto.getId() );
+  System.out.println( "New game: " + gameDto.getId() );
   return Optional.of( gameDto );
  }
 
@@ -75,6 +76,7 @@ public class HandleService {
 
  // √ Start the game
  public Optional<GameDto> startGame ( UUID gameId, PlayerDto playerDto ) {
+  System.out.print( "Try to start game: " + gameId );
   Optional<Game> game = gamesDb.findById( gameId );
   if ( game.isPresent() && gamesService.isGameMaster( game.get(), playerDto.getId() ) ) {
    Game startedGame = gamesService.setGameStatusToPlay( game.get() );
@@ -85,6 +87,7 @@ public class HandleService {
    broadcastQuestionDtoList( game.get() );
    return Optional.of( gameDto );
   }
+  System.out.println( "Not possible to start" );
   return Optional.empty();
  }
 
@@ -116,4 +119,15 @@ public class HandleService {
   }
  }
 
+ // √ Get the questionDtoList for a specific player and game
+ public Optional<QuestionDtoList> listGameQuestionDto ( UUID gameId, UUID playerId ) {
+  Optional<Game> game = gamesDb.findById( gameId );
+  if ( game.isPresent()
+          && gamesService.isPlayerWithinExistingGame( playerId, game.get() )
+          && !game.get().getStatus().equals( GameStatus.PREPARE ) ) {
+   List<QuestionDto> questionDtoList = gamesService.getQuestionListDto( game.get(), playerId );
+   return Optional.of( QuestionDtoList.builder().questionDtoList( questionDtoList ).build() );
+  }
+  return Optional.empty();
+ }
 }
