@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { usePlayerDetails } from '../../../contexts/playerDetails';
+import Button from '../../Buttons/Button';
 import Tiles from '../Tiles';
 import { Container, Input } from './styles';
 
@@ -23,23 +24,22 @@ export default function SetPlayerName({ onSubmit, hasPlayerDetails }) {
   };
 
   const handleChange = (event) => {
-    const updatedPlayerName = event.target.value.trim().toUpperCase();
+    const updatedPlayerName = event.target.value.toUpperCase();
     setTmpPlayerName(updatedPlayerName);
   };
 
   return (
     <Tiles bg="mediumseagreen">
       <Container>
+        <h1>Enter your name: </h1>
         <form onSubmit={handleSubmit}>
-          <label>
-            Your ninja name?
-            <Input
-              type="text"
-              placeholder="It has one, right?"
-              validate={(hasValidPlayerName).toString()}
-              value={tmpPlayerName}
-              onChange={handleChange} />
-          </label>
+          <Input
+            type="text"
+            placeholder="Your ninja has one, right?"
+            validate={(hasValidPlayerName).toString()}
+            value={tmpPlayerName}
+            onChange={handleChange} />
+          <Button />
         </form>
       </Container>
     </Tiles>

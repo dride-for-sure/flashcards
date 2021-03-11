@@ -8,7 +8,8 @@ export default function NewGame({ onGameOpen }) {
   return (
     <Tiles bg="turquoise">
       <Container>
-        <h1>Your own arena?</h1>
+        <h1>To start a new game...</h1>
+        <span>...choose a difficulty:</span>
         <span>
           <Button title="Easy peasy" onClick={() => onGameOpen('EASY')}>
             {getGameIconByDifficulty('EASY')}

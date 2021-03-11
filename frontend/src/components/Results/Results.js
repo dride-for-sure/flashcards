@@ -4,15 +4,21 @@ import ResultListItem from './ResultListItem/ResultListItem';
 import { Button, Container, ResultList } from './styles';
 
 export default function Results({ playerList, playerDetails, onGameRestart }) {
+  const sortedPlayerList = playerList.sort(
+    (playerA, playerB) => (playerB.score - playerA.score),
+  );
+
+  const headline = sortedPlayerList[0].id === playerDetails.id
+    ? 'You have finished!'
+    : `${sortedPlayerList[0].name} has finished!`;
+
   return (
     <Container>
       <div>
         <span>⛩️</span>
-        <h1>Well...</h1>
+        <h1>{headline}</h1>
         <ResultList>
-          {playerList
-            .sort((playerA, playerB) => (
-              playerB.score - playerA.score))
+          {sortedPlayerList
             .map((player) => (
               <ResultListItem
                 key={player.id}
@@ -21,7 +27,7 @@ export default function Results({ playerList, playerDetails, onGameRestart }) {
             ))}
         </ResultList>
         <Button onClick={() => onGameRestart()}>
-          Again, again and again!
+          Wanna try again?
         </Button>
       </div>
     </Container>

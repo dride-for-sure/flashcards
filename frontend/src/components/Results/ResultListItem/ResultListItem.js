@@ -3,9 +3,8 @@ import Container from './styled';
 
 export default function ResultListItem({ player, playerDetails }) {
   return (
-    <Container itsMe={playerDetails.id === player.id}>
+    <Container itsMe={playerDetails.id === player.id} score={player.score}>
       <span>{player.name}</span>
-      <span>{player.score}</span>
     </Container>
   );
 }

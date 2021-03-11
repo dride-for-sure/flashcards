@@ -12,19 +12,28 @@ const Container = styled.div`
       text-transform: uppercase;
       margin: 0;
       padding: 0;
-      flex-grow:1;
   }
 
-  > span {
+  > span:first-of-type {
+    margin-top: 10px;
+    font-style: italic;
+    display:block;
+  }
+
+  > span:nth-of-type(2){
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    margin-top: 5px;
+
+    > button + button {
+      margin-left: 7%;
+    }
      
-     > button {
-      border:0;
-      background-color: transparent;
-      font-size: 2rem;
-      outline: none;
+    > button {
+    border:0;
+    background-color: transparent;
+    font-size: 2rem;
+    outline: none;
     }
   }
 `;

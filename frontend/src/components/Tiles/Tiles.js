@@ -6,7 +6,6 @@ const Tiles = styled.div`
   flex-direction: column;
   justify-content: ${(props) => props.justify || 'flex-start'};
   box-sizing: border-box; 
-  height: 200px;
   padding: 20px;
   background-color: ${(props) => props.bg || 'black'};
 

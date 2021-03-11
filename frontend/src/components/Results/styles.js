@@ -43,6 +43,7 @@ export const Container = styled.div`
 export const ResultList = styled.ol`
   margin: 35px 0 40px;
   padding: 0;
+  list-style: none;
 
   > li+li {
     margin-top: 10px;
