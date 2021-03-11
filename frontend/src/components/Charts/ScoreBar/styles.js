@@ -3,9 +3,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   align-self: flex-end;
   font-size: .8rem;
-  font-family: 'Times New Roman', Times, serif;
   text-transform: uppercase;
-  color:white;
   background-color: ${(props) => props.color};
   width: ${(props) => props.width};
   opacity: .7;

@@ -1,8 +1,8 @@
 const getColorByDifficulty = (difficulty) => {
   const colors = {
-    HARD: 'lightcoral',
-    MODERATE: 'sandybrown',
-    EASY: 'mediumseagreen' };
+    HARD: 'var(--color-red-light)',
+    MODERATE: 'var(--color-orange-dark)',
+    EASY: 'var(--color-green-light)' };
 
   return colors[difficulty.toUpperCase()];
 };

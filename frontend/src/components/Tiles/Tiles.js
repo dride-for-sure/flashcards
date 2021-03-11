@@ -7,7 +7,7 @@ const Tiles = styled.div`
   justify-content: ${(props) => props.justify || 'flex-start'};
   box-sizing: border-box; 
   padding: 20px;
-  background-color: ${(props) => props.bg || 'black'};
+  background-color: ${(props) => props.bg || 'var(--color-monochrom-dark)'};
 
   ${(props) => props.status === 'SELECTED' && css`
     transform: scale(1.2) rotate(-2deg) translate(1%,2%);

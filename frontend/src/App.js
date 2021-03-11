@@ -1,12 +1,12 @@
 import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import GlobalStyle from './components/GlobalStyles';
 import Grid from './components/Grid/Grid';
 import Lobby from './containers/Lobby/Lobby';
 import Play from './containers/Play/Play';
 import Welcome from './containers/Welcome/Welcome';
 import NotificationProvider from './contexts/notifications';
 import PlayerNameProvider from './contexts/playerDetails';
-import GlobalStyle from './GlobalStyles';
 
 export default function App() {
   return (

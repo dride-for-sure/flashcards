@@ -10,30 +10,29 @@ export const Container = styled.div`
       padding: 0;
   }
 
-  > form {
-    position:relative;
-    display: flex;
-    flex-direction: row;
+> form {
+  position:relative;
+  display: flex;
+  flex-direction: row;
 
-      > input {
-        margin-top: 10px;
-        margin-right: 10px;
-      }
-
-      > button {
-        border: solid white;
-        border-width: 0 5px 5px 0;
-        padding: 3px;
-        margin-top:7px;
-        height: 20px;
-        width: 20px;
-        -ms-transform: rotate(-45deg);
-        transform: rotate(-45deg);
-        -webkit-transform: rotate(-45deg);
-        align-self: center;
-        }
-      }
+    > input {
+      margin-top: 10px;
+      margin-right: 10px;
     }
+
+    > button {
+      border: solid white;
+      border-width: 0 5px 5px 0;
+      padding: 3px;
+      margin-top:7px;
+      height: 20px;
+      width: 20px;
+      -ms-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+      align-self: center;
+    }
+  }
 `;
 
 export const Input = styled.input`
@@ -42,8 +41,6 @@ export const Input = styled.input`
   padding: 8px;
   width: 100%;
   box-sizing: border-box;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 1rem;
   font-style: italic;
   color: white;
   outline:0;

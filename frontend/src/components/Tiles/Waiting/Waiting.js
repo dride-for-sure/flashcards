@@ -4,7 +4,7 @@ import Container from './styled';
 
 export default function Waiting({ gameMasterName }) {
   return (
-    <Tiles bg="silver">
+    <Tiles bg="var(--color-monochom-medium)">
       <Container>
         <h1>Ready?</h1>
         <span>
