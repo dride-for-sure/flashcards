@@ -104,8 +104,7 @@ export default function Play() {
         }}
         onMessage={handleMessages}
         onDisconnect={() => setSocksConnected(false)}
-        ref={setSocks}
-        debug />
+        ref={setSocks} />
       )}
       <Logo />
       {game.status === 'FINISH'
