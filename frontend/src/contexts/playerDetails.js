@@ -1,11 +1,11 @@
 import { node } from 'prop-types';
 import React, { createContext, useContext } from 'react';
-import useLocalStorage from '../hooks/useLocalStorage';
+import usePersistentStorage from '../hooks/usePersistentStorage';
 
 const PlayerDetailsContext = createContext();
 
 const PlayerDetailsProvider = ({ children }) => {
-  const [playerDetails, setPlayerDetails] = useLocalStorage('flashCardGame', { id: '', name: '' });
+  const [playerDetails, setPlayerDetails] = usePersistentStorage('flashCardGame', { id: '', name: '' });
 
   return (
     <PlayerDetailsContext.Provider value={[playerDetails, setPlayerDetails]}>
