@@ -1,4 +1,4 @@
-package com.dennisjauernig.flashcards.model;
+package com.dennisjauernig.flashcards.security.model;
 
 import com.dennisjauernig.flashcards.model.enums.GameUserRoles;
 import lombok.AllArgsConstructor;

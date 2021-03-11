@@ -1,4 +1,4 @@
-package com.dennisjauernig.flashcards.controller.model;
+package com.dennisjauernig.flashcards.security.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

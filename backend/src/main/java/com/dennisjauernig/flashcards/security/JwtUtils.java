@@ -1,6 +1,5 @@
-package com.dennisjauernig.flashcards.service;
+package com.dennisjauernig.flashcards.security;
 
-import com.dennisjauernig.flashcards.config.JwtConfig;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;

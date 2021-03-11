@@ -1,7 +1,7 @@
-package com.dennisjauernig.flashcards.service;
+package com.dennisjauernig.flashcards.security;
 
-import com.dennisjauernig.flashcards.model.GameUser;
 import com.dennisjauernig.flashcards.repository.UserDb;
+import com.dennisjauernig.flashcards.security.model.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

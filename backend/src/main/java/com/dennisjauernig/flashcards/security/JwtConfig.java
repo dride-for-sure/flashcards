@@ -1,4 +1,4 @@
-package com.dennisjauernig.flashcards.config;
+package com.dennisjauernig.flashcards.security;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
