@@ -7,26 +7,29 @@ import Play from './containers/Play/Play';
 import Welcome from './containers/Welcome/Welcome';
 import NotificationProvider from './contexts/notifications';
 import PlayerNameProvider from './contexts/playerDetails';
+import SocketProvider from './contexts/socket';
 
 export default function App() {
   return (
     <Router>
       <PlayerNameProvider>
         <NotificationProvider>
-          <GlobalStyle />
-          <Grid>
-            <Switch>
-              <Route path="/game/:difficulty/:gameId?">
-                <Play />
-              </Route>
-              <Route exact path="/games">
-                <Lobby />
-              </Route>
-              <Route path="/">
-                <Welcome />
-              </Route>
-            </Switch>
-          </Grid>
+          <SocketProvider>
+            <GlobalStyle />
+            <Grid>
+              <Switch>
+                <Route path="/game/:difficulty/:gameId?">
+                  <Play />
+                </Route>
+                <Route exact path="/games">
+                  <Lobby />
+                </Route>
+                <Route path="/">
+                  <Welcome />
+                </Route>
+              </Switch>
+            </Grid>
+          </SocketProvider>
         </NotificationProvider>
       </PlayerNameProvider>
     </Router>
