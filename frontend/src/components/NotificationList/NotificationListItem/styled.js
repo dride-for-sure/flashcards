@@ -5,7 +5,7 @@ const NotificationList = styled.button`
   margin: 20px;
   padding: 20px;
   box-sizing: border-box;
-  background-color: silver;
+  background-color: var(--color-monochrom-medium);
   border: 0;
   text-align:left;
   color: white;

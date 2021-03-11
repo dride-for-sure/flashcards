@@ -10,7 +10,8 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content:center;
   z-index:100;
-  background-color: rgba(110,212,142,.8);
+  background-color: var(--color-green-light);
+  opacity: .8;
 
   > div {
     align-self:center;

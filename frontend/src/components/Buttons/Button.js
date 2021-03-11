@@ -8,10 +8,6 @@ const Button = styled.button`
   margin: 0;
   cursor: pointer;
   transition: 0.5s;
-    
-    &:hover {
-      opacity: .7;
-    }
 `;
 
 export default Button;

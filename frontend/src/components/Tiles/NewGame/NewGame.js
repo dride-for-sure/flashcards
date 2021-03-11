@@ -6,7 +6,7 @@ import Container from './styles';
 
 export default function NewGame({ onGameOpen }) {
   return (
-    <Tiles bg="turquoise">
+    <Tiles bg="var(--color-blue-medium)">
       <Container>
         <h1>To start a new game...</h1>
         <span>...choose a difficulty:</span>

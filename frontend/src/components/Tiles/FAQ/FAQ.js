@@ -4,7 +4,7 @@ import Container from './styled';
 
 export default function FAQ({ playerName }) {
   return (
-    <Tiles bg="darkseagreen">
+    <Tiles bg="var(--color-green-dark)">
       <Container>
         <h1>
           Hey

@@ -29,7 +29,7 @@ export default function SetPlayerName({ onSubmit, hasPlayerDetails }) {
   };
 
   return (
-    <Tiles bg="mediumseagreen">
+    <Tiles bg="var(--color-green-light)">
       <Container>
         <h1>Enter your name: </h1>
         <form onSubmit={handleSubmit}>
