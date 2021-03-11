@@ -9,8 +9,8 @@ export const handleScoreColor = (score, maxPoints, setBarColor) => {
 };
 
 export const addScoreWidthRandomness = (setBarRandomness) => {
-  setBarRandomness(Math.floor(Math.random() * 20));
-  const delay = Math.floor(Math.random() * 4000 + 1000);
+  setBarRandomness(Math.floor(Math.random() * 5));
+  const delay = Math.floor(Math.random() * 2000 + 1000);
   return setTimeout(() => addScoreWidthRandomness(setBarRandomness), delay);
 };
 
