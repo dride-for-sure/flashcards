@@ -7,6 +7,7 @@ const Button = styled.button`
   padding: 0;
   margin: 0;
   cursor: pointer;
+  color: white;
   transition: 0.5s;
   font-size: ${(props) => props.fontsize || '1rem'};
 
