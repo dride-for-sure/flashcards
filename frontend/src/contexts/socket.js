@@ -11,7 +11,6 @@ const SocketProvider = ({ children }) => {
   const [questionList, setQuestionList] = useState();
   const [socket, setSocket] = useState();
   const [playerDetails] = usePlayerDetails();
-  const [joinedGameId, setJoinedGameId] = useState();
 
   const handleMessages = (data) => {
     if (data.type === 'QUESTIONLIST') {
@@ -25,36 +24,18 @@ const SocketProvider = ({ children }) => {
     }
   };
 
-  const getAvailableGamesOnConnect = () => {
-    listAvailableGames()
-      .then(handleMessages)
-      .catch(() => console.error('No data found'));
-  };
-
   return (
-    <SocketContext.Provider value={{
-      game,
-      setGame,
-      setJoinedGameId,
-      gameList,
-      setGameList,
-      socket,
-      questionList,
-      setQuestionList }}>
-      {game && (
+    <SocketContext.Provider value={{ game, gameList, socket, questionList }}>
       <SockJsClient
         url="/ws"
         topics={[
           '/topic/games',
-          joinedGameId ? `/topic/game/${joinedGameId}` : '',
-          joinedGameId ? `/api/user/${joinedGameId}` : '',
-          joinedGameId ? `/topic/user/${joinedGameId}/${playerDetails.id}` : '',
+          '/api/games',
+          playerDetails.id ? `/queue/player/${playerDetails.id}` : '',
         ]}
-        onConnect={getAvailableGamesOnConnect}
         onMessage={handleMessages}
         ref={setSocket}
         debug />
-      )}
       {children}
     </SocketContext.Provider>
   );
