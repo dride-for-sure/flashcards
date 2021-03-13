@@ -8,6 +8,11 @@ const Button = styled.button`
   margin: 0;
   cursor: pointer;
   transition: 0.5s;
+  font-size: ${(props) => props.fontsize || '1rem'};
+
+  &:hover {
+    opacity: .7
+  }
 `;
 
 export default Button;

@@ -47,14 +47,6 @@ export default function SetPlayerName({ onSubmit, hasPlayerDetails }) {
 }
 
 const Container = styled.div`
-> h1 {
-      font-weight: 600;
-      font-size: 2rem;
-      text-transform: uppercase;
-      margin: 0;
-      padding: 0;
-  }
-
 > form {
   position:relative;
   display: flex;

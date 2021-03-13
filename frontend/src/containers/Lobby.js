@@ -55,7 +55,7 @@ export default function Lobby() {
       <Logo />
       <FAQ playerName={playerDetails.name} />
       <NewGame onGameOpen={handleNewGame} />
-      {!gameList && <NoAvailableGames />}
+      {gameList.length === 0 && <NoAvailableGames />}
       {gameList && gameList.map((game) => <OpenGame key={game.id} game={game} />)}
     </>
   );

@@ -8,50 +8,36 @@ import Tiles from './Tiles';
 export default function OpenGame({ game }) {
   return (
     <Tiles bg={getColorByDifficulty(game.difficulty)}>
-      <Container>
-        <span>{getGameIconByDifficulty(game.difficulty)}</span>
-        <span>The GameMaster is:</span>
-        <h1>{game.master.name}</h1>
+      <Difficulty>{getGameIconByDifficulty(game.difficulty)}</Difficulty>
+      <SmallTitle>The GameMaster is:</SmallTitle>
+      <h1>{game.master.name}</h1>
+      <Center>
         <Link to={`/game/${game.difficulty}/${game.id}`}>⚔️</Link>
-      </Container>
+      </Center>
     </Tiles>
   );
 }
 
-const Container = styled.div`
-  display:flex;
+const Difficulty = styled.div`
+  position:absolute;
+  top:-18px;
+  right:-13px;
+  font-size: 3rem;
+`;
+
+const SmallTitle = styled.span`
+  font-style: italic;
+  margin-bottom: 3px;  
+`;
+
+const Center = styled.span`
+  font-size: 3.5rem;
+  align-self:center;
+  display: flex;
+  flex-grow: 1;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
+  justify-content: center;
 
-  > h1 {
-    font-weight: 600;
-    font-size: 2rem;
-    text-transform: uppercase;
-    margin: 0;
-    padding: 0;
-    word-break: break-word;
-    flex-grow: 1;
-  }
-
-  > span {
-    &:first-of-type {
-      position:absolute;
-      top:-18px;
-      right:-13px;
-      font-size: 3rem;
-    }
-    &:nth-of-type(2) {
-      font-style: italic;
-      margin-bottom: 3px;
-    }
-  }
-
-  > a {
-    font-size: 3.5rem;
-    align-self:center;
-    flex-grow: 1;
-  }
 `;
 
 OpenGame.propTypes = {
