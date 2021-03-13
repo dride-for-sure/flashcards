@@ -4,6 +4,7 @@ import com.dennisjauernig.flashcards.config.GameConfig;
 import com.dennisjauernig.flashcards.controller.model.*;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Player;
+import com.dennisjauernig.flashcards.model.Question;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.GameStatus;
 import com.dennisjauernig.flashcards.repository.GamesDb;
@@ -89,8 +90,8 @@ public class LogicService {
  private Optional<UUID> addPlayerToExistingGame (
          PlayerDto playerDto,
          Game game ) {
-  List<QuestionDto> questionDtoList = questionsService.getQuestionListDto( game,
-          playerDto.getId() );
+  List<Question> questionList = game.getQuestionList();
+  List<QuestionDto> questionDtoList = questionsService.convertQuestionListToDto( questionList );
   Player player = playerService.generateNewPlayer( playerDto, questionDtoList );
   Game updatedGame = gamesService.addPlayerToGame( game, player );
   gamesService.saveGame( updatedGame );
