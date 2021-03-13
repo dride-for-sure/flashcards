@@ -12,7 +12,7 @@ import { usePlayerDetails } from '../contexts/playerDetails';
 import { useSocket } from '../contexts/socket';
 
 export default function Lobby() {
-  const { gameList, socket, socketState } = useSocket();
+  const { gameList, topicList, socket, socketState } = useSocket();
   const [playerDetails] = usePlayerDetails();
   const history = useHistory();
   const [addNotification] = useNotifications();
@@ -25,8 +25,8 @@ export default function Lobby() {
     }
   };
 
-  const handleNewGame = (difficulty) => {
-    history.push(`/game/${difficulty}/${uuidv4()}`);
+  const handleNewGame = (topic) => {
+    history.push(`/game/${topic}/${uuidv4()}`);
   };
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function Lobby() {
     <>
       <Logo />
       <FAQ playerName={playerDetails.name} />
-      <NewGame onGameOpen={handleNewGame} />
+      <NewGame onGameOpen={handleNewGame} topics={topicList} />
       {gameList.length === 0 && <NoAvailableGames />}
       {gameList && gameList.map((game) => <OpenGame key={game.id} game={game} />)}
     </>
