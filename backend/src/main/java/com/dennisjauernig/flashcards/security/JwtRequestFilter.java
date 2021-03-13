@@ -1,8 +1,5 @@
-package com.dennisjauernig.flashcards.filter;
+package com.dennisjauernig.flashcards.security;
 
-import com.dennisjauernig.flashcards.config.JwtConfig;
-import com.dennisjauernig.flashcards.service.GameUserDetailsService;
-import com.dennisjauernig.flashcards.service.TimeUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

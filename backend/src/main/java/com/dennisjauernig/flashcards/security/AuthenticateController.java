@@ -1,7 +1,6 @@
-package com.dennisjauernig.flashcards.controller;
+package com.dennisjauernig.flashcards.security;
 
-import com.dennisjauernig.flashcards.controller.model.AuthenticationRequest;
-import com.dennisjauernig.flashcards.service.JwtUtils;
+import com.dennisjauernig.flashcards.security.model.AuthenticationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;

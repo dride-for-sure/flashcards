@@ -1,4 +1,4 @@
-package com.dennisjauernig.flashcards.service;
+package com.dennisjauernig.flashcards.security;
 
 import org.springframework.stereotype.Service;
 

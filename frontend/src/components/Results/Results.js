@@ -3,7 +3,7 @@ import { playerDetailsType, playerListType } from '../../types/types';
 import ResultListItem from './ResultListItem/ResultListItem';
 import { Button, Container, ResultList } from './styles';
 
-export default function Results({ playerList, playerDetails, onGameRestart }) {
+export default function Results({ playerList, playerDetails, onRestart }) {
   const sortedPlayerList = playerList.sort(
     (playerA, playerB) => (playerB.score - playerA.score),
   );
@@ -26,7 +26,7 @@ export default function Results({ playerList, playerDetails, onGameRestart }) {
                 playerDetails={playerDetails} />
             ))}
         </ResultList>
-        <Button onClick={() => onGameRestart()}>
+        <Button onClick={() => onRestart()}>
           Wanna try again?
         </Button>
       </div>
@@ -37,5 +37,5 @@ export default function Results({ playerList, playerDetails, onGameRestart }) {
 Results.propTypes = {
   playerList: playerListType.isRequired,
   playerDetails: playerDetailsType.isRequired,
-  onGameRestart: func.isRequired,
+  onRestart: func.isRequired,
 };

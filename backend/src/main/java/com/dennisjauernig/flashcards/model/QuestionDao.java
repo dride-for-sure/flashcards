@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,13 +16,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder ( toBuilder = true )
-public class Question {
+@Document ( collection = "questions" )
+public class QuestionDao {
 
+ @Id
  private UUID id;
  private Difficulty difficulty;
  private String category;
  private String question;
  private List<String> answers;
  private Solution solution;
- private Boolean firstQuestion;
 }

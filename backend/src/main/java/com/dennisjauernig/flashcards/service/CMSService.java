@@ -1,14 +1,8 @@
 package com.dennisjauernig.flashcards.service;
 
-import com.dennisjauernig.flashcards.model.Game;
-import com.dennisjauernig.flashcards.model.Question;
 import com.dennisjauernig.flashcards.repository.GamesDb;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CMSService {
@@ -21,11 +15,11 @@ public class CMSService {
   this.questionDb = questionDb;
  }
 
- public List<Question> listQuestions () {
+ /*public List<Question> listQuestions () {
   return questionDb.findAll();
  }
-
- public List<Game> listGames () {
+*/
+ /*public List<Game> listGames () {
   return gamesDb.findAll();
  }
 
@@ -36,7 +30,7 @@ public class CMSService {
  }
 
  public Optional<Question> deleteQuestion ( UUID questionId ) {
-  Optional<Question> questionToDelete = questionDb.findById( questionId );
+  Optional<QuestionDao> questionToDelete = questionDb.findById( questionId );
   questionDb.deleteById( questionId );
   return questionToDelete;
  }
@@ -52,5 +46,5 @@ public class CMSService {
   return Optional.of( questionDb.save( question.toBuilder()
                                                .id( UUID.randomUUID() )
                                                .build() ) );
- }
+ }*/
 }

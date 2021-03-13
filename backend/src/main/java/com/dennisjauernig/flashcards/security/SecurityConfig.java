@@ -1,7 +1,5 @@
-package com.dennisjauernig.flashcards.config;
+package com.dennisjauernig.flashcards.security;
 
-import com.dennisjauernig.flashcards.filter.JwtRequestFilter;
-import com.dennisjauernig.flashcards.service.GameUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,54 +1,65 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import SockJsClient from 'react-stomp';
-import { validate as uuidValidate } from 'uuid';
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import FAQ from '../../components/Tiles/FAQ/FAQ';
+import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
 import NewGame from '../../components/Tiles/NewGame/NewGame';
 import NoAvailableGames from '../../components/Tiles/NoAvailableGames/NoAvailableGames';
 import OpenGame from '../../components/Tiles/OpenGame/OpenGame';
+import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
-import { listAvailableGames } from '../../services/APIService';
+import { useSocket } from '../../contexts/socket';
 
 export default function Lobby() {
+  const { gameList, socket, socketState } = useSocket();
   const [playerDetails] = usePlayerDetails();
-  const [games, setGames] = useState();
   const history = useHistory();
+  const [addNotification] = useNotifications();
+
+  const handleLobbyJoin = () => {
+    try {
+      socket.sendMessage('/api/games');
+    } catch (e) {
+      addNotification('Could not load the lobby. Please try again!(Websocket Error)');
+    }
+  };
+
+  const handleNewGame = (difficulty) => {
+    history.push(`/game/${difficulty}/${uuidv4()}`);
+  };
 
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
       history.push('/');
     }
-    listAvailableGames()
-      .then(setGames)
-      .catch(() => console.error('Ninja-like the server is somehow not. Try gain... (Network Error'));
   }, []);
 
-  const handleOpenNewGame = (difficulty) => {
-    history.push(`/game/${difficulty}`);
-  };
+  useEffect(() => {
+    if (!socketState) {
+      addNotification('Connection to the arena lost. Try to reconnect automatically... (Websocket Error)');
+    } else {
+      addNotification('Connection to the arena established. Lets go!');
+      handleLobbyJoin();
+    }
+  }, [socketState]);
 
-  const getInitialAvailableGames = () => {
-    listAvailableGames()
-      .then(setGames)
-      .catch(() => console.error('No open games found'));
-  };
+  if (!socketState || !gameList) {
+    return (
+      <>
+        <Logo />
+        <Loading />
+      </>
+    );
+  }
 
   return (
     <>
-      <SockJsClient
-        url="/ws"
-        topics={['/topic/games']}
-        onConnect={() => {
-          getInitialAvailableGames();
-        }}
-        onMessage={(data) => setGames(data.gameDtoList)} />
       <Logo />
       <FAQ playerName={playerDetails.name} />
-
-      <NewGame onGameOpen={handleOpenNewGame} />
-      <NoAvailableGames />
-      {games && games.map((game) => <OpenGame key={game.id} game={game} />)}
+      <NewGame onGameOpen={handleNewGame} />
+      {!gameList && <NoAvailableGames />}
+      {gameList && gameList.map((game) => <OpenGame key={game.id} game={game} />)}
     </>
   );
 }

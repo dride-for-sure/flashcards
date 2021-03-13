@@ -1,14 +1,8 @@
 package com.dennisjauernig.flashcards.controller;
 
-import com.dennisjauernig.flashcards.model.Game;
-import com.dennisjauernig.flashcards.model.Question;
 import com.dennisjauernig.flashcards.service.CMSService;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping ( "/api" )
@@ -20,7 +14,7 @@ public class CMSController {
   this.cmsService = cmsService;
  }
 
- @GetMapping ( "/questions" )
+ /*@GetMapping ( "/questions" )
  public List<Question> listQuestions () {
   return cmsService.listQuestions();
  }
@@ -56,6 +50,6 @@ public class CMSController {
   return cmsService.addQuestion( question )
                    .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST,
                            "Question: " + question.getId() + " could not be added" ) );
- }
+ }*/
 
 }
