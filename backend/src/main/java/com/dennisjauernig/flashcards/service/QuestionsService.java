@@ -5,6 +5,7 @@ import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.controller.model.QuestionDtoList;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Question;
+import com.dennisjauernig.flashcards.model.QuestionDao;
 import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.QuestionStatus;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
@@ -134,7 +135,7 @@ public class QuestionsService {
 
  // √ Filter a questionList by difficulty
  private List<Question> filterQuestionsByDifficulty ( Difficulty difficulty ) {
-  return questionDb.findAll().stream().filter( question -> {
+  return listQuestions().stream().filter( question -> {
    if ( difficulty.equals( Difficulty.EASY ) ) {
     return question.getDifficulty().equals( Difficulty.EASY );
    }
@@ -146,6 +147,22 @@ public class QuestionsService {
   } ).collect( Collectors.toList() );
  }
 
+ // √ List questions
+ private List<Question> listQuestions () {
+  List<QuestionDao> questionDaoList = questionDb.findAll();
+  return questionDaoList.stream().map( questionDao ->
+          Question.builder()
+                  .id( questionDao.getId() )
+                  .difficulty( questionDao.getDifficulty() )
+                  .category( questionDao.getCategory() )
+                  .question( questionDao.getQuestion() )
+                  .answers( questionDao.getAnswers() )
+                  .solution( questionDao.getSolution() )
+                  .firstQuestion( false )
+                  .build() ).collect( Collectors.toList() );
+ }
+
+ // √ Add type to list
  public QuestionDtoList addTypeToQuestionDtoList ( List<QuestionDto> questionDtoList ) {
   return QuestionDtoList.builder().questionDtoList( questionDtoList ).build();
  }
