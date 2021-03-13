@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,13 +26,13 @@ public class SocketController {
  }
 
  // √ Join lobby
- @SubscribeMapping ( "/games" )
+ @MessageMapping ( "/games" )
  public GameDtoList joinLobby () {
   return logicService.joinLobby();
  }
 
  // √ Join game
- @SubscribeMapping ( "/games/{difficulty}/{gameId}/join" )
+ @MessageMapping ( "/games/{difficulty}/{gameId}/join" )
  public UUID joinGame (
          @Header ( "simpSessionId" ) String sessionId,
          @DestinationVariable String difficulty,
@@ -44,7 +44,7 @@ public class SocketController {
  }
 
  // √ Start game
- @SubscribeMapping ( "/games/{difficulty}/{gameId}/start" )
+ @MessageMapping ( "/games/{difficulty}/{gameId}/start" )
  public UUID startGame (
          @Header ( "simpSessionId" ) String sessionId,
          @DestinationVariable UUID gameId ) {
@@ -55,7 +55,7 @@ public class SocketController {
 
 
  // √ Receive answers
- @SubscribeMapping ( "/player/{playerId}/{gameId}" )
+ @MessageMapping ( "/player/{playerId}/{gameId}" )
  public UUID receiveAnswer (
          @DestinationVariable UUID gameId,
          @DestinationVariable UUID playerId,
@@ -65,7 +65,7 @@ public class SocketController {
  }
 
  // √ Leave game
- @SubscribeMapping ( "/games/{difficulty}/{gameId}/leave" )
+ @MessageMapping ( "/games/{difficulty}/{gameId}/leave" )
  public void leaveGame (
          @Header ( "simpSessionId" ) String sessionId ) {
   logicService.leaveGame( sessionId );
