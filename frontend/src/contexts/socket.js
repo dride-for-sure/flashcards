@@ -10,6 +10,7 @@ const SocketProvider = ({ children }) => {
   const [gameList, setGameList] = useState();
   const [questionList, setQuestionList] = useState();
   const [socket, setSocket] = useState();
+  const [socketState, setSocketState] = useState();
   const [playerDetails] = usePlayerDetails();
 
   const handleMessages = (data) => {
@@ -24,17 +25,25 @@ const SocketProvider = ({ children }) => {
     }
   };
 
+  const handleReset = () => {
+    setGame();
+    setQuestionList();
+  };
+
   return (
-    <SocketContext.Provider value={{ game, gameList, questionList, socket }}>
+    <SocketContext.Provider value={
+      { handleReset, game, gameList, questionList, socket, socketState }
+    }>
       <SockJsClient
         url="/ws"
         topics={[
           '/topic/games', // List<GameDto>
           playerDetails.id ? `/queue/player/${playerDetails.id}` : '', // List<QuestionDtoList> & GameDto
         ]}
+        onConnect={() => setSocketState(true)}
         onMessage={handleMessages}
-        ref={setSocket}
-        debug />
+        onDisconnect={() => setSocketState(false)}
+        ref={setSocket} />
       {children}
     </SocketContext.Provider>
   );
