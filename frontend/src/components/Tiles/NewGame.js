@@ -1,25 +1,46 @@
 import { func } from 'prop-types';
+import { useState } from 'react';
 import styled from 'styled-components';
-import getGameIconByDifficulty from '../../common/handleIcons';
+import { topicList } from '../../types/types';
 import Button from '../Buttons/Button';
+import Arrow from '../Icon/Arrow';
 import Tiles from './Tiles';
 
-export default function NewGame({ onGameOpen }) {
+export default function NewGame({ onGameOpen, topics }) {
+  const [chosenTopic, setChosenTopic] = useState(topics && topics[0].name);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (chosenTopic) {
+      onGameOpen(chosenTopic);
+    }
+  };
+
+  const handleChange = (event) => {
+    setChosenTopic(event.target.value);
+  };
+
   return (
     <Tiles bg="var(--color-blue-medium)">
       <h1>To start a new game...</h1>
-      <Subtitle>...choose a difficulty:</Subtitle>
-      <Container>
-        <Button title="Easy peasy" fontsize="2rem" onClick={() => onGameOpen('EASY')}>
-          {getGameIconByDifficulty('EASY')}
-        </Button>
-        <Button title="Easy peasy" fontsize="2rem" onClick={() => onGameOpen('MODERATE')}>
-          {getGameIconByDifficulty('MODERATE')}
-        </Button>
-        <Button title="Easy peasy" fontsize="2rem" onClick={() => onGameOpen('HARD')}>
-          {getGameIconByDifficulty('HARD')}
-        </Button>
-      </Container>
+      <Subtitle>...choose a topic:</Subtitle>
+      <Form onSubmit={handleSubmit}>
+        <select onChange={handleChange} value={chosenTopic}>
+          {topics && topics.map((topic) => (
+            <option key={topic.name} value={topic.name}>
+              {topic.name}
+              {' '}
+              (
+              {topic.questionCount}
+              {' '}
+              {topic.questionCount > 1 ? 'Questions' : 'Question'}
+              )
+            </option>
+          ))}
+        </select>
+        <Button onClick={handleSubmit}><Arrow /></Button>
+      </Form>
+      {onGameOpen}
     </Tiles>
   );
 }
@@ -30,16 +51,30 @@ const Subtitle = styled.div`
   display:block;
 `;
 
-const Container = styled.div`
+const Form = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   margin-top: 5px;
-
-  > button + button {
-    margin-left: 7%;
+  
+  > select {
+    width: 100%;
+    outline: none;
+    padding: 8px;
+    border: 4px solid white;
+    color: white;
+    background-color: transparent;
+    box-sizing: border-box;
+    font-style: italic;
   }
+
+  > button {
+    padding: 5px;
+    margin-left: 10px;
+  } 
 `;
 
 NewGame.propTypes = {
   onGameOpen: func.isRequired,
+  topics: topicList.isRequired,
 };
