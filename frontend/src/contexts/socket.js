@@ -25,13 +25,12 @@ const SocketProvider = ({ children }) => {
   };
 
   return (
-    <SocketContext.Provider value={{ game, gameList, socket, questionList }}>
+    <SocketContext.Provider value={{ game, gameList, questionList, socket }}>
       <SockJsClient
         url="/ws"
         topics={[
-          '/topic/games',
-          '/api/games',
-          playerDetails.id ? `/queue/player/${playerDetails.id}` : '',
+          '/topic/games', // List<GameDto>
+          playerDetails.id ? `/queue/player/${playerDetails.id}` : '', // List<QuestionDtoList> & GameDto
         ]}
         onMessage={handleMessages}
         ref={setSocket}
