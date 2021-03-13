@@ -132,7 +132,7 @@ public class LogicService {
  }
 
  // √ Answer received
- public Optional<Boolean> receiveAnswer (
+ public Optional<UUID> receiveAnswer (
          UUID gameId,
          UUID playerId,
          AnswerDto answerDto ) {
@@ -141,7 +141,7 @@ public class LogicService {
    Game updatedGame = answerService.updateGameWithReceivedAnswer( playerId, game.get(), answerDto );
    messagingService.broadcastGameDto( updatedGame );
    gamesDb.save( updatedGame );
-   return Optional.of( true );
+   return Optional.of( gameId );
   }
   return Optional.empty();
  }
