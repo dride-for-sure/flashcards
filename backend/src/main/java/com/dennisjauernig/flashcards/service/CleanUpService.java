@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CleanUpService {
@@ -33,9 +34,23 @@ public class CleanUpService {
                     .stream()
                     .filter( player -> playerIds.contains( player.getId() ) )
                     .count();
-   if ( count == 0 ) gamesService.deleteGameById( game.getId() );
+   if ( count == 0 ) {
+    gamesService.deleteGameById( game.getId() );
+   } else if ( !playerIds.contains( game.getMaster().getId() ) ) {
+    promotePlayerToGameMaster( playerIds, game );
+   }
   }
   messagingService.broadcastGameDtoList( gamesService.listAvailableGames() );
   return null;
+ }
+
+ private void promotePlayerToGameMaster ( List<UUID> playerIds, Game game ) {
+  Game cleanedGame = game.toBuilder()
+                         .playerList( game.getPlayerList().stream()
+                                          .filter( player -> playerIds.contains( player.getId() ) )
+                                          .collect( Collectors.toList() ) )
+                         .build();
+  Game gameWithNewMaster = gamesService.promoteRandomPlayerToGameMaster( cleanedGame );
+  messagingService.broadcastGameDto( gameWithNewMaster );
  }
 }
