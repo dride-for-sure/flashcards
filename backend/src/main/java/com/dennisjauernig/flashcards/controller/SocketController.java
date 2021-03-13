@@ -56,12 +56,12 @@ public class SocketController {
 
  // √ Receive answers
  @SubscribeMapping ( "/player/{playerId}/{gameId}" )
- public void receiveAnswer (
+ public UUID receiveAnswer (
          @DestinationVariable UUID gameId,
          @DestinationVariable UUID playerId,
          AnswerDto answerDto ) {
-  logicService.receiveAnswer( gameId, playerId, answerDto )
-              .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST, "Answer not possible" ) );
+  return logicService.receiveAnswer( gameId, playerId, answerDto )
+                     .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST, "Answer not possible" ) );
  }
 
  // √ Leave game
