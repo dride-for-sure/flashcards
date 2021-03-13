@@ -47,12 +47,13 @@ public class GamesService {
  // √ Generate a new game
  public Game generateNewGame (
          PlayerDto playerDto,
-         Difficulty difficulty ) {
+         Difficulty difficulty,
+         UUID gameId ) {
   List<Question> questionsList = questionsService.generateQuestionList( difficulty );
   List<QuestionDto> questionDtoList = questionsService.convertQuestionListToDto( questionsList );
   Player player = playerService.generateNewPlayer( playerDto, questionDtoList );
   return Game.builder()
-             .id( UUID.randomUUID() )
+             .id( gameId )
              .timestamp( Instant.now().getEpochSecond() )
              .difficulty( difficulty )
              .status( GameStatus.PREPARE )
