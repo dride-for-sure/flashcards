@@ -1,6 +1,7 @@
 import { node } from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SockJsClient from 'react-stomp';
+import { useNotifications } from './notifications';
 import { usePlayerDetails } from './playerDetails';
 
 const SocketContext = React.createContext();
@@ -12,6 +13,7 @@ const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState();
   const [socketState, setSocketState] = useState();
   const [playerDetails] = usePlayerDetails();
+  const [addNotification] = useNotifications();
 
   const handleMessages = (data) => {
     if (data.type === 'QUESTIONLIST') {
@@ -29,6 +31,15 @@ const SocketProvider = ({ children }) => {
     setGame();
     setQuestionList();
   };
+
+  useEffect(() => {
+    if (!socketState && socket) {
+      addNotification('Connection to the arena lost. I\'m trying to reconnect (Websocket Error)');
+    }
+    if (socketState && socket) {
+      addNotification('Connection to the arena established. Lets go!');
+    }
+  }, [socketState]);
 
   return (
     <SocketContext.Provider value={
