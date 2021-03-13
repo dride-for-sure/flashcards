@@ -70,6 +70,7 @@ public class LogicService {
   if ( !gamesService.isMaxOpenGames() ) {
    Game newGame = gamesService.generateNewGame( playerDto, difficulty, gameId );
    gamesService.saveGame( newGame );
+   messagingService.broadcastGameDtoList( gamesService.listAvailableGames() );
    messagingService.broadcastGameDto( newGame );
    return Optional.of( newGame.getId() );
   }
