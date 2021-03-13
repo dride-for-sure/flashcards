@@ -1,8 +1,8 @@
 import { node } from 'prop-types';
 import { createContext, useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import NotificationListItem from '../components/NotificationList/NotificationListItem/NotificationListItem';
-import NotificationList from '../components/NotificationList/styled';
+import NotificationList from '../components/NotificationList/NotificationList';
+import NotificationListItem from '../components/NotificationList/NotificationListItem';
 
 const NotificationContext = createContext();
 
