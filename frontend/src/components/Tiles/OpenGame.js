@@ -1,24 +1,24 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import getColorByDifficulty from '../../common/handleDifficultyColor';
-import getGameIconByDifficulty from '../../common/handleIcons';
+import getGameIconByTopic from '../../common/handleIcons';
+import getColorByTopic from '../../common/handleTopicColor';
 import { gamesListItemType } from '../../types/types';
 import Tiles from './Tiles';
 
 export default function OpenGame({ game }) {
   return (
-    <Tiles bg={getColorByDifficulty(game.difficulty)}>
-      <Difficulty>{getGameIconByDifficulty(game.difficulty)}</Difficulty>
+    <Tiles bg={getColorByTopic(game.topic)}>
+      <Topic>{getGameIconByTopic(game.topic)}</Topic>
       <SmallTitle>The GameMaster is:</SmallTitle>
       <h1>{game.master.name}</h1>
       <Center>
-        <Link to={`/game/${game.difficulty}/${game.id}`}>⚔️</Link>
+        <Link to={`/game/${game.topic}/${game.id}`}>⚔️</Link>
       </Center>
     </Tiles>
   );
 }
 
-const Difficulty = styled.div`
+const Topic = styled.div`
   position:absolute;
   top:-18px;
   right:-13px;
