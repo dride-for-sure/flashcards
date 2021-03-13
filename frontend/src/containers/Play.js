@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { validate as uuidValidate } from 'uuid';
-import Results from '../../components/Results/Results';
-import ScoreList from '../../components/Scores/ScoreList';
-import ScoreListItem from '../../components/Scores/ScoreListItem';
-import GameMaster from '../../components/Tiles/GameMaster';
-import Loading from '../../components/Tiles/Loading';
-import Logo from '../../components/Tiles/Logo';
-import Question from '../../components/Tiles/Question';
-import Waiting from '../../components/Tiles/Waiting';
-import { useNotifications } from '../../contexts/notifications';
-import { usePlayerDetails } from '../../contexts/playerDetails';
-import { useSocket } from '../../contexts/socket';
+import Results from '../components/Results/Results';
+import ScoreList from '../components/Scores/ScoreList';
+import ScoreListItem from '../components/Scores/ScoreListItem';
+import GameMaster from '../components/Tiles/GameMaster';
+import Loading from '../components/Tiles/Loading';
+import Logo from '../components/Tiles/Logo';
+import Question from '../components/Tiles/Question';
+import Waiting from '../components/Tiles/Waiting';
+import { useNotifications } from '../contexts/notifications';
+import { usePlayerDetails } from '../contexts/playerDetails';
+import { useSocket } from '../contexts/socket';
 
 export default function Play() {
   const { handleReset, game, questionList, socket, socketState } = useSocket();
