@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class GameConfig {
 
- private final int deleteGamesDelay = 8;
+ private final int deleteGamesDelay = 3;
  private final int maxQuestions = 25;
  private final int maxOpenGames = 20;
 }
