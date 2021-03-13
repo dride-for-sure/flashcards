@@ -145,9 +145,12 @@ public class GamesService {
   return game.getMaster().getId().equals( playerId );
  }
 
- // √ Convert the List<GameDto> to GameDtoList
- public GameDtoList addTypeToGameDtoList ( List<GameDto> gameDtoList ) {
-  return GameDtoList.builder().gameDtoList( gameDtoList ).build();
+ // √ Convert the List<GameDto> to GameDtoList and add the topics
+ public GameDtoList addTypeAndTopicsToGameDtoList ( List<GameDto> gameDtoList ) {
+  return GameDtoList.builder()
+                    .gameDtoList( gameDtoList )
+                    .topicDetailsList( questionsService.listTopicDetails() )
+                    .build();
  }
 
  // √ Get game by Id

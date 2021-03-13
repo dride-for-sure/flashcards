@@ -6,14 +6,13 @@ import com.dennisjauernig.flashcards.controller.model.QuestionDtoList;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Question;
 import com.dennisjauernig.flashcards.model.QuestionDao;
+import com.dennisjauernig.flashcards.model.TopicDetails;
 import com.dennisjauernig.flashcards.model.enums.QuestionStatus;
 import com.dennisjauernig.flashcards.model.enums.Topic;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -145,6 +144,24 @@ public class QuestionsService {
                   .solution( questionDao.getSolution() )
                   .firstQuestion( false )
                   .build() ).collect( Collectors.toList() );
+ }
+
+ // √ Generate list with TopicDetails
+ public List<TopicDetails> listTopicDetails () {
+  List<QuestionDao> questionDaoList = questionDb.findAll();
+  Map<Topic, Integer> occurences = new HashMap<>();
+  for ( QuestionDao questionDao : questionDaoList ) {
+   Integer index = occurences.get( questionDao.getTopic() );
+   occurences.put( questionDao.getTopic(), index == null ? 1 : index + 1 );
+  }
+  return occurences
+          .entrySet()
+          .stream()
+          .map( topic -> TopicDetails.builder()
+                                     .name( topic.getKey() )
+                                     .questionCount( topic.getValue() )
+                                     .build() )
+          .collect( Collectors.toList() );
  }
 
  // √ Add type to list

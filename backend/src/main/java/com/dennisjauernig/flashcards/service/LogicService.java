@@ -54,7 +54,7 @@ public class LogicService {
  // √ Player joins lobby
  public GameDtoList joinLobby () {
   List<GameDto> gameDtoList = gamesService.listAvailableGames();
-  return gamesService.addTypeToGameDtoList( gameDtoList );
+  return gamesService.addTypeAndTopicsToGameDtoList( gameDtoList );
  }
 
  // √ Player joins game

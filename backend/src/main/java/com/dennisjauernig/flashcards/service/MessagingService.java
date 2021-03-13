@@ -29,7 +29,7 @@ public class MessagingService {
 
  // √ Broadcast all open games to the lobby
  public void broadcastGameDtoList ( List<GameDto> gameDtoList ) {
-  GameDtoList gamesToBroadcast = gamesService.addTypeToGameDtoList( gameDtoList );
+  GameDtoList gamesToBroadcast = gamesService.addTypeAndTopicsToGameDtoList( gameDtoList );
   simpMessagingTemplate.convertAndSend( "/topic/games", gamesToBroadcast );
  }
 
