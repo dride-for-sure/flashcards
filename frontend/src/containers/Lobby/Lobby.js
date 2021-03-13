@@ -36,10 +36,7 @@ export default function Lobby() {
   }, []);
 
   useEffect(() => {
-    if (!socketState) {
-      addNotification('Connection to the arena lost. Try to reconnect automatically... (Websocket Error)');
-    } else {
-      addNotification('Connection to the arena established. Lets go!');
+    if (socketState) {
       handleLobbyJoin();
     }
   }, [socketState]);

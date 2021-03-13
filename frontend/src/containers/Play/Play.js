@@ -42,7 +42,7 @@ export default function Play() {
     try {
       socket.sendMessage(`/api/player/${playerDetails.id}/${gameId}`, JSON.stringify({ id, selectedSolution }));
     } catch (e) {
-      addNotification('Stay calm little ninja. The internet in germany is not that fast. Try again in a few seconds! (Network Error)');
+      addNotification('Germany...internet...uknow? Try again in a few seconds! (Network Error)');
     }
   };
 
@@ -71,11 +71,8 @@ export default function Play() {
   }, []);
 
   useEffect(() => {
-    if (!socketState) {
-      addNotification('Connection to the arena lost. Try to reconnect automatically... (Websocket Error)');
-    } else {
+    if (socketState) {
       handleGameJoin();
-      addNotification('Connection to the arena established. Lets go!');
     }
   }, [socketState]);
 
