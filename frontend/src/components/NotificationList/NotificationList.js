@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
 
-const Container = styled.div`
+const NotificationList = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
@@ -8,4 +8,4 @@ const Container = styled.div`
   flex-direction: column-reverse;
 `;
 
-export default Container;
+export default NotificationList;

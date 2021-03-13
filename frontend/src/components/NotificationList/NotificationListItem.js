@@ -1,6 +1,16 @@
-import styled from 'styled-components';
+import { func, string } from 'prop-types';
+import styled from 'styled-components/macro';
 
-const NotificationList = styled.button`
+export default function NotificationListItem({ notification, onDelete }) {
+  return (
+    <Container type="button" onClick={() => onDelete(notification.id)}>
+      <span>🔧</span>
+      {notification.content}
+    </Container>
+  );
+}
+
+const Container = styled.button`
   width: fit-content;
   margin: 20px;
   padding: 20px;
@@ -33,4 +43,7 @@ const NotificationList = styled.button`
   }
 `;
 
-export default NotificationList;
+NotificationListItem.propTypes = {
+  notification: string.isRequired,
+  onDelete: func.isRequired,
+};

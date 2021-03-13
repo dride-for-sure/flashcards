@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { validate as uuidValidate } from 'uuid';
-import ScoreBar from '../../components/Charts/ScoreBar/ScoreBar';
-import Charts from '../../components/Charts/styles';
 import Results from '../../components/Results/Results';
+import ScoreList from '../../components/Scores/ScoreList';
+import ScoreListItem from '../../components/Scores/ScoreListItem';
 import GameMaster from '../../components/Tiles/GameMaster/GameMaster';
 import Loading from '../../components/Tiles/Loading/Loading';
 import Logo from '../../components/Tiles/Logo/Logo';
@@ -109,15 +109,15 @@ export default function Play() {
           question={question}
           onSendAnswer={handleAnswer} />
       ))}
-      <Charts>
+      <ScoreList>
         {game && game.playerList.map((player) => (
-          <ScoreBar
+          <ScoreListItem
             key={player.id}
             player={player}
             playerDetails={playerDetails}
             maxPoints={game.maxPoints} />
         ))}
-      </Charts>
+      </ScoreList>
     </>
   );
 }

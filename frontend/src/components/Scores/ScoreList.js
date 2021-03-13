@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
 
-const Charts = styled.div`
+const ScoreList = styled.div`
     position: fixed;
     bottom:0;
     right:0;
@@ -13,4 +13,4 @@ const Charts = styled.div`
     user-select:none;
 `;
 
-export default Charts;
+export default ScoreList;

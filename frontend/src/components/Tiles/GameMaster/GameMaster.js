@@ -1,7 +1,7 @@
 import { func } from 'prop-types';
+import styled from 'styled-components/macro';
 import Icon from '../../Icon/Icon';
 import Tiles from '../Tiles';
-import StartButton from './styled';
 
 export default function GameMaster({ onGameStart }) {
   return (
@@ -12,6 +12,18 @@ export default function GameMaster({ onGameStart }) {
     </Tiles>
   );
 }
+
+const StartButton = styled.button`
+  border:0;
+  background-color: transparent;
+  font-size: 7rem;
+  outline: none;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+`;
 
 GameMaster.propTypes = {
   onGameStart: func.isRequired,
