@@ -1,8 +1,8 @@
 import { func } from 'prop-types';
 import styled from 'styled-components/macro';
-import getGameIconByDifficulty from '../../../common/handleIcons';
-import Button from '../../Buttons/Button';
-import Tiles from '../Tiles';
+import getGameIconByDifficulty from '../../common/handleIcons';
+import Button from '../Buttons/Button';
+import Tiles from './Tiles';
 
 export default function NewGame({ onGameOpen }) {
   return (

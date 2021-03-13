@@ -1,6 +1,6 @@
 import { string } from 'prop-types';
 import styled from 'styled-components/macro';
-import Tiles from '../Tiles';
+import Tiles from './Tiles';
 
 export default function Waiting({ gameMasterName }) {
   return (

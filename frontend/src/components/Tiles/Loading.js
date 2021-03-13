@@ -1,5 +1,5 @@
-import Icon from '../../Icon/Icon';
-import Tiles from '../Tiles';
+import Icon from '../Icon/Icon';
+import Tiles from './Tiles';
 
 export default function Loading() {
   return (

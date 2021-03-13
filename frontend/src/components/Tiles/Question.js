@@ -1,10 +1,10 @@
 import { func } from 'prop-types';
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
-import getColorByDifficulty from '../../../common/handleDifficultyColor';
-import { questionListItemType } from '../../../types/types';
-import Button from '../../Buttons/Button';
-import Tiles from '../Tiles';
+import getColorByDifficulty from '../../common/handleDifficultyColor';
+import { questionListItemType } from '../../types/types';
+import Button from '../Buttons/Button';
+import Tiles from './Tiles';
 
 export default function Question({ question, onSendAnswer }) {
   return (

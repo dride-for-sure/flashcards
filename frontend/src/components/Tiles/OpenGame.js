@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import getColorByDifficulty from '../../../common/handleDifficultyColor';
-import getGameIconByDifficulty from '../../../common/handleIcons';
-import { gamesListItemType } from '../../../types/types';
-import Tiles from '../Tiles';
+import getColorByDifficulty from '../../common/handleDifficultyColor';
+import getGameIconByDifficulty from '../../common/handleIcons';
+import { gamesListItemType } from '../../types/types';
+import Tiles from './Tiles';
 
 export default function OpenGame({ game }) {
   return (

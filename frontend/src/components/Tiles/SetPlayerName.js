@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { v4 as uuidv4 } from 'uuid';
-import { usePlayerDetails } from '../../../contexts/playerDetails';
-import Button from '../../Buttons/Button';
-import Tiles from '../Tiles';
+import { usePlayerDetails } from '../../contexts/playerDetails';
+import Button from '../Buttons/Button';
+import Tiles from './Tiles';
 
 export default function SetPlayerName({ onSubmit, hasPlayerDetails }) {
   const [playerDetails, setPlayerDetails] = usePlayerDetails();

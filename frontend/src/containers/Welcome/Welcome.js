@@ -1,8 +1,8 @@
 import { useHistory } from 'react-router-dom';
 import { validate as uuidValidate } from 'uuid';
-import Logo from '../../components/Tiles/Logo/Logo';
-import SetPlayerName from '../../components/Tiles/SetPlayerName/SetPlayerName';
-import Title from '../../components/Tiles/Title/Title';
+import Logo from '../../components/Tiles/Logo';
+import SetPlayerName from '../../components/Tiles/SetPlayerName';
+import Title from '../../components/Tiles/Title';
 
 export default function Welcome() {
   const history = useHistory();
