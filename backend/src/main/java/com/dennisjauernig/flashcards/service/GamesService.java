@@ -9,8 +9,8 @@ import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.GameMaster;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.Question;
-import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.GameStatus;
+import com.dennisjauernig.flashcards.model.enums.Topic;
 import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,15 +47,15 @@ public class GamesService {
  // √ Generate a new game
  public Game generateNewGame (
          PlayerDto playerDto,
-         Difficulty difficulty,
+         Topic topic,
          UUID gameId ) {
-  List<Question> questionsList = questionsService.generateQuestionList( difficulty );
+  List<Question> questionsList = questionsService.generateQuestionList( topic );
   List<QuestionDto> questionDtoList = questionsService.convertQuestionListToDto( questionsList );
   Player player = playerService.generateNewPlayer( playerDto, questionDtoList );
   return Game.builder()
              .id( gameId )
              .timestamp( Instant.now().getEpochSecond() )
-             .difficulty( difficulty )
+             .topic( topic )
              .status( GameStatus.PREPARE )
              .master( GameMaster.builder()
                                 .id( playerDto.getId() )
@@ -70,7 +70,7 @@ public class GamesService {
  public GameDto convertGameToDto ( Game game ) {
   return GameDto.builder()
                 .id( game.getId() )
-                .difficulty( game.getDifficulty() )
+                .topic( game.getTopic() )
                 .status( game.getStatus() )
                 .master( game.getMaster() )
                 .maxPoints( questionsService.calcMaxPoints( game ) )

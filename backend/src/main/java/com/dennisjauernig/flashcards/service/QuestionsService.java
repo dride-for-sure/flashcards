@@ -6,8 +6,8 @@ import com.dennisjauernig.flashcards.controller.model.QuestionDtoList;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Question;
 import com.dennisjauernig.flashcards.model.QuestionDao;
-import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.QuestionStatus;
+import com.dennisjauernig.flashcards.model.enums.Topic;
 import com.dennisjauernig.flashcards.repository.QuestionDb;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +50,7 @@ public class QuestionsService {
   return QuestionDto.builder()
                     .id( question.getId() )
                     .status( question.getFirstQuestion() ? QuestionStatus.SELECTED : QuestionStatus.NONE )
-                    .difficulty( question.getDifficulty() )
+                    .topic( question.getTopic() )
                     .category( question.getCategory() )
                     .question( question.getQuestion() )
                     .answers( question.getAnswers() )
@@ -92,19 +92,12 @@ public class QuestionsService {
 
  // √ Calculate maximal possible Points for a given game
  public int calcMaxPoints ( Game game ) {
-  return game.getQuestionList()
-             .stream()
-             .map( question -> switch ( question.getDifficulty() ) {
-              case EASY -> 1;
-              case MODERATE -> 2;
-              case HARD -> 3;
-             } )
-             .reduce( 0, ( sum, points ) -> sum + points );
+  return game.getQuestionList().size();
  }
 
  // √ Generate a fresh questionList
- public List<Question> generateQuestionList ( Difficulty difficulty ) {
-  return selectFirstQuestion( selectRandomQuestionsFromList( filterQuestionsByDifficulty( difficulty ) ) );
+ public List<Question> generateQuestionList ( Topic topic ) {
+  return selectFirstQuestion( selectRandomQuestionsFromList( filterQuestionListByTopic( topic ) ) );
  }
 
  // √ Select a random first question
@@ -133,18 +126,10 @@ public class QuestionsService {
   return chosenQuestions;
  }
 
- // √ Filter a questionList by difficulty
- private List<Question> filterQuestionsByDifficulty ( Difficulty difficulty ) {
-  return listQuestions().stream().filter( question -> {
-   if ( difficulty.equals( Difficulty.EASY ) ) {
-    return question.getDifficulty().equals( Difficulty.EASY );
-   }
-   if ( difficulty.equals( Difficulty.MODERATE ) ) {
-    return question.getDifficulty().equals( Difficulty.EASY )
-            || question.getDifficulty().equals( Difficulty.MODERATE );
-   }
-   return true;
-  } ).collect( Collectors.toList() );
+ // √ Filter a questionList by topic
+ private List<Question> filterQuestionListByTopic ( Topic topic ) {
+  return listQuestions().stream().filter( question ->
+          question.getTopic().equals( topic ) ).collect( Collectors.toList() );
  }
 
  // √ List questions
@@ -153,7 +138,7 @@ public class QuestionsService {
   return questionDaoList.stream().map( questionDao ->
           Question.builder()
                   .id( questionDao.getId() )
-                  .difficulty( questionDao.getDifficulty() )
+                  .topic( questionDao.getTopic() )
                   .category( questionDao.getCategory() )
                   .question( questionDao.getQuestion() )
                   .answers( questionDao.getAnswers() )

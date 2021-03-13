@@ -3,7 +3,7 @@ package com.dennisjauernig.flashcards.controller;
 import com.dennisjauernig.flashcards.controller.model.AnswerDto;
 import com.dennisjauernig.flashcards.controller.model.GameDtoList;
 import com.dennisjauernig.flashcards.controller.model.PlayerDto;
-import com.dennisjauernig.flashcards.model.enums.Difficulty;
+import com.dennisjauernig.flashcards.model.enums.Topic;
 import com.dennisjauernig.flashcards.service.LogicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,19 +32,20 @@ public class SocketController {
  }
 
  // √ Join game
- @MessageMapping ( "/games/{difficulty}/{gameId}/join" )
+ @MessageMapping ( "/games/{topic}/{gameId}/join" )
  public UUID joinGame (
          @Header ( "simpSessionId" ) String sessionId,
-         @DestinationVariable String difficulty,
+         @DestinationVariable String topic,
          @DestinationVariable UUID gameId,
          PlayerDto playerDto ) {
-  return logicService.joinGame( sessionId, Difficulty.valueOf( difficulty ), gameId, playerDto )
-                     .orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST, "Could not " +
-                             "join or open a new game with id " + gameId + " and difficulty " + difficulty ) );
+  return logicService.joinGame( sessionId, Topic.valueOf( topic ), gameId, playerDto )
+                     .
+                             orElseThrow( () -> new ResponseStatusException( HttpStatus.BAD_REQUEST, "Could not " +
+                                     "join or open a new game with id " + gameId + " and topic " + topic ) );
  }
 
  // √ Start game
- @MessageMapping ( "/games/{difficulty}/{gameId}/start" )
+ @MessageMapping ( "/games/{topic}/{gameId}/start" )
  public UUID startGame (
          @Header ( "simpSessionId" ) String sessionId,
          @DestinationVariable UUID gameId ) {
@@ -65,7 +66,7 @@ public class SocketController {
  }
 
  // √ Leave game
- @MessageMapping ( "/games/{difficulty}/{gameId}/leave" )
+ @MessageMapping ( "/games/{topic}/{gameId}/leave" )
  public void leaveGame (
          @Header ( "simpSessionId" ) String sessionId ) {
   logicService.leaveGame( sessionId );

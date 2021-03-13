@@ -5,8 +5,8 @@ import com.dennisjauernig.flashcards.controller.model.*;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.Question;
-import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.GameStatus;
+import com.dennisjauernig.flashcards.model.enums.Topic;
 import com.dennisjauernig.flashcards.repository.GamesDb;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +60,7 @@ public class LogicService {
  // √ Player joins game
  public Optional<UUID> joinGame (
          String sessionId,
-         Difficulty difficulty,
+         Topic topic,
          UUID gameId,
          PlayerDto playerDto ) {
   playerService.registerPlayer( sessionId, playerDto );
@@ -69,7 +69,7 @@ public class LogicService {
    return joinExistingGame( playerDto, game.get() );
   }
   if ( !gamesService.isMaxOpenGames() ) {
-   Game newGame = gamesService.generateNewGame( playerDto, difficulty, gameId );
+   Game newGame = gamesService.generateNewGame( playerDto, topic, gameId );
    gamesService.saveGame( newGame );
    messagingService.broadcastGameDtoList( gamesService.listAvailableGames() );
    messagingService.broadcastGameDto( newGame );

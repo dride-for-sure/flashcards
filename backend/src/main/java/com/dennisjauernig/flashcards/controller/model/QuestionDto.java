@@ -1,7 +1,7 @@
 package com.dennisjauernig.flashcards.controller.model;
 
-import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.QuestionStatus;
+import com.dennisjauernig.flashcards.model.enums.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class QuestionDto {
 
  private UUID id;
  private QuestionStatus status;
- private Difficulty difficulty;
+ private Topic topic;
  private String category;
  private String question;
  private List<String> answers;
