@@ -14,7 +14,7 @@ export default function Results({ playerList, playerDetails, onRestart }) {
 
   return (
     <Container>
-      <div>
+      <Center>
         <span>⛩️</span>
         <h1>{headline}</h1>
         <ResultList>
@@ -29,7 +29,7 @@ export default function Results({ playerList, playerDetails, onRestart }) {
         <Button onClick={() => onRestart()}>
           Wanna try again?
         </Button>
-      </div>
+      </Center>
     </Container>
   );
 }
@@ -46,32 +46,32 @@ const Container = styled.div`
   z-index:100;
   background-color: var(--color-green-light);
   opacity: .8;
+`;
 
-  > div {
+const Center = styled.div`
+  align-self:center;
+  display:flex;
+  flex-direction: column;
+  width: 50%;
+  max-width: 500px;
+  padding-bottom:10%;
+
+  > *{
+    width: fit-content;
     align-self:center;
-    display:flex;
-    flex-direction: column;
-    width: 50%;
-    max-width: 500px;
-    padding-bottom:10%;
+  }
 
-    > *{
-      width: fit-content;
-      align-self:center;
-    }
+  > span:first-of-type{
+    font-size: 10rem;
+    margin-bottom: 40px;
+  }
 
-    > span:first-of-type{
-      font-size: 10rem;
-      margin-bottom: 40px;
-    }
-
-    > h1 {
-      font-weight: 600;
-      font-size: 4rem;
-      text-transform: uppercase;
-      margin:0;
-      padding: 0;
-    }
+  > h1 {
+    font-weight: 600;
+    font-size: 4rem;
+    text-transform: uppercase;
+    margin:0;
+    padding: 0;
   }
 `;
 

@@ -10,6 +10,15 @@ const Tiles = styled.div`
   height: 220px;
   background-color: ${(props) => props.bg || 'var(--color-monochrom-dark)'};
 
+  h1 {
+      font-weight: 600;
+      font-size: 2rem;
+      text-transform: uppercase;
+      word-break: break-word;
+      margin: 0;
+      padding: 0;
+  }
+
   ${(props) => props.status === 'SELECTED' && css`
     transform: scale(1.2) rotate(-2deg) translate(1%,2%);
     transition-duration: .8s;
