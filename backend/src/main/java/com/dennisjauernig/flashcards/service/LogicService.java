@@ -68,7 +68,8 @@ public class LogicService {
    return joinExistingGame( playerDto, game.get() );
   }
   if ( !gamesService.isMaxOpenGames() ) {
-   Game newGame = gamesService.generateNewGame( playerDto, difficulty );
+   Game newGame = gamesService.generateNewGame( playerDto, difficulty, gameId );
+   gamesService.saveGame( newGame );
    messagingService.broadcastGameDto( newGame );
    return Optional.of( newGame.getId() );
   }
@@ -139,7 +140,9 @@ public class LogicService {
   Optional<Game> game = gamesDb.findById( gameId );
   if ( game.isPresent() && gamesService.hasPlayer( playerId, game.get() ) ) {
    Game updatedGame = answerService.updateGameWithReceivedAnswer( playerId, game.get(), answerDto );
+   List<QuestionDto> questionDtoList = questionsService.getQuestionListDto( updatedGame, playerId );
    messagingService.broadcastGameDto( updatedGame );
+   messagingService.broadcastQuestionDtoListToPlayer( questionDtoList, playerId );
    gamesDb.save( updatedGame );
    return Optional.of( gameId );
   }
