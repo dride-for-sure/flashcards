@@ -9,14 +9,15 @@ const NotificationContext = createContext();
 const NotificationProvider = ({ children }) => {
   const [notificationList, setNotificationList] = useState([]);
 
-  const removeNotification = (id) => {
-    setNotificationList(notificationList.filter((notification) => notification.id !== id));
+  const removeNotifications = () => {
+    setNotificationList(notificationList.filter((notification) =>
+      notification.timestamp >= Date.now() * 1000 * 60 * 4));
   };
 
   const addNotification = (content) => {
-    const notification = { id: uuidv4(), content };
-    setNotificationList([notification, ...notificationList]);
-    setTimeout(() => removeNotification(notification.id), 8000);
+    const notification = { id: uuidv4(), timestamp: Date.now(), content };
+    setNotificationList([...notificationList, notification]);
+    setTimeout(() => removeNotifications(), 4000);
   };
 
   return (
@@ -26,7 +27,7 @@ const NotificationProvider = ({ children }) => {
           <NotificationListItem
             key={notification.id}
             notification={notification}
-            onDelete={removeNotification} />
+            onDelete={removeNotifications} />
         ))}
       </NotificationList>
       {children}
