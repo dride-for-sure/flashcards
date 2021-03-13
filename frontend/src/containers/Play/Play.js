@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import SockJsClient from 'react-stomp';
 import { validate as uuidValidate } from 'uuid';
 import ScoreBar from '../../components/Charts/ScoreBar/ScoreBar';
 import Charts from '../../components/Charts/styles';
@@ -12,76 +11,73 @@ import Question from '../../components/Tiles/Question/Question';
 import Waiting from '../../components/Tiles/Waiting/Waiting';
 import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
-import { joinExistingGame, newGame, startGame } from '../../services/APIService';
+import { useSocket } from '../../contexts/socket';
 
 export default function Play() {
-  const [game, setGame] = useState();
-  const [questionList, setQuestionList] = useState();
-  const [socks, setSocks] = useState();
-  const [socksConnected, setSocksConnected] = useState();
+  const { game, questionList, socket } = useSocket();
   const [playerDetails] = usePlayerDetails();
   const [addNotification] = useNotifications();
   const { gameId, difficulty } = useParams();
   const history = useHistory();
 
-  const handleGameRestart = () => {
-    history.push('/');
-  };
-
-  const handleDisconnect = () => {
-    if (socksConnected) {
-      socks.sendMessage(`/api/user/${game.id}`);
-    }
-  };
-
-  const handleMessages = (data) => {
-    if (data.type === 'QUESTIONLIST') {
-      setQuestionList(data.questionDtoList);
-    }
-    if (data.type === 'GAME') {
-      setGame(data);
-    }
-  };
-
-  const handleAnswer = (id, selectedSolution) => {
-    if (socksConnected) {
-      socks.sendMessage(`/api/user/${game.id}/${playerDetails.id}`,
-        JSON.stringify({ id, selectedSolution }));
-    } else {
-      addNotification('Stay calm little ninja. the internet in germany is not that fast. try again in a few seconds! (Database Error)');
+  const handleGameJoin = () => {
+    try {
+      socket.sendMessage(`/api/games/${difficulty}/${gameId}/join`, playerDetails);
+    } catch (e) {
+      addNotification('The arena takes a break. Try again. I reloaded for you. Am I nice?');
+      history.push('/');
     }
   };
 
   const handleGameStart = () => {
-    startGame(game.id, { id: playerDetails.id, name: playerDetails.name })
-      .then(setGame)
-      .then(history.push(`/game/${difficulty}/${game.id}`))
-      .catch(() => addNotification('Your ninja is need of sleep! Sorry. (Network Error)'));
+    try {
+      socket.sendMessage(`/api/games/${difficulty}/${gameId}/start`);
+    } catch (e) {
+      addNotification('Your ninja is need of sleep! Sorry. (Network Error)');
+    }
   };
 
-  const getInitialGame = () => {
-    if (gameId) {
-      joinExistingGame(gameId, { id: playerDetails.id, name: playerDetails.name })
-        .then(setGame)
-        .catch(() => addNotification('You love forbidden things, dont you? (Game not available)'));
-    } else {
-      newGame(difficulty, { id: playerDetails.id, name: playerDetails.name })
-        .then(setGame)
-        .catch(() => addNotification('Pow! Bang! Slapstick Action! But...not today!(Network Error)'));
+  const handleAnswer = (id, selectedSolution) => {
+    try {
+      socket.sendMessage(`/api/player/${playerDetails.id}/${gameId}`, JSON.stringify({ id, selectedSolution }));
+    } catch (e) {
+      addNotification('Stay calm little ninja. The internet in germany is not that fast. Try again in a few seconds! (Network Error)');
+    }
+  };
+
+  const handleRestart = () => {
+    history.push('/');
+  };
+
+  const handleUnmount = () => {
+    try {
+      socket.sendMessage(`/api/games/${difficulty}/${gameId}/leave`);
+    } catch (e) {
+      history.push('/');
+      addNotification('Could not leave the current game. Please reload your browser manually! (Network Error)');
     }
   };
 
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
+      addNotification('Please add a ninja name to start! Thanks.');
       history.push('/');
     }
-    getInitialGame();
+    handleGameJoin();
     return (() => {
-      handleDisconnect();
+      handleUnmount();
     });
   }, []);
 
-  if (!game) {
+  useEffect(() => {
+    if (!socket) {
+      addNotification('Connection to the arena lost. Try to reconnect automatically... (Websocket Error)');
+    } else {
+      addNotification('Connection to the arena established. Lets go!');
+    }
+  }, [socket]);
+
+  if (!socket || !game) {
     return (
       <>
         <Logo />
@@ -92,32 +88,20 @@ export default function Play() {
 
   return (
     <>
-      {game && (
-      <SockJsClient
-        url="/ws"
-        topics={[
-          `/topic/game/${game.id}`,
-          `/api/user/${game.id}`,
-          `/topic/user/${game.id}/${playerDetails.id}`]}
-        onConnect={() => {
-          setSocksConnected(true);
-        }}
-        onMessage={handleMessages}
-        onDisconnect={() => setSocksConnected(false)}
-        ref={setSocks} />
-      )}
       <Logo />
       {game.status === 'FINISH'
-      && (
-      <Results
-        playerList={game.playerList}
-        playerDetails={playerDetails}
-        onGameRestart={handleGameRestart} />
-      )}
-      {game && game.status === 'PREPARE'
+        && (
+        <Results
+          playerList={game.playerList}
+          playerDetails={playerDetails}
+          onRestart={handleRestart} />
+        )}
+      {game
+        && game.status === 'PREPARE'
         && game.master.id !== playerDetails.id
         && <Waiting gameMasterName={game.master.name} />}
-      {game && game.status === 'PREPARE'
+      {game
+        && game.status === 'PREPARE'
         && game.master.id === playerDetails.id
         && <GameMaster onGameStart={handleGameStart} />}
       {questionList && questionList.map((question) => (
