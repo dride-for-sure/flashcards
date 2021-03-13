@@ -56,8 +56,7 @@ public class MessagingService {
   for ( Player player : game.getPlayerList() ) {
    List<QuestionDto> questionDtoList = questionsService.getQuestionListDto( game, player.getId() );
    QuestionDtoList questionsToBroadcast = questionsService.addTypeToQuestionDtoList( questionDtoList );
-   simpMessagingTemplate.convertAndSend( "/topic/user/" + game.getId() + "/" + player.getId(),
-           questionsToBroadcast );
+   simpMessagingTemplate.convertAndSend( "/queue/player/" + player.getId(), questionsToBroadcast );
   }
  }
 }
