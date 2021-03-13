@@ -1,8 +1,8 @@
 const getGameIconByTopic = (topic) => {
   const icon = {
-    HARD: '🤯',
-    MODERATE: '💪',
-    EASY: '🥱' };
+    JAVA: '🤯',
+    JS: '💪',
+    REACT: '🔥' };
 
   return icon[topic.toUpperCase()];
 };
