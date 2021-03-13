@@ -18,7 +18,6 @@ public class SessionEventListener {
  // √ Trigger on disconnect -> cleanup games
  @EventListener
  public void handleSessionDisconnect ( SessionDisconnectEvent event ) {
-  System.out.println( "(EventListener) disconnect: " + event.getSessionId() );
   sessionService.deregisterPlayer( event.getSessionId() );
  }
 }
