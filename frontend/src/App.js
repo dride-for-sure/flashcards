@@ -18,7 +18,7 @@ export default function App() {
             <GlobalStyle />
             <Grid>
               <Switch>
-                <Route path="/game/:difficulty/:gameId">
+                <Route path="/game/:topic/:gameId">
                   <Play />
                 </Route>
                 <Route exact path="/games">

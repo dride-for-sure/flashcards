@@ -17,13 +17,13 @@ export default function Play() {
   const { handleReset, game, questionList, socket, socketState } = useSocket();
   const [playerDetails] = usePlayerDetails();
   const [addNotification] = useNotifications();
-  const { gameId, difficulty } = useParams();
+  const { gameId, topic } = useParams();
   const history = useHistory();
 
   const handleGameJoin = () => {
     handleReset();
     try {
-      socket.sendMessage(`/api/games/${difficulty}/${gameId}/join`, JSON.stringify(playerDetails));
+      socket.sendMessage(`/api/games/${topic}/${gameId}/join`, JSON.stringify(playerDetails));
     } catch (e) {
       addNotification('The arena takes a break. Try again. I reloaded for you. Am I nice?');
       history.push('/');
@@ -32,7 +32,7 @@ export default function Play() {
 
   const handleGameStart = () => {
     try {
-      socket.sendMessage(`/api/games/${difficulty}/${gameId}/start`);
+      socket.sendMessage(`/api/games/${topic}/${gameId}/start`);
     } catch (e) {
       addNotification('Your ninja is need of sleep! Sorry. (Network Error)');
     }
@@ -52,7 +52,7 @@ export default function Play() {
 
   const handleUnmount = () => {
     try {
-      socket.sendMessage(`/api/games/${difficulty}/${gameId}/leave`);
+      socket.sendMessage(`/api/games/${topic}/${gameId}/leave`);
     } catch (e) {
       history.push('/');
       addNotification('Could not leave the current game. Please reload your browser manually! (Network Error)');

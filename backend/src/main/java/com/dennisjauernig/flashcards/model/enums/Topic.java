@@ -1,7 +1,7 @@
 package com.dennisjauernig.flashcards.model.enums;
 
-public enum Difficulty {
- EASY,
- MODERATE,
- HARD
+public enum Topic {
+ JAVA,
+ JS,
+ REACT,
 }

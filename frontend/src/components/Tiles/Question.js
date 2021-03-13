@@ -1,7 +1,7 @@
 import { func } from 'prop-types';
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
-import getColorByDifficulty from '../../common/handleDifficultyColor';
+import getColorByTopic from '../../common/handleTopicColor';
 import { questionListItemType } from '../../types/types';
 import Button from '../Buttons/Button';
 import Tiles from './Tiles';
@@ -9,7 +9,7 @@ import Tiles from './Tiles';
 export default function Question({ question, onSendAnswer }) {
   return (
     <Tiles
-      bg={getColorByDifficulty(question.difficulty)}
+      bg={getColorByTopic(question.topic)}
       status={question.status}
       checked={question.points > 0}>
       <Container

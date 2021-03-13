@@ -1,10 +1,10 @@
-const getGameIconByDifficulty = (difficulty) => {
+const getGameIconByTopic = (topic) => {
   const icon = {
-    HARD: '🤯',
-    MODERATE: '💪',
-    EASY: '🥱' };
+    JAVA: '🤯',
+    JS: '💪',
+    REACT: '🔥' };
 
-  return icon[difficulty.toUpperCase()];
+  return icon[topic.toUpperCase()];
 };
 
-export default getGameIconByDifficulty;
+export default getGameIconByTopic;

@@ -16,7 +16,7 @@ export const playerListType = arrayOf(playerType);
 export const questionListItemType = shape({
   id: string,
   status: string,
-  difficulty: string,
+  topic: string,
   category: string,
   question: string,
   answers: arrayOf(string),
@@ -37,12 +37,19 @@ export const gameType = shape({
 
 export const gamesListItemType = shape({
   id: string,
-  difficulty: string,
+  topic: string,
   icon: string,
   master: masterType,
 });
 
 export const gamesListType = arrayOf(gamesListItemType);
+
+export const topics = shape({
+  name: string,
+  questionCount: number,
+});
+
+export const topicList = arrayOf(topics);
 
 export const playerDetailsType = shape({
   id: string,

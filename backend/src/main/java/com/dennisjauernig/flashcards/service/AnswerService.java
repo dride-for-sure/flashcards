@@ -1,7 +1,6 @@
 package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.controller.model.AnswerDto;
-import com.dennisjauernig.flashcards.controller.model.QuestionDto;
 import com.dennisjauernig.flashcards.model.Game;
 import com.dennisjauernig.flashcards.model.Player;
 import com.dennisjauernig.flashcards.model.enums.QuestionStatus;
@@ -55,7 +54,7 @@ public class AnswerService {
                                                .equals( QuestionStatus.SOLVED )
                                 ? questionDto.toBuilder()
                                              .status( QuestionStatus.SOLVED )
-                                             .points( calcQuestionPoints( questionDto, answerDto ) )
+                                             .points( calcQuestionPoints( answerDto ) )
                                              .build()
                                 : questionDto )
                         .collect( Collectors.toList() ) ) )
@@ -63,17 +62,13 @@ public class AnswerService {
  }
 
  // √ Calculate points for a given answer
- private int calcQuestionPoints ( QuestionDto questionDto, AnswerDto answerDto ) {
+ private int calcQuestionPoints ( AnswerDto answerDto ) {
   Solution solution =
           questionDb.findById( answerDto.getId() )
                     .orElseThrow( () -> new IllegalArgumentException( "Question: " + answerDto
                             .getId() + " does not exist" ) ).getSolution();
   if ( answerDto.getSelectedSolution().equals( solution ) ) {
-   return switch ( questionDto.getDifficulty() ) {
-    case EASY -> 1;
-    case MODERATE -> 2;
-    case HARD -> 3;
-   };
+   return 1;
   }
   return 0;
  }

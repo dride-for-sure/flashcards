@@ -1,7 +1,7 @@
 package com.dennisjauernig.flashcards.model;
 
-import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.Solution;
+import com.dennisjauernig.flashcards.model.enums.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class QuestionDao {
 
  @Id
  private UUID id;
- private Difficulty difficulty;
+ private Topic topic;
  private String category;
  private String question;
  private List<String> answers;

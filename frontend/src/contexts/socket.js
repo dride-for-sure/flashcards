@@ -12,6 +12,7 @@ const SocketProvider = ({ children }) => {
   const [questionList, setQuestionList] = useState();
   const [socket, setSocket] = useState();
   const [socketState, setSocketState] = useState();
+  const [topicList, setTopicList] = useState();
   const [playerDetails] = usePlayerDetails();
   const [addNotification] = useNotifications();
 
@@ -21,6 +22,7 @@ const SocketProvider = ({ children }) => {
     }
     if (data.type === 'GAMELIST') {
       setGameList(data.gameDtoList);
+      setTopicList(data.topicDetailsList);
     }
     if (data.type === 'GAME') {
       setGame(data);
@@ -43,7 +45,7 @@ const SocketProvider = ({ children }) => {
 
   return (
     <SocketContext.Provider value={
-      { handleReset, game, gameList, questionList, socket, socketState }
+      { handleReset, game, gameList, topicList, questionList, socket, socketState }
     }>
       <SockJsClient
         url="/ws"

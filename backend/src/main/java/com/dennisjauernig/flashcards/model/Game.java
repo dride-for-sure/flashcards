@@ -1,7 +1,7 @@
 package com.dennisjauernig.flashcards.model;
 
-import com.dennisjauernig.flashcards.model.enums.Difficulty;
 import com.dennisjauernig.flashcards.model.enums.GameStatus;
+import com.dennisjauernig.flashcards.model.enums.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class Game {
  @Id
  private UUID id;
  private long timestamp;
- private Difficulty difficulty;
+ private Topic topic;
  private GameStatus status;
  private GameMaster master;
  private List<Player> playerList;
