@@ -7,14 +7,27 @@ import Logo from '../../components/Tiles/Logo/Logo';
 import NewGame from '../../components/Tiles/NewGame/NewGame';
 import NoAvailableGames from '../../components/Tiles/NoAvailableGames/NoAvailableGames';
 import OpenGame from '../../components/Tiles/OpenGame/OpenGame';
-import addNotification from '../../contexts/notifications';
+import { useNotifications } from '../../contexts/notifications';
 import { usePlayerDetails } from '../../contexts/playerDetails';
 import { useSocket } from '../../contexts/socket';
 
 export default function Lobby() {
-  const { gameList, socket } = useSocket();
+  const { gameList, socket, socketState } = useSocket();
   const [playerDetails] = usePlayerDetails();
   const history = useHistory();
+  const [addNotification] = useNotifications();
+
+  const handleLobbyJoin = () => {
+    try {
+      socket.sendMessage('/api/games');
+    } catch (e) {
+      addNotification('Could not load the lobby. Please try again!(Websocket Error)');
+    }
+  };
+
+  const handleNewGame = (difficulty) => {
+    history.push(`/game/${difficulty}/${uuidv4()}`);
+  };
 
   useEffect(() => {
     if (!uuidValidate(playerDetails.id) || !playerDetails.name.length) {
@@ -23,16 +36,15 @@ export default function Lobby() {
   }, []);
 
   useEffect(() => {
-    if (!socket) {
-      addNotification('Connection to the game arena could not established. Please try again later! (Websocket Error)');
+    if (!socketState) {
+      addNotification('Connection to the arena lost. Try to reconnect automatically... (Websocket Error)');
+    } else {
+      addNotification('Connection to the arena established. Lets go!');
+      handleLobbyJoin();
     }
-  }, [socket]);
+  }, [socketState]);
 
-  const handleNewGame = (difficulty) => {
-    history.push(`/game/${difficulty}/${uuidv4()}`);
-  };
-
-  if (!socket || !gameList) {
+  if (!socketState || !gameList) {
     return (
       <>
         <Logo />

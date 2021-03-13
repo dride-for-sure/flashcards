@@ -14,15 +14,16 @@ import { usePlayerDetails } from '../../contexts/playerDetails';
 import { useSocket } from '../../contexts/socket';
 
 export default function Play() {
-  const { game, questionList, socket } = useSocket();
+  const { handleReset, game, questionList, socket, socketState } = useSocket();
   const [playerDetails] = usePlayerDetails();
   const [addNotification] = useNotifications();
   const { gameId, difficulty } = useParams();
   const history = useHistory();
 
   const handleGameJoin = () => {
+    handleReset();
     try {
-      socket.sendMessage(`/api/games/${difficulty}/${gameId}/join`, playerDetails);
+      socket.sendMessage(`/api/games/${difficulty}/${gameId}/join`, JSON.stringify(playerDetails));
     } catch (e) {
       addNotification('The arena takes a break. Try again. I reloaded for you. Am I nice?');
       history.push('/');
@@ -56,6 +57,7 @@ export default function Play() {
       history.push('/');
       addNotification('Could not leave the current game. Please reload your browser manually! (Network Error)');
     }
+    handleReset();
   };
 
   useEffect(() => {
@@ -63,21 +65,21 @@ export default function Play() {
       addNotification('Please add a ninja name to start! Thanks.');
       history.push('/');
     }
-    handleGameJoin();
     return (() => {
       handleUnmount();
     });
   }, []);
 
   useEffect(() => {
-    if (!socket) {
+    if (!socketState) {
       addNotification('Connection to the arena lost. Try to reconnect automatically... (Websocket Error)');
     } else {
+      handleGameJoin();
       addNotification('Connection to the arena established. Lets go!');
     }
-  }, [socket]);
+  }, [socketState]);
 
-  if (!socket || !game) {
+  if (!socketState || !game) {
     return (
       <>
         <Logo />
