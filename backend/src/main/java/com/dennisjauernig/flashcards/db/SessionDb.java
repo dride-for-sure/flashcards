@@ -15,7 +15,6 @@ public class SessionDb {
  // √ Save sessionIds
  public void saveSession ( String sessionId, UUID playerId ) {
   sessionDb.put( sessionId, playerId );
-  System.out.println( sessionDb );
  }
 
  // √ Get playerId by sessionId
@@ -28,7 +27,6 @@ public class SessionDb {
  // √ Delete sessionIds
  public void deleteBySessionId ( String sessionId ) {
   sessionDb.remove( sessionId );
-  System.out.println( sessionDb );
  }
 
  // √ List sessionIds

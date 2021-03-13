@@ -94,6 +94,27 @@ public class GamesService {
              .build();
  }
 
+ // √ Promote a random player to gameMaster if he has left
+ public Game promoteRandomPlayerToGameMaster ( Game game ) {
+  int randomIndex = ( int ) ( Math.random() * game.getPlayerList().size() );
+  Player playerToPromote = game.getPlayerList().get( randomIndex );
+  GameMaster gameMaster = GameMaster.builder()
+                                    .name( playerToPromote.getName() )
+                                    .id( playerToPromote.getId() )
+                                    .build();
+  Game updatedGame = game.toBuilder()
+                         .master( gameMaster )
+                         .playerList( game.getPlayerList().stream()
+                                          .map( player -> player.getId()
+                                                                .equals( playerToPromote.getId() )
+                                                  ? playerToPromote
+                                                  : playerToPromote )
+                                          .collect( Collectors.toList() ) )
+                         .build();
+  saveGame( updatedGame );
+  return updatedGame;
+ }
+
  // √ Set game status to FINISH
  public Game setGameStatusToFinish ( Game game ) {
   return game.toBuilder()

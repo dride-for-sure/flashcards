@@ -29,14 +29,12 @@ public class MessagingService {
 
  // √ Broadcast all open games to the lobby
  public void broadcastGameDtoList ( List<GameDto> gameDtoList ) {
-  System.out.println( "Broadcast gameDto to lobby" );
   GameDtoList gamesToBroadcast = gamesService.addTypeToGameDtoList( gameDtoList );
   simpMessagingTemplate.convertAndSend( "/topic/games", gamesToBroadcast );
  }
 
  // √ Broadcast the gameDto to all player within this game
  public void broadcastGameDto ( Game game ) {
-  System.out.println( "Broadcast gameDto to all player" );
   GameDto gameDto = gamesService.convertGameToDto( game );
   for ( PlayerDto playerDto : gameDto.getPlayerDtoList() ) {
    simpMessagingTemplate.convertAndSend( "/queue/player/" + playerDto.getId(), gameDto );
@@ -45,7 +43,6 @@ public class MessagingService {
 
  // √ Broadcast questionDtoList to one player
  public void broadcastQuestionDtoListToPlayer ( List<QuestionDto> questionDtoList, UUID playerId ) {
-  System.out.println( "Broadcast gameDto to player" );
   QuestionDtoList questionsToBroadcast = questionsService.addTypeToQuestionDtoList( questionDtoList );
   simpMessagingTemplate.convertAndSend( "/queue/player/" + playerId, questionsToBroadcast );
  }
