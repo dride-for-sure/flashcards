@@ -44,7 +44,6 @@ export default function Lobby() {
   if (!socketState || !gameList) {
     return (
       <>
-        <Logo />
         <Loading />
       </>
     );

@@ -14,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
     /* GREEN */
     --color-green-dark: darkseagreen;
     --color-green-light: mediumseagreen;
+    --color-green-light-transparent: rgba(60,179,113,.8);
     
     /* ORANGE */
     --color-orange-dark: sandybrown;

@@ -9,13 +9,17 @@ export default function Results({ playerList, playerDetails, onRestart }) {
   );
 
   const headline = sortedPlayerList[0].id === playerDetails.id
-    ? 'You have finished!'
-    : `${sortedPlayerList[0].name} has finished!`;
+    ? 'You have won!'
+    : `${sortedPlayerList[0].name} has won!`;
+
+  const symbol = sortedPlayerList[0].id === playerDetails.id
+    ? '🏆'
+    : '🤕';
 
   return (
     <Container>
       <Center>
-        <span>⛩️</span>
+        <span>{symbol}</span>
         <h1>{headline}</h1>
         <ResultList>
           {sortedPlayerList
@@ -44,8 +48,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content:center;
   z-index:100;
-  background-color: var(--color-green-light);
-  opacity: .8;
+  background-color: var(--color-green-light-transparent);
+  overflow: scroll;
 `;
 
 const Center = styled.div`
@@ -62,16 +66,18 @@ const Center = styled.div`
   }
 
   > span:first-of-type{
-    font-size: 10rem;
-    margin-bottom: 40px;
+    font-size: 8rem;
+    margin-bottom: 20px;
   }
 
   > h1 {
-    font-weight: 600;
-    font-size: 4rem;
+    font-size: 5rem;
     text-transform: uppercase;
     margin:0;
     padding: 0;
+    text-align: center;
+    width: min-content;
+    word-spacing: 10rem;
   }
 `;
 

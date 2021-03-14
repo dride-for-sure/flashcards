@@ -1,10 +1,10 @@
-import { number } from 'prop-types';
+import { bool, number } from 'prop-types';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { addScoreWidthRandomness, handleScoreColor, handleScoreWidth } from '../../common/handleCharts';
 import { playerDetailsType, playerType } from '../../types/types';
 
-export default function ScoreListItem({ player, playerDetails, maxPoints }) {
+export default function ScoreListItem({ player, playerDetails, maxPoints, showPlayer }) {
   const [barWidth, setBarWidth] = useState();
   const [barRandomness, setBarRandomness] = useState();
   const [barColor, setBarColor] = useState();
@@ -17,7 +17,7 @@ export default function ScoreListItem({ player, playerDetails, maxPoints }) {
   }, []);
 
   useEffect(() => {
-    const width = (100 / (maxPoints / player.score)) + barRandomness;
+    const width = (100 / (maxPoints / player.score)) + barRandomness + (showPlayer ? 15 : 0);
     handleScoreWidth(width, setBarWidth);
     handleScoreColor(player.score, maxPoints, setBarColor);
   }, [barRandomness]);
@@ -53,4 +53,5 @@ ScoreListItem.propTypes = {
   player: playerType.isRequired,
   playerDetails: playerDetailsType.isRequired,
   maxPoints: number.isRequired,
+  showPlayer: bool.isRequired,
 };
