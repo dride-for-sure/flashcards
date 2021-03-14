@@ -20,9 +20,13 @@ export default function NewGame({ onGameOpen, topics }) {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     if (topics) {
       setChosenTopic(topics[0].name);
     }
+=======
+    setChosenTopic(topics[0].name);
+>>>>>>> main
   }, []);
 
   return (
