@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components/macro';
 import { v4 as uuidv4 } from 'uuid';
 import { usePlayerDetails } from '../../contexts/playerDetails';
 import Button from '../Buttons/Button';
-import Tiles from './Tiles';
 
 export default function SetPlayerName({ onSubmit, hasPlayerDetails }) {
   const [playerDetails, setPlayerDetails] = usePlayerDetails();
@@ -29,46 +28,41 @@ export default function SetPlayerName({ onSubmit, hasPlayerDetails }) {
   };
 
   return (
-    <Tiles bg="var(--color-green-light)">
-      <Container>
-        <h1>Enter your name: </h1>
-        <form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            placeholder="Your ninja has one, right?"
-            validate={(hasValidPlayerName).toString()}
-            value={tmpPlayerName}
-            onChange={handleChange} />
-          <Button />
-        </form>
-      </Container>
-    </Tiles>
+    <Form onSubmit={handleSubmit}>
+      <Input
+        type="text"
+        placeholder="Enter ninjas name..."
+        validate={(hasValidPlayerName).toString()}
+        value={tmpPlayerName}
+        onChange={handleChange} />
+      <Button type="button" onClick={handleSubmit} />
+    </Form>
   );
 }
 
-const Container = styled.div`
-> form {
+const Form = styled.div`
   position:relative;
   display: flex;
   flex-direction: row;
+  width: fit-content;
+  align-self: center;
 
-    > input {
-      margin-top: 10px;
-      margin-right: 10px;
-    }
+  > input {
+    margin-top: 10px;
+    margin-right: 10px;
+  }
 
-    > button {
-      border: solid white;
-      border-width: 0 5px 5px 0;
-      padding: 3px;
-      margin-top:7px;
-      height: 20px;
-      width: 20px;
-      -ms-transform: rotate(-45deg);
-      transform: rotate(-45deg);
-      -webkit-transform: rotate(-45deg);
-      align-self: center;
-    }
+  > button {
+    border: solid white;
+    border-width: 0 5px 5px 0;
+    padding: 3px;
+    margin-top:7px;
+    height: 20px;
+    width: 20px;
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    align-self: center;
   }
 `;
 
