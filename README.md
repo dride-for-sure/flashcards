@@ -7,7 +7,7 @@
 MORTAL CODING COMBAT
 </h1>
 
-<p align=center><i>A cooperative flashcard game about java/js</i></p>
+<p align=center><i>A multiplayer realtime flashcard game about various tech topics</i></p>
 
 <p align=center>
   <img alt="Status Beta" src="https://img.shields.io/badge/Status-Beta-green.svg?style=flat"/>  <img alt="MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"/>  <img alt="React" src="https://img.shields.io/badge/-React-blue?logo=react&style=flat"/>  <img alt="Java" src="https://img.shields.io/badge/-Java-brown?logo=java&style=flat"/>  <img alt="Spring" src="https://img.shields.io/badge/-Spring-lightgrey?logo=spring&style=flat"/>  <img alt="Docker" src="https://img.shields.io/badge/-Docker-grey?logo=docker&style=flat"/>  <img alt="MongoDb" src="https://img.shields.io/badge/-MongoDb-yellow?logo=mongodb&style=flat"/>
