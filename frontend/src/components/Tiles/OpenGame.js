@@ -8,9 +8,19 @@ import Tiles from './Tiles';
 export default function OpenGame({ game }) {
   return (
     <Tiles bg={getColorByTopic(game.topic)}>
-      <Topic>{getGameIconByTopic(game.topic)}</Topic>
-      <SmallTitle>The GameMaster is:</SmallTitle>
-      <h1>{game.master.name}</h1>
+      <Icon>{getGameIconByTopic(game.topic)}</Icon>
+      <h1>{game.topic}</h1>
+      <Stats>
+        <StatItem>
+          <span>👩‍👩‍👧‍👦 x</span>
+          <span>{game.playerList.length}</span>
+        </StatItem>
+        <StatItem>
+          <span>🥷</span>
+          <span>{game.master.name}</span>
+        </StatItem>
+      </Stats>
+      <CTA>Do you dare to compete?</CTA>
       <Center>
         <Link to={`/game/${game.topic}/${game.id}`}>⚔️</Link>
       </Center>
@@ -18,16 +28,40 @@ export default function OpenGame({ game }) {
   );
 }
 
-const Topic = styled.div`
+const Icon = styled.div`
   position:absolute;
-  top:-18px;
+  top:-15px;
   right:-13px;
   font-size: 3rem;
 `;
 
-const SmallTitle = styled.span`
+const Stats = styled.div`
+  display:flex;
+  flex-direction: row;
+  margin: 8px 0;
+
+  > span + span {
+    margin-left: 14px;
+  }
+`;
+
+const StatItem = styled.span`
+  align-self: center;
+
+  > span:first-of-type {
+    margin-right: 2px;
+    font-size: 1.3rem;
+  }
+
+  > span:last-of-type {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+`;
+
+const CTA = styled.span`
+  flex-grow: 1;
   font-style: italic;
-  margin-bottom: 3px;  
 `;
 
 const Center = styled.span`

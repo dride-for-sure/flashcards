@@ -3,7 +3,7 @@ import Tiles from './Tiles';
 
 export default function NoAvailableGames() {
   return (
-    <Tiles bg="var(--color-orange-light)">
+    <Tiles bg="var(--color-monochrom-light)">
       <h1>No open games so far</h1>
       <Span>If you are bold, open your own.</Span>
     </Tiles>
