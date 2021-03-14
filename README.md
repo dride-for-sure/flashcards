@@ -27,7 +27,7 @@ MORTAL CODING COMBAT
 
 ### Contributing
 
-**MORTAL CODING COMBAT** is an open source project and contributions of any kind are welcome and highly appreciated. Issues, bugs and feature requests are all listed on the [issues]("/issues") page. Feel free to open a ticket and make feature requests. Have a look at the [CONTRIBUTING]("CONTRIBUTING.md") to learn about the common style guide and project structure.
+**MORTAL CODING COMBAT** is an open source project and contributions of any kind are welcome and highly appreciated. Issues, bugs and feature requests are all listed on the [issues](/issues) page. Feel free to open a ticket and make feature requests. Have a look at the [CONTRIBUTING](CONTRIBUTING.md) to learn about the common style guide and project structure.
 
 #### Local Development
 
@@ -53,6 +53,6 @@ To seed a local test environment mongodb instance please use the `seed.js` (Upco
 
 ### License
 
-**MORTAL CODING COMBAT** ist an open source project under the [MIT License]("LICENSE")
+**MORTAL CODING COMBAT** ist an open source project under the [MIT License](LICENSE.md)
 
 Happy coding! :metal:
