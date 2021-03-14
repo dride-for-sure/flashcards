@@ -36,21 +36,27 @@ public class CleanUpService {
                     .count();
    if ( count == 0 ) {
     gamesService.deleteGameById( game.getId() );
-   } else if ( !playerIds.contains( game.getMaster().getId() ) ) {
-    promotePlayerToGameMaster( playerIds, game );
+   } else {
+    Game cleanedGame = removeAllDeregisterPlayerFromGame( playerIds, game );
+    if ( !playerIds.contains( game.getMaster().getId() ) ) {
+     Game promotedGame = gamesService.promoteRandomPlayerToGameMaster( cleanedGame );
+     messagingService.broadcastGameDto( promotedGame );
+    } else {
+     gamesService.saveGame( cleanedGame );
+     messagingService.broadcastGameDto( cleanedGame );
+    }
    }
   }
   messagingService.broadcastGameDtoList( gamesService.listAvailableGames() );
   return null;
  }
 
- private void promotePlayerToGameMaster ( List<UUID> playerIds, Game game ) {
-  Game cleanedGame = game.toBuilder()
-                         .playerList( game.getPlayerList().stream()
-                                          .filter( player -> playerIds.contains( player.getId() ) )
-                                          .collect( Collectors.toList() ) )
-                         .build();
-  Game gameWithNewMaster = gamesService.promoteRandomPlayerToGameMaster( cleanedGame );
-  messagingService.broadcastGameDto( gameWithNewMaster );
+ // √ Remove all deregistered player to cleanup the game
+ private Game removeAllDeregisterPlayerFromGame ( List<UUID> playerIds, Game game ) {
+  return game.toBuilder()
+             .playerList( game.getPlayerList().stream()
+                              .filter( player -> playerIds.contains( player.getId() ) )
+                              .collect( Collectors.toList() ) )
+             .build();
  }
 }
