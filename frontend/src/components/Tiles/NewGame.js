@@ -1,12 +1,12 @@
 import { func } from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { topicList } from '../../types/types';
 import Button from '../Buttons/Button';
 import Tiles from './Tiles';
 
 export default function NewGame({ onGameOpen, topics }) {
-  const [chosenTopic, setChosenTopic] = useState(topics[0].name);
+  const [chosenTopic, setChosenTopic] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,6 +18,10 @@ export default function NewGame({ onGameOpen, topics }) {
   const handleChange = (event) => {
     setChosenTopic(event.target.value);
   };
+
+  useEffect(() => {
+    setChosenTopic(topics[0].name);
+  }, []);
 
   return (
     <Tiles bg="var(--color-blue-medium)">
@@ -45,7 +49,7 @@ export default function NewGame({ onGameOpen, topics }) {
 }
 
 const Subtitle = styled.div`
-  margin-top: 10px;
+  margin: 10px 0 5px;
   font-style: italic;
   display:block;
 `;
