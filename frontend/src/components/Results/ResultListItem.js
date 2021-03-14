@@ -22,9 +22,10 @@ const Container = styled.li`
   `}
   
   :before {
-    content: ${(props) => props.score};
+    content: '${(props) => props.score} Points:';
     font-weight: 600;
     margin-right: 8px;
+    text-transform: capitalize;
   }
 `;
 

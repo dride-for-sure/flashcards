@@ -6,6 +6,7 @@ const NotificationList = styled.div`
   left: 0;
   display: flex;
   flex-direction: column-reverse;
+  z-index:2;
 `;
 
 export default NotificationList;

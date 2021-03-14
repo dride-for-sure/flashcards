@@ -6,7 +6,6 @@ import ScoreList from '../components/Scores/ScoreList';
 import ScoreListItem from '../components/Scores/ScoreListItem';
 import GameMaster from '../components/Tiles/GameMaster';
 import Loading from '../components/Tiles/Loading';
-import Logo from '../components/Tiles/Logo';
 import Question from '../components/Tiles/Question';
 import Waiting from '../components/Tiles/Waiting';
 import { useNotifications } from '../contexts/notifications';
@@ -79,7 +78,6 @@ export default function Play() {
   if (!socketState || !game) {
     return (
       <>
-        <Logo />
         <Loading />
       </>
     );
@@ -87,7 +85,14 @@ export default function Play() {
 
   return (
     <>
-      <Logo />
+      {game.status === 'PREPARE' && (
+      <>
+        {game.master.id === playerDetails.id
+           && <GameMaster onGameStart={handleGameStart} playerList={game.playerList} />}
+        {game.master.id !== playerDetails.id
+           && <Waiting gameMasterName={game.master.name} playerList={game.playerList} />}
+      </>
+      )}
       {game.status === 'FINISH'
         && (
         <Results
@@ -95,14 +100,6 @@ export default function Play() {
           playerDetails={playerDetails}
           onRestart={handleRestart} />
         )}
-      {game
-        && game.status === 'PREPARE'
-        && game.master.id !== playerDetails.id
-        && <Waiting gameMasterName={game.master.name} />}
-      {game
-        && game.status === 'PREPARE'
-        && game.master.id === playerDetails.id
-        && <GameMaster onGameStart={handleGameStart} />}
       {questionList && questionList.map((question) => (
         <Question
           key={question.id}
@@ -115,7 +112,8 @@ export default function Play() {
             key={player.id}
             player={player}
             playerDetails={playerDetails}
-            maxPoints={game.maxPoints} />
+            maxPoints={game.maxPoints}
+            showPlayer={game.status === 'PREPARE'} />
         ))}
       </ScoreList>
     </>
