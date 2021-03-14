@@ -6,7 +6,7 @@ import Button from '../Buttons/Button';
 import Tiles from './Tiles';
 
 export default function NewGame({ onGameOpen, topics }) {
-  const [chosenTopic, setChosenTopic] = useState(topics && topics[0].name);
+  const [chosenTopic, setChosenTopic] = useState(topics[0].name);
 
   const handleSubmit = (event) => {
     event.preventDefault();
