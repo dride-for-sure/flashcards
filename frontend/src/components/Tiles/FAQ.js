@@ -5,12 +5,8 @@ import Tiles from './Tiles';
 export default function FAQ({ playerName }) {
   return (
     <Tiles bg="var(--color-green-dark)">
-      <h1>
-        Hey
-        {' '}
-        {playerName}
-        !
-      </h1>
+      <Hey>Hey,</Hey>
+      <h1>{`${playerName}!`}</h1>
       <Span>
         This is the lobby.
       </Span>
@@ -21,12 +17,14 @@ export default function FAQ({ playerName }) {
   );
 }
 
-const Span = styled.div`
-    margin-top: 10px;
-    font-style: italic;
-    flex-grow: 2;
-    display:block;
+const Hey = styled.span`
+  margin-bottom: 5px;
+  font-style: italic;
+`;
 
+const Span = styled.span`
+  margin-top: 5px;
+  font-style: italic;
 `;
 
 FAQ.propTypes = {

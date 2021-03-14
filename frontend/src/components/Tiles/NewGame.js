@@ -3,7 +3,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { topicList } from '../../types/types';
 import Button from '../Buttons/Button';
-import Arrow from '../Icon/Arrow';
 import Tiles from './Tiles';
 
 export default function NewGame({ onGameOpen, topics }) {
@@ -22,7 +21,7 @@ export default function NewGame({ onGameOpen, topics }) {
 
   return (
     <Tiles bg="var(--color-blue-medium)">
-      <h1>To start a new game...</h1>
+      <h1>Start a new game...</h1>
       <Subtitle>...choose a topic:</Subtitle>
       <Form onSubmit={handleSubmit}>
         <select onChange={handleChange} value={chosenTopic}>
@@ -38,7 +37,7 @@ export default function NewGame({ onGameOpen, topics }) {
             </option>
           ))}
         </select>
-        <Button onClick={handleSubmit}><Arrow /></Button>
+        <Button fontsize="2rem" onClick={handleSubmit}>🤘</Button>
       </Form>
       {onGameOpen}
     </Tiles>
