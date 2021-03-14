@@ -41,7 +41,7 @@ export default function Lobby() {
     }
   }, [socketState]);
 
-  if (!socketState || !gameList) {
+  if (!socketState || !gameList || !topicList) {
     return (
       <>
         <Loading />

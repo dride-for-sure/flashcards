@@ -1,12 +1,12 @@
 import { func } from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { topicList } from '../../types/types';
 import Button from '../Buttons/Button';
 import Tiles from './Tiles';
 
 export default function NewGame({ onGameOpen, topics }) {
-  const [chosenTopic, setChosenTopic] = useState(null);
+  const [chosenTopic, setChosenTopic] = useState(topics[0].name);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,12 +18,6 @@ export default function NewGame({ onGameOpen, topics }) {
   const handleChange = (event) => {
     setChosenTopic(event.target.value);
   };
-
-  useEffect(() => {
-    if (topics) {
-      setChosenTopic(topics[0].name);
-    }
-  }, []);
 
   return (
     <Tiles bg="var(--color-blue-medium)">
@@ -43,7 +37,7 @@ export default function NewGame({ onGameOpen, topics }) {
             </option>
           ))}
         </select>
-        <Button fontsize="2rem" onClick={handleSubmit}>🤘</Button>
+        <Button fontsize="2rem">🤘</Button>
       </Form>
       {onGameOpen}
     </Tiles>
@@ -56,11 +50,15 @@ const Subtitle = styled.div`
   display:block;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 5px;
+
+  > * {
+    align-self: flex-start;
+  }
   
   > select {
     width: 100%;
@@ -71,11 +69,11 @@ const Form = styled.div`
     background-color: transparent;
     box-sizing: border-box;
     font-style: italic;
+    height: fit-content;
   }
 
   > button {
-    padding: 5px;
-    margin-left: 10px;
+    margin-left: 13px;
   } 
 `;
 
