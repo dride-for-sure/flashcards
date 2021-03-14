@@ -35,12 +35,12 @@ export default function SetPlayerName({ onSubmit, hasPlayerDetails }) {
         validate={(hasValidPlayerName).toString()}
         value={tmpPlayerName}
         onChange={handleChange} />
-      <Button type="button" onClick={handleSubmit} />
+      <Button />
     </Form>
   );
 }
 
-const Form = styled.div`
+const Form = styled.form`
   position:relative;
   display: flex;
   flex-direction: row;
