@@ -2,6 +2,7 @@ package com.dennisjauernig.flashcards.service;
 
 import com.dennisjauernig.flashcards.db.SessionDb;
 import com.dennisjauernig.flashcards.model.Game;
+import com.dennisjauernig.flashcards.model.enums.GameStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class CleanUpService {
                     .count();
    if ( count == 0 ) {
     gamesService.deleteGameById( game.getId() );
-   } else {
+   } else if ( !gamesService.hasStatus( GameStatus.FINISH, game ) ) {
     Game cleanedGame = removeAllDeregisterPlayerFromGame( playerIds, game );
     if ( !playerIds.contains( game.getMaster().getId() ) ) {
      Game promotedGame = gamesService.promoteRandomPlayerToGameMaster( cleanedGame );
