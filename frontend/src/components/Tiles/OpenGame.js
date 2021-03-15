@@ -20,7 +20,11 @@ export default function OpenGame({ game }) {
           <span>{game.master.name}</span>
         </StatItem>
       </Stats>
-      <CTA>Do you dare to compete?</CTA>
+      <CTA>
+        Do you dare to compete?
+        {' '}
+        <b>Click to start:</b>
+      </CTA>
       <Center>
         <Link to={`/game/${game.topic}/${game.id}`}>⚔️</Link>
       </Center>
