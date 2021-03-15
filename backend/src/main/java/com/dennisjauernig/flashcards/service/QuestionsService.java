@@ -69,7 +69,7 @@ public class QuestionsService {
 
   if ( questionListStatusNONE.size() > 0 && questionListStatusSELECTED.size() == 0 ) {
    QuestionDto nextQuestion = questionListStatusNONE
-           .get( ( int ) ( Math.random() * questionListStatusNONE.size() ) )
+           .get( 0 )
            .toBuilder()
            .status( QuestionStatus.SELECTED )
            .build();
@@ -101,9 +101,8 @@ public class QuestionsService {
 
  // √ Select a random first question
  private List<Question> selectFirstQuestion ( List<Question> questionList ) {
-  int randomIndex = ( int ) ( Math.random() * questionList.size() );
   List<Question> listToUpdate = new ArrayList<>( questionList );
-  listToUpdate.set( randomIndex, setAsFirstQuestion( listToUpdate.get( randomIndex ) ) );
+  listToUpdate.set( 0, setAsFirstQuestion( listToUpdate.get( 0 ) ) );
   return listToUpdate;
  }
 
