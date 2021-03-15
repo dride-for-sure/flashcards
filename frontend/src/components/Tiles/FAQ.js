@@ -8,9 +8,6 @@ export default function FAQ({ playerName }) {
       <Hey>Hey,</Hey>
       <h1>{`${playerName}!`}</h1>
       <Span>
-        This is the lobby.
-      </Span>
-      <Span>
         Feel free to start a new game or join an existing one.
       </Span>
     </Tiles>
